@@ -54,10 +54,21 @@
     width: 100%;
     padding: 0 50px;
 }
+
+/* Caso fosse trocado o logo por uma palavra, tipo 'Login'
 h2 {
     font-size: 2em;
     color: #0ef;
     text-align: center;
+}
+*/
+
+.error-msg {
+  color: #0ef;
+  font-size: 12px;
+  margin-left: 15px;
+  margin-top: -25px;
+  margin-bottom: 20px;
 }
 
 img {
@@ -87,28 +98,36 @@ img {
     padding: 0 20px;
     transition: .5s ease;
 }
+
+// Efeito quando clicado sobre os inputs dessa classes
 .input-box input:focus,
 .input-box input:valid {
     border-color: #0ef;
 }
+
+// Coloca o label 'Usuário' e 'Senha' para cima, dentro dos inputs
 .input-box label {
     position: absolute;
-    top: 50%;
-    left: 20px;
+    top: 50%; //50%; //25px;
     transform: translateY(-50%);
+    left: 20px;
     font-size: 1em;
     color: #fff;
     pointer-events: none;
-    transition: .5s ease;
+    transition: .5s ease; // Aplica meio segundo de transicao toda vez que o label muda
 }
-.input-box input:focus~label, // Ao clicar no input, deixa o label encima
+
+// Aplica o efeito de subir o label quando o input for
+// clicado e quando ele estiver valido (preenchido devido ao required)
+.input-box input:focus~label,
 .input-box input:valid~label {
-    top: 1px;
+    top: 10%; // 10% ou 5px;
     font-size: .8em;
     background: #1f293a;
     padding: 0 6px;
     color: #0ef;
 }
+
 .forgot-pass {
     margin: -15px 0 10px;
     text-align: center;
@@ -121,18 +140,29 @@ img {
 .forgot-pass a:hover {
     text-decoration: underline;
 }
+
 .btn {
-    width: 100%;
-    height: 45px;
-    background: #0ef;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    cursor: pointer;
-    font-size: 1em;
-    color: #1f293a;
-    font-weight: 600;
+  width: 100%;
+  height: 45px;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  font-size: 1em;
+  font-weight: 600;
 }
+
+.btn-enabled{
+    background: #0ef;
+    cursor: pointer;
+    color: #1f293a;
+}
+
+.btn-disabled{
+    background: #1f293a;
+    border: solid #0ef;
+    color: #0ef;
+}
+
 .signup-link {
     margin: 20px 0 10px;
     text-align: center;

@@ -23,7 +23,13 @@
               <div class="forgot-pass">
                   <a href="#">Esqueceu sua senha?</a>
               </div>
-              <button type="submit" class="btn" (click)="logar()" >Login</button>
+              <button
+                [disabled]="!formulario.valid"
+                type="submit"
+                [ngClass]="enableButton()"
+                (click)="logar()"
+              >Login
+              </button>
               <div class="signup-link">
                   <a href="#">Cadastrar</a>
               </div>
