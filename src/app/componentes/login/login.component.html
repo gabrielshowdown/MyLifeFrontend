@@ -3,11 +3,11 @@
   <div class="container">
       <div class="login-box">
         <img src="/img/my-life-dark.png" alt="" class="logo">
-        <form action="#" [formGroup]="formulario">
+        <form action="#" (ngSubmit)="logar()" [formGroup]="formulario">
               <div class="input-box">
                   <input
                     type="text"
-                    formControlName="usuario"
+                    formControlName="username"
                     required
                   >
                   <label>Usuário</label>
@@ -15,19 +15,21 @@
               <div class="input-box">
                   <input
                     type="password"
-                    formControlName="senha"
+                    formControlName="password"
                     required
                   >
                   <label>Senha</label>
-              </div>
-              <div class="forgot-pass">
+                </div>
+                <div *ngIf="loginError==true" class="incorret-password">
+                  Usuário/Senha incorreto
+                </div>
+                <div class="forgot-pass">
                   <a href="#">Esqueceu sua senha?</a>
-              </div>
-              <button
+                </div>
+                <button
                 [disabled]="!formulario.valid"
                 type="submit"
                 [ngClass]="enableButton()"
-                (click)="logar()"
               >Login
               </button>
               <div class="signup-link">

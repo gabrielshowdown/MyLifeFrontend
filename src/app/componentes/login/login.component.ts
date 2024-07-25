@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -17,19 +18,21 @@ export class LoginComponent implements OnInit{
 
   //Atribrutos
   formulario!: FormGroup;
+  loginError!: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
+    private service: LoginService
   ){}
 
   ngOnInit(): void{
     this.formulario = this.formBuilder.group({
-      usuario: ['', Validators.compose([
+      username: ['', Validators.compose([
         Validators.required, // Não permite branco
         Validators.minLength(3),
       ])],
-      senha: ['', Validators.compose([
+      password: ['', Validators.compose([
         Validators.required, // Não permite branco
         //Validators.pattern(/(.|\s)*\S(.|\s)*/), // Não permite espaços em branco no conteúdo
       ])],
@@ -46,12 +49,18 @@ export class LoginComponent implements OnInit{
   }
 
   logar(): void{
-    //console.log('Clicou no login');
-    console.log(this.formulario);
-    console.log('usuario valid: ' + this.formulario.get('usuario')?.valid);
-    console.log(this.formulario.get('senha')?.value);
-    console.log(this.formulario.valid);
-    this.router.navigate(['/teste'])
+    console.log('Clicou no login');
+    console.log(this.formulario.value);
+    console.log('usuario valid: ' + this.formulario.get('username')?.valid);
+    console.log('senha valid: ' + this.formulario.get('password')?.valid);
+
+    if (this.service.validateLogin(this.formulario.value)){
+      this.loginError = false;
+      this.router.navigate(['/teste'])
+    }
+    else{
+      this.loginError = true;
+    }
 
   }
 }
