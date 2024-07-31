@@ -3,14 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
+import { TemplateModalComponent } from "../views/template-modal/template-modal.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule
-  ],
+    CommonModule,
+    TemplateModalComponent
+],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -19,6 +21,9 @@ export class LoginComponent implements OnInit{
   //Atribrutos
   formulario!: FormGroup;
   loginError!: boolean;
+  openModal!: boolean;
+
+  forgotPasswordText : string = 'Chama o Gabriel no zap que ele resolve :)'
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,6 +66,6 @@ export class LoginComponent implements OnInit{
     else{
       this.loginError = true;
     }
-
   }
+
 }

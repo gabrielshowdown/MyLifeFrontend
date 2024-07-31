@@ -24,7 +24,9 @@
                   Usuário/Senha incorreto
                 </div>
                 <div class="forgot-pass">
-                  <a href="#">Esqueceu sua senha?</a>
+                  <!-- Esse 'data-bs-toggle' é um atributo do b5 para identificar elementos que devem ativar modais
+                       e o 'data-bs-target' é qual componente deve ser aberto -->
+                  <a data-bs-toggle="modal" data-bs-target="#templateModal" >Esqueceu sua senha?</a>
                 </div>
                 <button
                 [disabled]="!formulario.valid"
@@ -35,6 +37,9 @@
               <div class="signup-link">
                   <a href="#">Cadastrar</a>
               </div>
+              <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#templateModal">
+                Esqueci minha senha
+              </button>
           </form>
       </div>
       <span style="--i:0;"></span>
@@ -89,3 +94,11 @@
       <span style="--i:49;"></span>
   </div>
 </div>
+
+<!-- <div *ngIf="openModal"> -->
+  <!--Passado a string 'forgot...' como parâmetro de entrada para a view,
+      e o (modalChange) é a informação do output da view, deixando o modelChange como false dnv-->
+  <!-- <app-dialog-template [message]="forgotPasswordText" (modalChange)="onModalChange($event)"></app-dialog-template>
+</div> -->
+
+<app-template-modal [message]="forgotPasswordText"></app-template-modal>
