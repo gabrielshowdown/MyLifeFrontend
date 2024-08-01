@@ -10,7 +10,12 @@ import { Component, Input } from '@angular/core';
 export class TemplateModalComponent {
 
   @Input()
-  message: string = '';
+  message: {
+    title: string,
+    content: string
+  } = {
+    title: '', content: '' };
+
 
   constructor(){}
 

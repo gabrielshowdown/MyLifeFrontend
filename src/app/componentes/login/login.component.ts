@@ -23,7 +23,10 @@ export class LoginComponent implements OnInit{
   loginError!: boolean;
   openModal!: boolean;
 
-  forgotPasswordText : string = 'Chama o Gabriel no zap que ele resolve :)'
+  forgotPasswordMessage = {
+    title: 'Esqueceu sua senha? ',
+    content: 'Chama o Gabriel no zap que ele resolve :)'
+   };
 
   constructor(
     private formBuilder: FormBuilder,

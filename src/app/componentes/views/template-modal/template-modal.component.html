@@ -1,20 +1,12 @@
 <div class="modal fade" id="templateModal" tabindex="-1" aria-labelledby="templateModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content parent">
       <div class="modal-header">
-        <h5 class="modal-title" id="templateModalLabel">Esqueci Minha Senha</h5>
+        <h5 class="modal-title title" id="templateModalLabel">{{ message.title }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <p>{{message}}</p>
-        <form>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">Nós nunca compartilharemos seu email com ninguém.</div>
-          </div>
-          <button type="submit" class="btn btn-primary">Enviar</button>
-        </form>
+      <div class="modal-body content">
+        <p>{{ message.content }}</p>
       </div>
     </div>
   </div>
