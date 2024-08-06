@@ -4,9 +4,15 @@
   background: #1f293a;
   color: #0ef;;
   font-family: 'Poppins', sans-serif;
+  border-radius: 30px;
+}
+
+.btn-close{
+  margin-top: -40px;
 }
 
 .title{
+  margin-left: auto; // Deixa centralizado
   margin-top: 15px;
   margin-bottom: 15px;
 }
