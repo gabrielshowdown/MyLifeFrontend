@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { TemplateModalComponent } from "../views/template-modal/template-modal.component";
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,8 @@ import { TemplateModalComponent } from "../views/template-modal/template-modal.c
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    TemplateModalComponent
+    TemplateModalComponent,
+    MatIconModule
 ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
