@@ -14,11 +14,15 @@
         </div>
         <div class="input-box">
           <input
-            type="password"
+            [type]="passwordFieldType"
             formControlName="password"
             required
+            [(ngModel)]="password"
           >
           <label>Senha</label>
+          <div *ngIf="password.length > 0">
+            <mat-icon class="visible" (click)="togglePasswordVisibility()" >{{passwordVisibility}}</mat-icon>
+          </div>
         </div>
         <div *ngIf="loginError==true" class="incorret-password">
           Usuário/Senha incorreto
@@ -92,11 +96,9 @@
     <span style="--i:49;"></span>
   </div>
 </div>
-
 <!-- <div *ngIf="openModal"> -->
   <!--Passado a string 'forgot...' como parâmetro de entrada para a view,
       e o (modalChange) é a informação do output da view, deixando o modelChange como false dnv-->
   <!-- <app-dialog-template [message]="forgotPasswordText" (modalChange)="onModalChange($event)"></app-dialog-template>
 </div> -->
-
 <app-template-modal [message]="forgotPasswordMessage"></app-template-modal>

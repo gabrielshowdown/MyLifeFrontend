@@ -24,6 +24,9 @@ export class LoginComponent implements OnInit{
   formulario!: FormGroup;
   loginError!: boolean;
   openModal!: boolean;
+  password: string = '';
+  passwordFieldType: string = 'password';
+  passwordVisibility: string = 'visibility';
 
   forgotPasswordMessage = {
     title: 'Esqueceu sua senha? ',
@@ -56,6 +59,11 @@ export class LoginComponent implements OnInit{
     else{
       return 'btn btn-disabled';
     }
+  }
+
+  togglePasswordVisibility(): void {
+    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+    this.passwordVisibility = this.passwordVisibility === 'visibility' ? 'visibility_off' : 'visibility'
   }
 
   logar(): void{
