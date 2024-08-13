@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit{
   password: string = '';
   passwordFieldType: string = 'password';
   passwordVisibility: string = 'visibility';
+  theme = 'day';
 
   forgotPasswordMessage = {
     title: 'Esqueceu sua senha? ',

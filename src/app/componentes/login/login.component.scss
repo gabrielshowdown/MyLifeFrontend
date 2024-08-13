@@ -5,14 +5,19 @@
 //     box-sizing: border-box;
 //     font-family: 'Poppins', sans-serif;
 // }
-.parent {
+.parent{
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #1f293a;
-    /* background-image: url(./bg.jpg); */
+    &.night{
+      background: #1f293a;
+    }
+    &.day{
+      background: #fff;
+    }
 }
+
 .container {
     position: relative;
     width: 256px;
@@ -29,20 +34,39 @@
       left: 0;
       width: 32px;
       height: 6px;
-      background: #2c4766;
       border-radius: 8px;
       transform-origin: 128px;
-      transform: scale(2.2) rotate(calc(var(--i) * (360deg / 50)));
-      animation: animateBlink 3s linear infinite;
-      animation-delay: calc(var(--i) * (3s / 50));
+      &.night{
+        animation: animateBlinkNight 3s linear infinite;
+        transform: scale(2.2) rotate(calc(var(--i) * (360deg / 50)));
+        animation-delay: calc(var(--i) * (3s / 50));
+        background: #2c4766;
+
+      }
+      &.day{
+        animation: animateBlinkDay 3s linear infinite;
+        transform: scale(2.2) rotate(calc(var(--i) * (360deg / 50)));
+        animation-delay: calc(var(--i) * (3s / 50));
+        background: #97b9c2;
+      }
+
   }
-  @keyframes animateBlink {
+  @keyframes animateBlinkNight {
       0% {
           background: #0ef;
       }
       25% {
           background: #2c4766;
       }
+  }
+
+  @keyframes animateBlinkDay {
+    0% {
+        background: #b6c6c7;
+    }
+    25% {
+        background: #97b9c2;
+    }
   }
 }
 
@@ -64,7 +88,6 @@ h2 {
 */
 
 .error-msg {
-  color: #0ef;
   font-size: 12px;
   margin-left: 15px;
   margin-top: -25px;
@@ -90,19 +113,30 @@ img {
     width: 100%;
     height: 50px;
     background: transparent;
-    border: 2px solid #2c4766;
     outline: none;
     border-radius: 40px;
     font-size: 1em;
-    color: #fff;
     padding: 0 20px;
     transition: .5s ease;
+    &.night{
+      border: 2px solid #2c4766;
+      color: #fff;
+    }
+    &.day{
+      border: 2px solid #000000;
+      color: #000000;;
+    }
 }
 
 // Efeito quando clicado sobre os inputs dessa classes
 .input-box input:focus,
 .input-box input:valid {
+  &.night{
     border-color: #0ef;
+  }
+  &.day{
+    border-color: #0662cc;
+  }
 }
 
 // Coloca o label 'Usuário' e 'Senha' para cima, dentro dos inputs
@@ -112,9 +146,14 @@ img {
     transform: translateY(-50%);
     left: 20px;
     font-size: 1em;
-    color: #fff;
     pointer-events: none;
     transition: .5s ease; // Aplica meio segundo de transicao toda vez que o label muda
+    &.night{
+      color: #fff;;
+    }
+    &.day{
+      color: #1e0d7e;
+    }
 }
 
 .input-box .visible {
@@ -122,8 +161,13 @@ img {
     top: 50%; //50%; //25px;
     transform: translateY(-50%);
     right: 20px;
-    color: #0ef;
     cursor: pointer;
+    &.night{
+      color: #0ef;
+    }
+    &.day{
+      color: #1e0d7e;
+    }
 }
 
 // Aplica o efeito de subir o label quando o input for
@@ -132,9 +176,15 @@ img {
 .input-box input:valid~label {
     top: 10%; // 10% ou 5px;
     font-size: .8em;
-    background: #1f293a;
     padding: 0 6px;
-    color: #0ef;
+    &.night{
+      background: #1f293a;
+      color: #0ef;
+    }
+    &.day{
+      background: #ffffff;
+      color: #000000;
+    }
 }
 
 .forgot-pass {
@@ -143,8 +193,13 @@ img {
 }
 .forgot-pass a {
     font-size: .85em;
-    color: #fff;
     text-decoration: none;
+    &.night{
+      color: #fff;
+    }
+    &.day{
+      color: #000000;;
+    }
 }
 .forgot-pass a:hover {
     text-decoration: underline;
@@ -162,15 +217,29 @@ img {
 }
 
 .btn-enabled{
+  &.night{
     background: #0ef;
     cursor: pointer;
     color: #1f293a;
+  }
+  &.day{
+    background: #2870f5;
+    border: solid #565e5f;
+    color: #ffffff;
+  }
 }
 
 .btn-disabled{
+  &.night{
     background: #1f293a;
     border: solid #0ef;
     color: #0ef;
+  }
+  &.day{
+    background: #686b77;
+    border: solid #000000;
+    color: #ffffff;
+  }
 }
 
 .incorret-password{
@@ -186,9 +255,14 @@ img {
 }
 .signup-link a {
     font-size: 1em;
-    color: #0ef;
     text-decoration: none;
     font-weight: 600;
+    &.night{
+      color: #0ef;
+    }
+    &.day{
+      color: #000000;;
+    }
 }
 .signup-link a:hover {
     text-decoration: underline;
