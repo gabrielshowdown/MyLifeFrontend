@@ -38,7 +38,9 @@ export class LoginComponent implements OnInit{
     private formBuilder: FormBuilder,
     private router: Router,
     private service: LoginService
-  ){}
+  ){
+    this.theme = this.getTimeOfDay();
+  }
 
   ngOnInit(): void{
     this.formulario = this.formBuilder.group({
@@ -82,4 +84,13 @@ export class LoginComponent implements OnInit{
     }
   }
 
+  getTimeOfDay(): string {
+    const currentHour = new Date().getHours(); // Obtém a hora atual (0-23)
+
+    if (currentHour >= 6 && currentHour < 18) {
+        return 'day';
+    } else {
+        return 'night';
+    }
+  }
 }
