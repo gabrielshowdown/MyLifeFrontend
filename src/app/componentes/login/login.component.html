@@ -27,11 +27,10 @@
             [type]="passwordFieldType"
             formControlName="password"
             required
-            [(ngModel)]="password"
             [ngClass]="theme"
           >
           <label [ngClass]="theme">Senha</label>
-          <div *ngIf="password.length > 0">
+          <div *ngIf="formulario.get('password')?.value.length > 0">
             <mat-icon
               class="visible"
               [ngClass]="theme"
