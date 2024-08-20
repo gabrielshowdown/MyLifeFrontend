@@ -16,6 +16,8 @@ export class TemplateModalComponent {
   } = {
     title: '', content: '' };
 
+  @Input()
+  theme!: string;
 
   constructor(){}
 

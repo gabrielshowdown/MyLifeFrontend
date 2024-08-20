@@ -1,10 +1,16 @@
 .parent {
   display: flex;
   justify-content: center;
-  background: #1f293a;
-  color: #0ef;;
   font-family: 'Poppins', sans-serif;
   border-radius: 30px;
+  &.night{
+    background: #1f293a;
+    color: #0ef;;
+  }
+  &.day{
+    background: #fff;
+    color: #000000;
+  }
 }
 
 .btn-close{
