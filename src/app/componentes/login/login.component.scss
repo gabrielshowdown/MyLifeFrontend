@@ -27,6 +27,13 @@
     align-items: center;
 }
 
+//.toogle-container {
+mat-slide-toggle{
+  position: absolute;
+  top: 10px; /* Distância do topo da tela */
+  right: 10px; /* Distância da esquerda da tela */
+}
+
 /* Se a tela for grande, executa os comandos abaixo*/
 @media screen and (min-width: 1024px) {
   .container span {

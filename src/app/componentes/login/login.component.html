@@ -1,5 +1,14 @@
 
 <div class="parent" [ngClass]="theme">
+  <div>
+    <mat-slide-toggle
+      class="toogle-container"
+      #darkModeSwitch
+      [checked]="theme === 'night'"
+      (change)="onToggleChange($event)">
+      <!-- {{ theme === 'day' ? 'Day' : 'Night' }} -->
+    </mat-slide-toggle>
+  </div>
   <div class="container">
     <div class="login-box">
       <img src="/img/my-life-{{theme}}.png" alt="" class="logo">
