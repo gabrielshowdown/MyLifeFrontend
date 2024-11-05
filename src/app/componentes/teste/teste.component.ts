@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -12,6 +13,7 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
     MatSlideToggleModule,
     CommonModule,
     MatCheckbox,
+    FormsModule
   ],
   templateUrl: './teste.component.html',
   styleUrl: './teste.component.scss'
@@ -32,5 +34,7 @@ export class TesteComponent {
       this.element.nativeElement.querySelector('.mdc-switch__icon--off').firstChild.setAttribute('d', this.sun);
     }
   }
+
+  textoTeste: string = 'teste';
 
 }

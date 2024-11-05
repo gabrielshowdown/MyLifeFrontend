@@ -10,7 +10,7 @@ export class LoginService {
 
   validateLogin(credentials: { username: string; password: string }) : boolean{
     const { username, password } = credentials
-    if (username === 'gabriel' && password === 'senha123'){
+    if (username === 'gabriel' && password === 'senha123'){ // Poderia ser credentials.password === 'senha123'
       return true;
     }
     else {
