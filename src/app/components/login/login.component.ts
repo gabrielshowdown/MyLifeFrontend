@@ -6,6 +6,7 @@ import { LoginService } from '../../services/login.service';
 import { TemplateModalComponent } from "../views/template-modal/template-modal.component";
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-login',
@@ -90,13 +91,26 @@ export class LoginComponent implements OnInit{
     console.log('usuario valid: ' + this.formulario.get('username')?.valid);
     console.log('senha valid: ' + this.formulario.get('password')?.valid);
 
-    if (this.service.validateLogin(this.formulario.value)){
-      this.loginError = false;
-      this.router.navigate(['/teste'])
-    }
-    else{
-      this.loginError = true;
-    }
+    // if (this.service.validateLogin(this.formulario.value)){
+    //   this.loginError = false;
+    //   this.router.navigate(['/teste'])
+    // }
+    // else{
+    //   this.loginError = true;
+    // }
+
+    this.service.getUsers().subscribe({
+      next: (users) => {
+        console.log(users); // Manipulação de sucesso
+      },
+      error: (error) => {
+        console.error('Erro ao buscar usuários:', error); // Manipulação de erro
+      },
+      complete: () => {
+        console.log('Busca de usuários concluída.'); // (Opcional) Finalização do Observable
+      }
+    });
+
   }
 
   getTimeOfDay(): string {
