@@ -91,25 +91,40 @@ export class LoginComponent implements OnInit{
     console.log('usuario valid: ' + this.formulario.get('username')?.valid);
     console.log('senha valid: ' + this.formulario.get('password')?.valid);
 
-    // if (this.service.validateLogin(this.formulario.value)){
-    //   this.loginError = false;
-    //   this.router.navigate(['/teste'])
-    // }
-    // else{
-    //   this.loginError = true;
-    // }
+    // const credentials = this.formulario.value;
+    /* Se deixar assim como no trecho acima vai gerar o json dessa forma:
+    {username: 'super', password: 'super'}
+    e como na interface e no banco é 'senha' no lugar de 'password', da pau. */
 
-    this.service.getUsers().subscribe({
-      next: (users) => {
-        console.log(users); // Manipulação de sucesso
+    const credentials = {
+      username: this.formulario.get('username')?.value,
+      senha: this.formulario.get('password')?.value
+    }
+    console.log('Credentials do logar : ' , credentials);
+
+    this.service.validateLogin(credentials).subscribe({
+      next: (user) => {
+        console.log('User:' , user);
+        this.loginError = false;
+        this.router.navigate(['/teste']);
       },
-      error: (error) => {
-        console.error('Erro ao buscar usuários:', error); // Manipulação de erro
+      error: (err) => {
+        console.error('Erro ao validar login:', err);
+        this.loginError = true;
       },
-      complete: () => {
-        console.log('Busca de usuários concluída.'); // (Opcional) Finalização do Observable
-      }
     });
+
+    // this.service.getUsers().subscribe({
+    //   next: (users) => {
+    //     console.log(users); // Manipulação de sucesso
+    //   },
+    //   error: (error) => {
+    //     console.error('Erro ao buscar usuários:', error); // Manipulação de erro
+    //   },
+    //   complete: () => {
+    //     console.log('Busca de usuários concluída.'); // (Opcional) Finalização do Observable
+    //   }
+    // });
 
   }
 

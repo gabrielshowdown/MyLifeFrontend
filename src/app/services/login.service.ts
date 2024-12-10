@@ -16,14 +16,10 @@ export class LoginService {
     return this.http.get<User[]>(this.API_USERS);
   }
 
-  validateLogin(credentials: { username: string; password: string }) : boolean{
-    const { username, password } = credentials
-    if (username === 'gabriel' && password === 'senha123'){ // Poderia ser credentials.password === 'senha123'
-      return true;
-    }
-    else {
-      return false;
-    }
+  validateLogin(credentials: { username: string; senha: string }): Observable<boolean> {
+    console.log('credentials:' , credentials);
+
+    return this.http.post<boolean>(`${this.API_USERS}/validate`, credentials);
   }
 
 }
