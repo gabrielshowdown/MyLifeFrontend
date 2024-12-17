@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { TesteComponent } from './components/teste/teste.component';
 import { Teste2Component } from './components/teste2/teste2.component';
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'teste',

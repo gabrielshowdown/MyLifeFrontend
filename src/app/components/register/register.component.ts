@@ -1,28 +1,26 @@
-import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
-import { TemplateModalComponent } from "../views/template-modal/template-modal.component";
-import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { User } from '../../interfaces/user';
+import { TemplateModalComponent } from '../views/template-modal/template-modal.component';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { LoginService } from '../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    TemplateModalComponent,
     MatIconModule,
     MatSlideToggle,
     MatSlideToggleModule,
 ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss'
 })
-export class LoginComponent implements OnInit{
+export class RegisterComponent implements OnInit{
 
   //Atribrutos
   formulario!: FormGroup;
@@ -59,7 +57,15 @@ export class LoginComponent implements OnInit{
       ])],
       password: ['', Validators.compose([
         Validators.required, // Não permite branco
-        //Validators.pattern(/(.|\s)*\S(.|\s)*/), // Não permite espaços em branco no conteúdo
+      ])],
+      birthDate: ['', Validators.compose([
+        Validators.required, // Não permite branco
+      ])],
+      gender: ['', Validators.compose([
+        Validators.required, // Não permite branco
+      ])],
+      location: ['', Validators.compose([
+        Validators.required, // Não permite brancoo
       ])],
     })
   }
@@ -85,52 +91,9 @@ export class LoginComponent implements OnInit{
     this.passwordVisibility = this.passwordVisibility === 'visibility' ? 'visibility_off' : 'visibility'
   }
 
-  cadastrar(): void{
-    //alert('cadastrar');
-    this.router.navigate(['/register']);
-  }
-
-  logar(): void{
-    console.log('Clicou no login');
+  registrar(): void{
+    console.log('Clicou no registrar');
     console.log(this.formulario.value);
-    console.log('usuario valid: ' + this.formulario.get('username')?.valid);
-    console.log('senha valid: ' + this.formulario.get('password')?.valid);
-
-    // const credentials = this.formulario.value;
-    /* Se deixar assim como no trecho acima vai gerar o json dessa forma:
-    {username: 'super', password: 'super'}
-    e como na interface e no banco é 'senha' no lugar de 'password', da pau. */
-
-    const credentials = {
-      username: this.formulario.get('username')?.value,
-      senha: this.formulario.get('password')?.value
-    }
-    console.log('Credentials do logar : ' , credentials);
-
-    this.service.validateLogin(credentials).subscribe({
-      next: (user) => {
-        console.log('User:' , user);
-        this.loginError = false;
-        this.router.navigate(['/teste']);
-      },
-      error: (err) => {
-        console.error('Erro ao validar login:', err);
-        this.loginError = true;
-      },
-    });
-
-    // this.service.getUsers().subscribe({
-    //   next: (users) => {
-    //     console.log(users); // Manipulação de sucesso
-    //   },
-    //   error: (error) => {
-    //     console.error('Erro ao buscar usuários:', error); // Manipulação de erro
-    //   },
-    //   complete: () => {
-    //     console.log('Busca de usuários concluída.'); // (Opcional) Finalização do Observable
-    //   }
-    // });
-
   }
 
   getTimeOfDay(): string {
