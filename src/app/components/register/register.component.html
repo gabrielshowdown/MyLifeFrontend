@@ -27,18 +27,24 @@
 
       <!-- Senha -->
       <div class="input-box">
-        <input type="password" formControlName="password" required [ngClass]="theme"/>
+        <input [type]="passwordFieldType" formControlName="password" required [ngClass]="theme"/>
         <label [ngClass]="theme">Senha</label>
+        <div *ngIf="formulario.get('password')?.value.length > 0">
+          <mat-icon class="visible" [ngClass]="theme" (click)="togglePasswordVisibility()" >{{passwordVisibility}}</mat-icon>
+        </div>
       </div>
 
       <!-- Confirmar Senha -->
       <div class="input-box">
-        <input type="password" formControlName="confirmPassword" required [ngClass]="theme"/>
+        <input [type]="passwordFieldType2" formControlName="confirmPassword" required [ngClass]="theme"/>
         <label [ngClass]="theme">Confirmar Senha</label>
+        <div *ngIf="formulario.get('confirmPassword')?.value.length > 0">
+          <mat-icon class="visible" [ngClass]="theme" (click)="togglePasswordVisibility2()" >{{passwordVisibility2}}</mat-icon>
+        </div>
       </div>
 
-      <div *ngIf="loginError==true" class="incorret-password" [ngClass]="theme">
-        Usuário/Senha incorreto
+      <div *ngIf="passwordsDifferents==true" class="incorret-password" [ngClass]="theme">
+        Senhas não correspondem
       </div>
 
       <!-- Gênero -->
@@ -54,25 +60,21 @@
 
       <!-- Localização -->
       <div class="input-box">
-        <input type="text" formControlName="location" required [ngClass]="theme"/>
+        <input placeholder="Cidade-UF" type="text" formControlName="location" required [ngClass]="theme"/>
         <label [ngClass]="theme">Localização</label>
       </div>
 
       <!-- Data de Nascimento -->
       <div class="input-box">
         <label [ngClass]="theme">Data de Nascimento</label>
-        <input type="date" formControlName="birthdate" required [ngClass]="theme"/>
+        <input type="date" formControlName="birthdate" required [ngClass]="theme" />
       </div>
 
-      <button
-          [disabled]="!formulario.valid"
-          type="submit"
-          [ngClass]="[
-            enableButton(),
-            theme
-          ]"
-        >Registrar
-        </button>
+      <!-- Botão de Cadastrar -->
+      <button [disabled]="!formulario.valid" type="submit" [ngClass]="[enableButton(), theme]">
+        Registrar
+      </button>
+
     </form>
   </div>
 </div>

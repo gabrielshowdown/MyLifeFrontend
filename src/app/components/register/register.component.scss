@@ -119,6 +119,27 @@ input, select {
   }
 }
 
+.input-box .visible {
+  position: absolute;
+  top: 50%; //50%; //25px;
+  transform: translateY(-50%);
+  right: 20px;
+  cursor: pointer;
+  &.night{
+    color: #0ef;
+  }
+  &.day{
+    color: #1e0d7e;
+  }
+}
+
+.incorret-password{
+  margin: -18px 0 10px;
+  text-align: center;
+  color: #ff4646;
+  font-size: 0.8em;
+}
+
 /* Estilo para as opções */
 .styled-select{
   &.night{
