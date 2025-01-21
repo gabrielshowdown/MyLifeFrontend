@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class UsersService {
 
   private readonly API_USERS = 'http://localhost:8080/users';
 

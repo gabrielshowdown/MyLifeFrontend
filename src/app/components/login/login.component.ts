@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
+import { UsersService } from '../../services/users.service';
 import { TemplateModalComponent } from "../views/template-modal/template-modal.component";
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit{
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private service: LoginService
+    private service: UsersService
   ){
     this.theme = this.getTimeOfDay();
   }
