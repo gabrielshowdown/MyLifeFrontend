@@ -22,4 +22,9 @@ export class UsersService {
     return this.http.post<boolean>(`${this.API_USERS}/validate`, credentials);
   }
 
+  registerUser(user: User): Observable<User>{
+    console.log('user: ', user);
+    return this.http.post<User>(`${this.API_USERS}`, user);
+  }
+
 }
