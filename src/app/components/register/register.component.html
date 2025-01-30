@@ -19,10 +19,20 @@
     <img src="/img/my-life-{{theme}}.png" alt="" class="logo">
     <form [formGroup]="formulario" (ngSubmit)="cadastrar()" class="grid-container">
 
+      <div *ngIf="userRegisteredSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+        Usuário cadastrado com sucesso!
+        <button type="button" class="btn-close" aria-label="Close" (click)="userRegisteredSuccess = false"></button>
+      </div>
+
       <!-- Usuário -->
       <div class="input-box">
         <input type="text" formControlName="username" required [ngClass]="theme"/>
         <label [ngClass]="theme">Usuário</label>
+      </div>
+
+      <!-- Mensagem de Usuário já cadastrado no sistema -->
+      <div *ngIf="userAlreadyRegistered==true" class="invalid-data" [ngClass]="theme">
+        Já existe um usuário com esse nome
       </div>
 
       <!-- Senha -->
@@ -43,7 +53,8 @@
         </div>
       </div>
 
-      <div *ngIf="passwordsDifferents==true" class="incorret-password" [ngClass]="theme">
+      <!-- Mensagem de senhas diferentes -->
+      <div *ngIf="passwordsDifferents==true" class="invalid-data" [ngClass]="theme">
         Senhas não correspondem
       </div>
 

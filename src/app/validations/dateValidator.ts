@@ -2,7 +2,6 @@ import { AbstractControl } from "@angular/forms";
 
 // Função que valida campos de formulário
 export function birthdayValidator(campoDoForm: AbstractControl) {
-  console.log('idnde', campoDoForm.value as string);
 
     const birthDay = campoDoForm.value as string + 'GMT-0300';
     const today = new Date();

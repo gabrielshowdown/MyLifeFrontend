@@ -26,6 +26,8 @@ export class RegisterComponent implements OnInit {
 
   // Atributos
   passwordsDifferents!: boolean;
+  userAlreadyRegistered!: boolean;
+  userRegisteredSuccess!: boolean;
   theme : String = 'day';
   formulario!: FormGroup;
   password: string = '';
@@ -90,18 +92,23 @@ export class RegisterComponent implements OnInit {
         this.service.registerUser(user).subscribe({
           next: (user) => {
             console.log('User retornado:' , user);
+            this.userRegisteredSuccess = true;
+            this.userAlreadyRegistered = false;
             this.clearForm();
-            alert('Usuário cadastrado com sucesso!')
           },
           error: (err) => {
-            console.error('Erro ao cadastrar usuário:', err);
-            this.passwordsDifferents = false;
-            alert('Já existe usuário cadastrado com esse nome')
+            if (err.status === 409){
+              console.error('Erro ao cadastrar usuário:', err);
+              this.passwordsDifferents = false;
+              this.userAlreadyRegistered = true;
+            }
+            else{
+              alert('Erro desconhecido')
+            }
           },
         });
       }
     }
-
   }
 
   backLogin(): void{
@@ -143,9 +150,20 @@ export class RegisterComponent implements OnInit {
   }
 
   clearForm(): void {
-    // Fazer campo a corppo
+    // Fazer campo a campo
     // this.formulario.get('username')?.reset();
-    this.formulario.reset();
+
+    // Se fizer apenas o this.formulario.reset() funciona certinho, porém mostra a mensagem no console log:
+    // Cannot read properties of null (reading 'length') at RegisterComponent_Template"
+
+    this.formulario.reset({
+      username: '',
+      password: '',
+      confirmPassword: '',
+      gender: '',
+      location: '',
+      birthdate: ''
+    });
   }
 
 }
