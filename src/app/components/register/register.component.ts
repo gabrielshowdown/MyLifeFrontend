@@ -67,6 +67,10 @@ export class RegisterComponent implements OnInit {
   }
 
   cadastrar(): void {
+    /* Para casos onde deu a msg de usuário já cadastrado, ai o cidadão coloca um válido e clica para cadastrar,
+       porém as senhas estão divergentes, ficaria as duas msg em tela, por isso precia do trecho abaixo */
+    this.userAlreadyRegistered = false;
+
     if (this.formulario.get('password')?.value != this.formulario.get('confirmPassword')?.value){
       this.passwordsDifferents = true;
     }
@@ -94,6 +98,7 @@ export class RegisterComponent implements OnInit {
             console.log('User retornado:' , user);
             this.userRegisteredSuccess = true;
             this.userAlreadyRegistered = false;
+            this.passwordsDifferents = false;
             this.clearForm();
           },
           error: (err) => {
