@@ -9,59 +9,58 @@
       <!-- {{ theme === 'day' ? 'Day' : 'Night' }} -->
     </mat-slide-toggle>
   </div>
+
   <div class="container">
+
     <div class="login-box">
       <img src="/img/my-life-{{theme}}.png" alt="" class="logo">
+
       <form action="#" (ngSubmit)="logar()" [formGroup]="formulario">
+
+        <!-- Usuário -->
         <div class="input-box">
-          <input
-            type="text"
-            formControlName="username"
-            required
-            [ngClass]="theme"
-          >
+          <input type="text" formControlName="username" required [ngClass]="theme">
           <label [ngClass]="theme">Usuário</label>
         </div>
+
+        <!-- Senha -->
         <div class="input-box">
-          <input
-            [type]="passwordFieldType"
-            formControlName="password"
-            required
-            [ngClass]="theme"
-          >
+          <input [type]="passwordFieldType" formControlName="password" required [ngClass]="theme">
           <label [ngClass]="theme">Senha</label>
           <div *ngIf="formulario.get('password')?.value.length > 0">
-            <mat-icon
-              class="visible"
-              [ngClass]="theme"
-              (click)="togglePasswordVisibility()"
-              >{{passwordVisibility}}
+            <mat-icon class="visible" [ngClass]="theme" (click)="togglePasswordVisibility()">
+              {{passwordVisibility}}
             </mat-icon>
           </div>
         </div>
+
+        <!-- Mensagem de login inválido -->
         <div *ngIf="loginError==true" class="incorret-password" [ngClass]="theme">
           Usuário/Senha incorreto
         </div>
+
+        <!-- Esqueceu a senha -->
         <div class="forgot-pass">
           <!-- Esse 'data-bs-toggle' é um atributo do b5 para identificar elementos que devem
            ativar modais e o 'data-bs-target' é qual componente deve ser aberto -->
           <a data-bs-toggle="modal" data-bs-target="#templateModal" [ngClass]="theme">Esqueceu sua senha?</a>
         </div>
-        <button
-          [disabled]="!formulario.valid"
-          type="submit"
-          [ngClass]="[
-            enableButton(),
-            theme
-          ]"
-        >Login
+
+        <!-- Botão de Logar -->
+        <button [disabled]="!formulario.valid" type="submit"  [ngClass]="[ enableButton(), theme ]">
+          Login
         </button>
+
+        <!-- Botão de Cadastrar -->
         <div class="signup-link">
           <a [ngClass]="theme" (click)="cadastrar()">Cadastrar</a>
         </div>
+
       </form>
+
     </div>
 
+    <!-- Coloca o circulo em volta do login -->
     <div [ngClass]="theme">
       <span [ngClass]="theme" style="--i:0;"></span>
       <span [ngClass]="theme" style="--i:1;"></span>
@@ -114,11 +113,10 @@
       <span [ngClass]="theme" style="--i:48;"></span>
       <span [ngClass]="theme" style="--i:49;"></span>
     </div>
+
   </div>
+
 </div>
-<!-- <div *ngIf="openModal"> -->
-  <!--Passado a string 'forgot...' como parâmetro de entrada para a view,
-      e o (modalChange) é a informação do output da view, deixando o modelChange como false dnv-->
-  <!-- <app-dialog-template [message]="forgotPasswordText" (modalChange)="onModalChange($event)"></app-dialog-template>
-</div> -->
+
+<!-- Modal aberto -->
 <app-template-modal [message]="forgotPasswordMessage" [theme]="theme"></app-template-modal>

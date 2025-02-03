@@ -6,7 +6,6 @@ import { UsersService } from '../../services/users.service';
 import { TemplateModalComponent } from "../views/template-modal/template-modal.component";
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +23,7 @@ import { User } from '../../interfaces/user';
 })
 export class LoginComponent implements OnInit{
 
-  //Atribrutos
+  // Atribrutos
   formulario!: FormGroup;
   loginError!: boolean;
   openModal!: boolean;
@@ -59,6 +58,7 @@ export class LoginComponent implements OnInit{
       ])],
       password: ['', Validators.compose([
         Validators.required, // Não permite branco
+        Validators.minLength(3),
         //Validators.pattern(/(.|\s)*\S(.|\s)*/), // Não permite espaços em branco no conteúdo
       ])],
     })
@@ -86,12 +86,10 @@ export class LoginComponent implements OnInit{
   }
 
   cadastrar(): void{
-    //alert('cadastrar');
     this.router.navigate(['/register']);
   }
 
   logar(): void{
-    console.log('Clicou no login');
     console.log(this.formulario.value);
     console.log('usuario valid: ' + this.formulario.get('username')?.valid);
     console.log('senha valid: ' + this.formulario.get('password')?.valid);
@@ -105,6 +103,7 @@ export class LoginComponent implements OnInit{
       username: this.formulario.get('username')?.value,
       senha: this.formulario.get('password')?.value
     }
+
     console.log('Credentials do logar : ' , credentials);
 
     this.service.validateLogin(credentials).subscribe({

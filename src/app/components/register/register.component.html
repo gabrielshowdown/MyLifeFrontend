@@ -14,11 +14,13 @@
     (click)="backLogin()"
     >Entrar
   </div>
+
   <div class="register-container">
 
     <img src="/img/my-life-{{theme}}.png" alt="" class="logo">
     <form [formGroup]="formulario" (ngSubmit)="cadastrar()" class="grid-container">
 
+      <!-- Mensagem de usuário registrado com sucesso -->
       <div *ngIf="userRegisteredSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
         Usuário cadastrado com sucesso!
         <button type="button" class="btn-close" aria-label="Close" (click)="userRegisteredSuccess = false"></button>

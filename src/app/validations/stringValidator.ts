@@ -14,8 +14,8 @@ export function minusculoValidator(campoDoForm: AbstractControl) {
 
 export function maiusculoValidator(campoDoForm: AbstractControl) {
   const autoria = campoDoForm.value as string;
-  if(autoria !== autoria?.toUpperCase()) { // Verifica se a string do campo autoria NÃO é toda minuscula
-      return { minusculo: true };
+  if(autoria !== autoria?.toUpperCase()) { // Verifica se a string do campo autoria NÃO é toda maiuscula
+      return { maiusculo: true };
   }
   else {
     return null;

@@ -12,6 +12,7 @@ export class UsersService {
 
   constructor(private http: HttpClient) { }
 
+  // Retorna todos os usuários cadastrados
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.API_USERS);
   }

@@ -77,7 +77,6 @@ export class RegisterComponent implements OnInit {
     else{
       if (this.formulario.valid) {
         console.log('Dados do formulário:', this.formulario.value);
-        //this.router.navigate(['/login']);
 
         const credentials = {
           username: this.formulario.get('username')?.value,
@@ -117,7 +116,6 @@ export class RegisterComponent implements OnInit {
   }
 
   backLogin(): void{
-    //alert('cadastrar');
     this.router.navigate(['/login']);
   }
 
@@ -158,8 +156,8 @@ export class RegisterComponent implements OnInit {
     // Fazer campo a campo
     // this.formulario.get('username')?.reset();
 
-    // Se fizer apenas o this.formulario.reset() funciona certinho, porém mostra a mensagem no console log:
-    // Cannot read properties of null (reading 'length') at RegisterComponent_Template"
+    /* Se fizer apenas o this.formulario.reset() funciona certinho, porém mostra a mensagem no console log:
+    Cannot read properties of null (reading 'length') at RegisterComponent_Template" */
 
     this.formulario.reset({
       username: '',

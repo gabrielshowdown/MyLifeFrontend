@@ -1,8 +1,8 @@
 export interface User{
-  id?:          number;
-  username:    string;
-  senha:       string;
-  genero:      string;
-  localizacao: string;
+  id?:            Number;
+  username:       String;
+  senha:          String;
+  genero:         String;
+  localizacao:    String;
   dataNascimento: Date;
 }
