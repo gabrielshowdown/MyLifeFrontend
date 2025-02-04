@@ -21,9 +21,9 @@
     <form [formGroup]="formulario" (ngSubmit)="cadastrar()" class="grid-container">
 
       <!-- Mensagem de usuário registrado com sucesso -->
-      <div *ngIf="userRegisteredSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
-        Usuário cadastrado com sucesso!
-        <button type="button" class="btn-close" aria-label="Close" (click)="userRegisteredSuccess = false"></button>
+      <div *ngIf="afterClickRegister" [ngClass]="typeMessage" class="alert alert-dismissible fade show" role="alert">
+        {{msgAfterClickRegister}}
+        <button type="button" class="btn-close" aria-label="Close" (click)="afterClickRegister = false"></button>
       </div>
 
       <!-- Usuário -->
