@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
   // Atributos
   passwordsDifferents!: boolean;
   userAlreadyRegistered!: boolean;
-  afterClickRegister!: boolean;
+  afterRequestRegister!: boolean;
   theme : String = 'day';
   formulario!: FormGroup;
   password: string = '';
@@ -69,15 +69,13 @@ export class RegisterComponent implements OnInit {
   }
 
   cadastrar(): void {
-    /* Para casos onde deu a msg de usuário já cadastrado, ai o cidadão coloca um válido e clica para cadastrar,
-       porém as senhas estão divergentes, ficaria as duas msg em tela, por isso precia do trecho abaixo */
-    this.userAlreadyRegistered = false;
+
+    this.clearMessages();
 
     if (this.formulario.get('password')?.value != this.formulario.get('confirmPassword')?.value){
       this.passwordsDifferents = true;
-      this.afterClickRegister = false;
     }
-    else{
+    else {
       if (this.formulario.valid) {
         console.log('Dados do formulário:', this.formulario.value);
 
@@ -98,29 +96,28 @@ export class RegisterComponent implements OnInit {
         this.service.registerUser(user).subscribe({
           next: (user) => {
             console.log('User retornado:' , user);
-            this.typeMessage = "alert-success"
-            this.msgAfterClickRegister = "Usuário cadastrado com sucesso!"
-            this.afterClickRegister = true;
-            this.userAlreadyRegistered = false;
-            this.passwordsDifferents = false;
+            this.showStatusRequestMsg("success");
             this.clearForm();
           },
           error: (err) => {
             if (err.status === 409){
               console.error('Erro ao cadastrar usuário:', err);
-              this.afterClickRegister = false;
-              this.passwordsDifferents = false;
               this.userAlreadyRegistered = true;
             }
             else{
-              this.typeMessage = "alert-danger"
-              this.msgAfterClickRegister = "Erro ao registrar"
-              this.afterClickRegister = true;
+              this.showStatusRequestMsg("error")
             }
           },
         });
       }
     }
+  }
+
+  showStatusRequestMsg(status : string) {
+    // Se o status for success , faz o
+    this.typeMessage = (status === 'success' ? "alert-success" : 'alert-danger');
+    this.msgAfterClickRegister = status === 'success' ? "Usuário cadastrado com sucesso!" : 'Erro ao registrar';
+    this.afterRequestRegister = true;
   }
 
   backLogin(): void{
@@ -175,6 +172,12 @@ export class RegisterComponent implements OnInit {
       location: '',
       birthdate: ''
     });
+  }
+
+  clearMessages(): void {
+    this.userAlreadyRegistered = false;
+    this.afterRequestRegister = false;
+    this.passwordsDifferents = false;
   }
 
 }
