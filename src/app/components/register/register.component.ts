@@ -32,15 +32,21 @@ export class RegisterComponent implements OnInit {
   theme : String = 'day';
   formulario!: FormGroup;
   password: string = '';
-  passwordFieldType: string = 'password';
-  passwordFieldType2: string = 'password';
-  passwordVisibility: string = 'visibility';
-  passwordVisibility2: string = 'visibility';
   today = new Date();
   typeMessage : String = "alert-success";
   msgAfterClickRegister: String = "Usuário cadastrado com sucesso!"
   sun : string;
   moon: string;
+
+  passwordFieldType = {
+    password: 'password',
+    confirmPassword: 'password'
+  };
+
+  passwordVisibility = {
+    password: 'visibility',
+    confirmPassword: 'visibility'
+  };
 
   @ViewChild('darkModeSwitch', { read: ElementRef }) element: ElementRef | undefined;
 
@@ -128,14 +134,9 @@ export class RegisterComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  togglePasswordVisibility(): void {
-    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
-    this.passwordVisibility = this.passwordVisibility === 'visibility' ? 'visibility_off' : 'visibility'
-  }
-
-  togglePasswordVisibility2(): void {
-    this.passwordFieldType2 = this.passwordFieldType2 === 'password' ? 'text' : 'password';
-    this.passwordVisibility2 = this.passwordVisibility2 === 'visibility' ? 'visibility_off' : 'visibility'
+  togglePasswordVisibility(field: 'password' | 'confirmPassword'): void {
+    this.passwordFieldType[field] = this.passwordFieldType[field] === 'password' ? 'text' : 'password';
+    this.passwordVisibility[field] = this.passwordVisibility[field] === 'visibility' ? 'visibility_off' : 'visibility';
   }
 
   onToggleChange(event: any): void {
