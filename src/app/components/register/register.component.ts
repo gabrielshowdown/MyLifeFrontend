@@ -9,6 +9,7 @@ import { UsersService } from '../../services/users.service';
 import { User } from '../../interfaces/user';
 import { ThemeService } from '../../services/theme.service';
 import { Subscription } from 'rxjs';
+import { DebugService } from '../../services/debug.service';
 
 @Component({
   selector: 'app-register',
@@ -53,7 +54,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
   @ViewChild('darkModeSwitch', { read: ElementRef }) element: ElementRef | undefined;
 
   //Construtor
-  constructor(private formBuilder: FormBuilder, private router: Router, private service: UsersService, private themeService: ThemeService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private service: UsersService,
+    private themeService: ThemeService,
+    private debugService: DebugService,
+
+  ) {
     this.theme = this.themeService.getTimeOfDay();
     this.sun = this.themeService.getSun();
     this.moon = this.themeService.getMoon();
@@ -93,7 +101,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
     else {
       if (this.formulario.valid) {
-        console.log('Dados do formulário:', this.formulario.value);
+        this.debugService.log('Dados do formulário:', this.formulario.value);
 
         const credentials = {
           username: this.formulario.get('username')?.value,
@@ -108,11 +116,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
           ...credentials
         };
 
-        console.log('Credentials ao cadastrar : ' , user);
+        this.debugService.log('Credentials ao cadastrar : ' , user);
         this.subscription =
         this.service.registerUser(user).subscribe({
           next: (user) => {
-            console.log('User retornado:' , user);
+            this.debugService.log('User retornado:' , user);
             this.showStatusRequestMsg("success");
             this.clearForm();
           },

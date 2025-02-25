@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DebugService } from '../../services/debug.service';
 
 @Component({
   selector: 'app-teste',
@@ -12,13 +12,14 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
     MatSlideToggle,
     MatSlideToggleModule,
     CommonModule,
-    MatCheckbox,
     FormsModule
   ],
   templateUrl: './teste.component.html',
   styleUrl: './teste.component.scss'
 })
 export class TesteComponent {
+
+  constructor(private debugService: DebugService) {}
 
   color = 'red'
 
@@ -36,5 +37,9 @@ export class TesteComponent {
   }
 
   textoTeste: string = 'teste';
+
+  ngOnInit(): void {
+    this.debugService.log('LoginComponent inicializado');
+  }
 
 }

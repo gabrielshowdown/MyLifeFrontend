@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ThemeService } from '../../services/theme.service';
 import { Subscription } from 'rxjs';
+import { DebugService } from '../../services/debug.service';
 
 @Component({
   selector: 'app-login',
@@ -50,7 +51,8 @@ export class LoginComponent implements OnInit, OnDestroy{
     private formBuilder: FormBuilder,
     private router: Router,
     private service: UsersService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private debugService: DebugService,
   ){
     this.theme = this.themeService.getTimeOfDay();
     this.sun = this.themeService.getSun();
@@ -102,9 +104,9 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   logar(): void{
-    console.log(this.formulario.value);
-    console.log('usuario valid: ' + this.formulario.get('username')?.valid);
-    console.log('senha valid: ' + this.formulario.get('password')?.valid);
+    this.debugService.log(this.formulario.value);
+    this.debugService.log('usuario valid: ' + this.formulario.get('username')?.valid);
+    this.debugService.log('senha valid: ' + this.formulario.get('password')?.valid);
 
     // const credentials = this.formulario.value;
     /* Se deixar assim como no trecho acima vai gerar o json dessa forma:
@@ -116,11 +118,11 @@ export class LoginComponent implements OnInit, OnDestroy{
       senha: this.formulario.get('password')?.value
     }
 
-    console.log('Credentials do logar : ' , credentials);
+    this.debugService.log('Credentials do logar : ' , credentials);
     this.subscription =
     this.service.validateLogin(credentials).subscribe({
       next: (user) => {
-        console.log('User:' , user);
+        this.debugService.log('User:' , user);
         this.loginError = false;
         this.router.navigate(['/teste']);
       },
@@ -132,13 +134,13 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     // this.service.getUsers().subscribe({
     //   next: (users) => {
-    //     console.log(users); // Manipulação de sucesso
+    //     this.debugService.log(users); // Manipulação de sucesso
     //   },
     //   error: (error) => {
     //     console.error('Erro ao buscar usuários:', error); // Manipulação de erro
     //   },
     //   complete: () => {
-    //     console.log('Busca de usuários concluída.'); // (Opcional) Finalização do Observable
+    //     this.debugService.log('Busca de usuários concluída.'); // (Opcional) Finalização do Observable
     //   }
     // });
 
