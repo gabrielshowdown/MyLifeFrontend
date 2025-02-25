@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsersService } from '../../services/users.service';
@@ -7,6 +7,7 @@ import { TemplateModalComponent } from "../views/template-modal/template-modal.c
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ThemeService } from '../../services/theme.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ import { ThemeService } from '../../services/theme.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit, OnDestroy{
 
   // Atribrutos
   formulario!: FormGroup;
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit{
   theme = 'day';
   sun : string;
   moon: string;
+  subscription!: Subscription;
 
   forgotPasswordMessage = {
     title: 'Esqueceu sua senha? ',
@@ -67,6 +69,10 @@ export class LoginComponent implements OnInit{
         //Validators.pattern(/(.|\s)*\S(.|\s)*/), // Não permite espaços em branco no conteúdo
       ])],
     })
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe(); // O ? indica que pode ser undefined, caso não seja usado ele no processo
   }
 
   ngAfterViewInit() {
@@ -111,7 +117,7 @@ export class LoginComponent implements OnInit{
     }
 
     console.log('Credentials do logar : ' , credentials);
-
+    this.subscription =
     this.service.validateLogin(credentials).subscribe({
       next: (user) => {
         console.log('User:' , user);

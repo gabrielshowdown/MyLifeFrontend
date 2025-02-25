@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { birthdayValidator } from '../../validations/dateValidator';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../interfaces/user';
 import { ThemeService } from '../../services/theme.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +24,7 @@ import { ThemeService } from '../../services/theme.service';
   styleUrl: './register.component.scss'
 })
 
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   // Atributos
   passwordsDifferents!: boolean;
@@ -37,6 +38,7 @@ export class RegisterComponent implements OnInit {
   msgAfterClickRegister: String = "Usuário cadastrado com sucesso!"
   sun : string;
   moon: string;
+  subscription!: Subscription;
 
   passwordFieldType = {
     password: 'password',
@@ -78,6 +80,10 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe(); // // O ? indica que pode ser undefined, caso não seja usado ele no processo
+  }
+
   cadastrar(): void {
 
     this.clearMessages();
@@ -103,6 +109,7 @@ export class RegisterComponent implements OnInit {
         };
 
         console.log('Credentials ao cadastrar : ' , user);
+        this.subscription =
         this.service.registerUser(user).subscribe({
           next: (user) => {
             console.log('User retornado:' , user);
