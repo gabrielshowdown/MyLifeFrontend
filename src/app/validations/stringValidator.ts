@@ -1,10 +1,10 @@
 import { AbstractControl } from "@angular/forms";
 
-// Função que valida campos de formulário
-export function minusculoValidator(campoDoForm: AbstractControl) {
+// Função valida se os campos são minusculos (minusculoValidator)
+export function lowercaseValidator(campoDoForm: AbstractControl) {
     const autoria = campoDoForm.value as string;
     if(autoria !== autoria?.toLowerCase()) { // Verifica se a string do campo autoria NÃO é toda minuscula
-        return { minusculo: true };
+        return { lowercase: true };
     }
     else {
       return null;
@@ -12,10 +12,11 @@ export function minusculoValidator(campoDoForm: AbstractControl) {
 
 }
 
-export function maiusculoValidator(campoDoForm: AbstractControl) {
+// Função valida se os campos são maiusculo (maiusculoValidator)
+export function uppercaseValidator(campoDoForm: AbstractControl) {
   const autoria = campoDoForm.value as string;
   if(autoria !== autoria?.toUpperCase()) { // Verifica se a string do campo autoria NÃO é toda maiuscula
-      return { maiusculo: true };
+      return { uppercase: true };
   }
   else {
     return null;

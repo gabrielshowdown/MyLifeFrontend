@@ -27,7 +27,7 @@ import { DebugService } from '../../services/debug.service';
 export class LoginComponent implements OnInit, OnDestroy{
 
   // Atribrutos
-  formulario!: FormGroup;
+  form!: FormGroup;
   loginError!: boolean;
   openModal!: boolean;
   password: string = '';
@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void{
-    this.formulario = this.formBuilder.group({
+    this.form = this.formBuilder.group({
       username: ['', Validators.compose([
         Validators.required, // Não permite branco
         Validators.minLength(3),
@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   enableButton(): string {
-    if(this.formulario.valid){
+    if(this.form.valid){
       return 'btn btn-enabled'
     }
     else{
@@ -99,23 +99,23 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.passwordVisibility = this.passwordVisibility === 'visibility' ? 'visibility_off' : 'visibility'
   }
 
-  cadastrar(): void{
+  register(): void{
     this.router.navigate(['/register']);
   }
 
-  logar(): void{
-    this.debugService.log(this.formulario.value);
-    this.debugService.log('usuario valid: ' + this.formulario.get('username')?.valid);
-    this.debugService.log('senha valid: ' + this.formulario.get('password')?.valid);
+  login(): void{
+    this.debugService.log(this.form.value);
+    this.debugService.log('usuario valid: ' + this.form.get('username')?.valid);
+    this.debugService.log('senha valid: ' + this.form.get('password')?.valid);
 
-    // const credentials = this.formulario.value;
+    // const credentials = this.form.value;
     /* Se deixar assim como no trecho acima vai gerar o json dessa forma:
     {username: 'super', password: 'super'}
     e como na interface e no banco é 'senha' no lugar de 'password', da pau. */
 
     const credentials = {
-      username: this.formulario.get('username')?.value,
-      senha: this.formulario.get('password')?.value
+      username: this.form.get('username')?.value,
+      senha: this.form.get('password')?.value
     }
 
     this.debugService.log('Credentials do logar : ' , credentials);

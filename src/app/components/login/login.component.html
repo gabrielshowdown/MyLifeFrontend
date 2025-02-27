@@ -15,7 +15,7 @@
     <div class="login-box">
       <img src="/img/my-life-{{theme}}.png" alt="" class="logo">
 
-      <form action="#" (ngSubmit)="logar()" [formGroup]="formulario">
+      <form action="#" (ngSubmit)="login()" [formGroup]="form">
 
         <!-- Usuário -->
         <div class="input-box">
@@ -27,7 +27,7 @@
         <div class="input-box">
           <input [type]="passwordFieldType" formControlName="password" required [ngClass]="theme">
           <label [ngClass]="theme">Senha</label>
-          <div *ngIf="formulario.get('password')?.value.length > 0">
+          <div *ngIf="form.get('password')?.value.length > 0">
             <mat-icon class="visible" [ngClass]="theme" (click)="togglePasswordVisibility()">
               {{passwordVisibility}}
             </mat-icon>
@@ -47,13 +47,13 @@
         </div>
 
         <!-- Botão de Logar -->
-        <button [disabled]="!formulario.valid" type="submit"  [ngClass]="[ enableButton(), theme ]">
+        <button [disabled]="!form.valid" type="submit"  [ngClass]="[ enableButton(), theme ]">
           Login
         </button>
 
         <!-- Botão de Cadastrar -->
         <div class="signup-link">
-          <a [ngClass]="theme" (click)="cadastrar()">Cadastrar</a>
+          <a [ngClass]="theme" (click)="register()">Cadastrar</a>
         </div>
 
       </form>

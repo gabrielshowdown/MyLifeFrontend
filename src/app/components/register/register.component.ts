@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   userAlreadyRegistered!: boolean;
   afterRequestRegister!: boolean;
   theme : String = 'day';
-  formulario!: FormGroup;
+  form!: FormGroup;
   password: string = '';
   today = new Date();
   typeMessage : String = "alert-success";
@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // this.maxDate = today.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
     // Formulário reativo (as aspas vazias '' é o valor inicial do campo)
-    this.formulario = this.formBuilder.group({
+    this.form = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(3),]], // minusculoValidator só aceitaria minusculo
       password: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/(.|\s)*\S(.|\s)*/),]],
       confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.pattern(/(.|\s)*\S(.|\s)*/)])], // Compose não é obrigatório
@@ -92,23 +92,23 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe(); // // O ? indica que pode ser undefined, caso não seja usado ele no processo
   }
 
-  cadastrar(): void {
+  register(): void {
 
     this.clearMessages();
 
-    if (this.formulario.get('password')?.value != this.formulario.get('confirmPassword')?.value){
+    if (this.form.get('password')?.value != this.form.get('confirmPassword')?.value){
       this.passwordsDifferents = true;
     }
     else {
-      if (this.formulario.valid) {
-        this.debugService.log('Dados do formulário:', this.formulario.value);
+      if (this.form.valid) {
+        this.debugService.log('Dados do formulário:', this.form.value);
 
         const credentials = {
-          username: this.formulario.get('username')?.value,
-          senha: this.formulario.get('password')?.value,
-          genero: this.formulario.get('gender')?.value,
-          localizacao: this.formulario.get('location')?.value,
-          dataNascimento: this.formulario.get('birthdate')?.value,
+          username: this.form.get('username')?.value,
+          senha: this.form.get('password')?.value,
+          genero: this.form.get('gender')?.value,
+          localizacao: this.form.get('location')?.value,
+          dataNascimento: this.form.get('birthdate')?.value,
         }
 
         const user: User = {
@@ -160,7 +160,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   enableButton(): string {
-    if(this.formulario.valid){
+    if(this.form.valid){
       return 'btn btn-enabled'
     }
     else{
@@ -170,12 +170,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   clearForm(): void {
     // Fazer campo a campo
-    // this.formulario.get('username')?.reset();
+    // this.form.get('username')?.reset();
 
-    /* Se fizer apenas o this.formulario.reset() funciona certinho, porém mostra a mensagem no console log:
+    /* Se fizer apenas o this.form.reset() funciona certinho, porém mostra a mensagem no console log:
     Cannot read properties of null (reading 'length') at RegisterComponent_Template" */
 
-    this.formulario.reset({
+    this.form.reset({
       username: '',
       password: '',
       confirmPassword: '',

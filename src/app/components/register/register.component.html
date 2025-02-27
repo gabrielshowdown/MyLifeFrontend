@@ -18,7 +18,7 @@
   <div class="register-container">
 
     <img src="/img/my-life-{{theme}}.png" alt="" class="logo">
-    <form [formGroup]="formulario" (ngSubmit)="cadastrar()" class="grid-container">
+    <form [formGroup]="form" (ngSubmit)="register()" class="grid-container">
 
       <!-- Mensagem de usuário registrado com sucesso -->
       <div *ngIf="afterRequestRegister" [ngClass]="typeMessage" class="alert alert-dismissible fade show" role="alert">
@@ -41,7 +41,7 @@
       <div class="input-box">
         <input [type]="passwordFieldType.password" formControlName="password" required [ngClass]="theme"/>
         <label [ngClass]="theme">Senha</label>
-        <div *ngIf="formulario.get('password')?.value.length > 0">
+        <div *ngIf="form.get('password')?.value.length > 0">
           <mat-icon class="visible" [ngClass]="theme" (click)="togglePasswordVisibility('password')" >{{passwordVisibility.password}}</mat-icon>
         </div>
       </div>
@@ -50,7 +50,7 @@
       <div class="input-box">
         <input [type]="passwordFieldType.confirmPassword" formControlName="confirmPassword" required [ngClass]="theme"/>
         <label [ngClass]="theme">Confirmar Senha</label>
-        <div *ngIf="formulario.get('confirmPassword')?.value.length > 0">
+        <div *ngIf="form.get('confirmPassword')?.value.length > 0">
           <mat-icon class="visible" [ngClass]="theme" (click)="togglePasswordVisibility('confirmPassword')" >{{passwordVisibility.confirmPassword}}</mat-icon>
         </div>
       </div>
@@ -84,7 +84,7 @@
       </div>
 
       <!-- Botão de Cadastrar -->
-      <button [disabled]="!formulario.valid" type="submit" [ngClass]="[enableButton(), theme]">
+      <button [disabled]="!form.valid" type="submit" [ngClass]="[enableButton(), theme]">
         Registrar
       </button>
 
