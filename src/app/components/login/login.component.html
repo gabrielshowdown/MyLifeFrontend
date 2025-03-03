@@ -1,7 +1,9 @@
 
 <div class="parent" [ngClass]="theme">
   <div>
+    <!-- Necessário colocar o ngIf para não ter aquele bug de inicializar o valor do toogle em microsegundos -->
     <mat-slide-toggle
+      *ngIf="theme"
       class="toogle-container"
       #darkModeSwitch
       [checked]="theme === 'night'"

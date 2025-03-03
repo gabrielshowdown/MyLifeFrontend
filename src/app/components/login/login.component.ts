@@ -54,12 +54,13 @@ export class LoginComponent implements OnInit, OnDestroy{
     private themeService: ThemeService,
     private debugService: DebugService,
   ){
-    this.theme = this.themeService.getTimeOfDay();
     this.sun = this.themeService.getSun();
     this.moon = this.themeService.getMoon();
   }
 
   ngOnInit(): void{
+    this.theme = this.themeService.getTheme() == undefined ? this.themeService.getTimeOfDay() : this.themeService.getTheme();
+
     this.form = this.formBuilder.group({
       username: ['', Validators.compose([
         Validators.required, // Não permite branco
@@ -100,6 +101,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   register(): void{
+    this.themeService.setTheme(this.theme);
     this.router.navigate(['/register']);
   }
 
@@ -148,7 +150,7 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   onToggleChange(event: any): void {
     // this.theme = event.checked ? 'night' : 'day';
-    this.theme = this.themeService.setTheme(event.checked)
+    this.theme = this.themeService.changeTheme(event.checked)
   }
 
 }

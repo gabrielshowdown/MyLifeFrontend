@@ -31,12 +31,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   passwordsDifferents!: boolean;
   userAlreadyRegistered!: boolean;
   afterRequestRegister!: boolean;
-  theme : String = 'day';
+  theme : string = 'day';
   form!: FormGroup;
   password: string = '';
   today = new Date();
-  typeMessage : String = "alert-success";
-  msgAfterClickRegister: String = "Usuário cadastrado com sucesso!"
+  typeMessage : string = "alert-success";
+  msgAfterClickRegister: string = "Usuário cadastrado com sucesso!"
   sun : string;
   moon: string;
   subscription!: Subscription;
@@ -62,12 +62,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private debugService: DebugService,
 
   ) {
-    this.theme = this.themeService.getTimeOfDay();
     this.sun = this.themeService.getSun();
     this.moon = this.themeService.getMoon();
   }
 
   ngOnInit(): void {
+    this.theme = this.themeService.getTheme() == undefined ? this.themeService.getTimeOfDay() : this.themeService.getTheme();
+
     // this.maxDate = today.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
     // Formulário reativo (as aspas vazias '' é o valor inicial do campo)
     this.form = this.formBuilder.group({
@@ -146,6 +147,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   backLogin(): void{
+    this.themeService.setTheme(this.theme);
     this.router.navigate(['/login']);
   }
 
@@ -155,7 +157,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onToggleChange(event: any): void {
-    this.theme = this.themeService.setTheme(event.checked)
+    this.theme = this.themeService.changeTheme(event.checked)
     //this.theme = event.checked ? 'night' : 'day';
   }
 
