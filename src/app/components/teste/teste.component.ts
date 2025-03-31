@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DebugService } from '../../services/debug.service';
+import { LoteriasService } from '../../services/loterias.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teste',
@@ -17,10 +19,16 @@ import { DebugService } from '../../services/debug.service';
   templateUrl: './teste.component.html',
   styleUrl: './teste.component.scss'
 })
-export class TesteComponent {
+export class TesteComponent implements OnDestroy{
 
-  constructor(private debugService: DebugService) {}
+  constructor(
+    private debugService: DebugService,
+    private service: LoteriasService
+  ) {
 
+  }
+
+  subscription!: Subscription;
   color = 'red'
 
   //https://stackoverflow.com/questions/62549139/it-is-possible-change-angular-material-mat-slide-toggle-icon
@@ -40,6 +48,29 @@ export class TesteComponent {
 
   ngOnInit(): void {
     this.debugService.log('LoginComponent inicializado');
+  }
+
+  numConcurso: any;
+
+  buscar(): void {
+    this.subscription = this.service.getConcurso(this.numConcurso)
+    .subscribe({
+      next: users => {
+        //this.debugService.log(users); // Manipulação de sucesso
+        console.log(users);
+
+      },
+      error: (error) => {
+        console.error('Erro ao buscar lotofácil:', error); // Manipulação de erro
+      },
+      complete: () => {
+        this.debugService.log('Busca de lotofácil concluída.'); // (Opcional) Finalização do Observable
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }
