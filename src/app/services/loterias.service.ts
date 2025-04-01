@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { DebugService } from './debug.service';
 import { Observable } from 'rxjs';
 import { User } from '../interfaces/user';
+import { Lotofacil } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,11 @@ export class LoteriasService {
     constructor(private http: HttpClient, private debugService: DebugService,) { }
 
     // Retorna todos os usuários cadastrados
-    getConcurso(conc : number): Observable<any[]> {
+    getConcurso(conc : number): Observable<Lotofacil> {
       //const paramertros = new HttpParams().append('','300')
       //return this.http.get<any[]>(this.API_LOTOFACIL , {params : paramertros});
       // geraria uma URL https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/?=300
-      return this.http.get<any[]>(this.API_LOTOFACIL + conc );
+      return this.http.get<Lotofacil>(this.API_LOTOFACIL + conc );
     }
 
     validateLogin(credentials: { username: string; senha: string }): Observable<boolean> {
