@@ -1,4 +1,4 @@
-export interface Lotofacil {
+export interface Concurso {
   acumulado:                      boolean;
   dataApuracao:                   string;
   dataProximoConcurso:            string;
@@ -50,7 +50,7 @@ export interface ListaRateioPremio {
 }
 
 // Interface que representa o modelo que nós queremos tratar
-export interface ConcursoLotofacil {
+export interface ConcursoResumo {
   numero?:                         number;
   numeroConcursoAnterior?:         number;
   numeroConcursoProximo?:          number;

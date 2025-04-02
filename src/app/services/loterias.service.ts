@@ -1,4 +1,4 @@
-import { ConcursoLotofacil, Lotofacil } from './../interfaces/lotofacil';
+import { Concurso } from '../interfaces/loterias';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from './debug.service';
@@ -14,11 +14,11 @@ export class LoteriasService {
     constructor(private http: HttpClient, private debugService: DebugService,) { }
 
     // Obtem todo o retorno da API
-    getConcursoLotofacil(conc : number): Observable<Lotofacil> {
+    getConcursoLotofacil(conc : number): Observable<Concurso> {
       //const paramertros = new HttpParams().append('','300')
       //return this.http.get<any[]>(this.API_LOTOFACIL , {params : paramertros});
       // geraria uma URL https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/?=300
-      return this.http.get<Lotofacil>(this.API_LOTOFACIL + conc )
+      return this.http.get<Concurso>(this.API_LOTOFACIL + conc )
         .pipe(
           tap((retornoAPI) => console.log('Fluxo do tap no service' , retornoAPI)), // Usado para debug
           //map(resultado => resultado.localSorteio), // Usado para transformação
@@ -28,7 +28,7 @@ export class LoteriasService {
 
     // Transforma toda a resposta da API em um array de string com as dezenas
     getDezenasLotofacil(conc : number): Observable<string[]> {
-      return this.http.get<Lotofacil>(this.API_LOTOFACIL + conc )
+      return this.http.get<Concurso>(this.API_LOTOFACIL + conc )
         .pipe(
           tap((retornoAPI) => console.log('Fluxo do tap no service' , retornoAPI)), // Usado para debug
           map(resultado => resultado.listaDezenas), // Usado para transformação

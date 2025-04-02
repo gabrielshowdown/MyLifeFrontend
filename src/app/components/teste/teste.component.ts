@@ -6,6 +6,7 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
 import { DebugService } from '../../services/debug.service';
 import { LoteriasService } from '../../services/loterias.service';
 import { Subscription } from 'rxjs';
+import { Concurso, ConcursoResumo } from '../../interfaces/loterias';
 
 @Component({
   selector: 'app-teste',
@@ -53,12 +54,29 @@ export class TesteComponent implements OnDestroy{
 
   numConcurso: any;
 
+  concursoLotofacil!: ConcursoResumo;
+
+  concursoParaConcursoResumo(concurso: Concurso){
+    this.concursoLotofacil = {
+      numero:  concurso.numero,
+      numeroConcursoAnterior: concurso.numeroConcursoAnterior,
+      numeroConcursoProximo: concurso.numeroConcursoProximo,
+      dataApuracao: concurso.dataApuracao,
+      dataProximoConcurso: concurso.dataProximoConcurso,
+      tipoJogo: concurso.tipoJogo,
+      listaDezenas: concurso.listaDezenas,
+      localSorteio: concurso.localSorteio,
+    }
+  }
+
   buscar(): void {
     this.subscription = this.service.getConcursoLotofacil(this.numConcurso)
     .subscribe({
-      next: users => {
+      next: concurso => {
         //this.debugService.log(users); // Manipulação de sucesso
-        console.log('Resultado no componente ' , users);
+        console.log('Resultado no componente ' , concurso);
+        this.concursoParaConcursoResumo(concurso);
+        console.log('concursoLotofacil:' , this.concursoLotofacil);
 
       },
       error: (error) => {
@@ -73,9 +91,9 @@ export class TesteComponent implements OnDestroy{
   buscarDezenas(): void {
     this.subscription = this.service.getDezenasLotofacil(this.numConcurso)
     .subscribe({
-      next: users => {
+      next: concurso => {
         //this.debugService.log(users); // Manipulação de sucesso
-        console.log('Resultado no componente ' , users);
+        console.log('Resultado no componente ' , concurso);
 
       },
       error: (error) => {
