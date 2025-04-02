@@ -48,3 +48,15 @@ export interface ListaRateioPremio {
   numeroDeGanhadores: number;
   valorPremio:        number;
 }
+
+// Interface que representa o modelo que nós queremos tratar
+export interface ConcursoLotofacil {
+  numero?:                         number;
+  numeroConcursoAnterior?:         number;
+  numeroConcursoProximo?:          number;
+  dataApuracao?:                   string;
+  dataProximoConcurso?:            string;
+  tipoJogo?:                       string;
+  listaDezenas?:                   string[];
+  localSorteio?:                   string;
+}

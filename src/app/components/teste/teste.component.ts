@@ -48,16 +48,34 @@ export class TesteComponent implements OnDestroy{
 
   ngOnInit(): void {
     this.debugService.log('LoginComponent inicializado');
+    this.numConcurso = 3000;
   }
 
   numConcurso: any;
 
   buscar(): void {
-    this.subscription = this.service.getConcurso(this.numConcurso)
+    this.subscription = this.service.getConcursoLotofacil(this.numConcurso)
     .subscribe({
       next: users => {
         //this.debugService.log(users); // Manipulação de sucesso
-        console.log(users);
+        console.log('Resultado no componente ' , users);
+
+      },
+      error: (error) => {
+        console.error('Erro ao buscar lotofácil:', error); // Manipulação de erro
+      },
+      complete: () => {
+        this.debugService.log('Busca de lotofácil concluída.'); // (Opcional) Finalização do Observable
+      }
+    });
+  }
+
+  buscarDezenas(): void {
+    this.subscription = this.service.getDezenasLotofacil(this.numConcurso)
+    .subscribe({
+      next: users => {
+        //this.debugService.log(users); // Manipulação de sucesso
+        console.log('Resultado no componente ' , users);
 
       },
       error: (error) => {

@@ -1,9 +1,8 @@
+import { ConcursoLotofacil, Lotofacil } from './../interfaces/lotofacil';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from './debug.service';
-import { Observable } from 'rxjs';
-import { User } from '../interfaces/user';
-import { Lotofacil } from '../interfaces/lotofacil';
+import { map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,23 +13,27 @@ export class LoteriasService {
 
     constructor(private http: HttpClient, private debugService: DebugService,) { }
 
-    // Retorna todos os usuários cadastrados
-    getConcurso(conc : number): Observable<Lotofacil> {
+    // Obtem todo o retorno da API
+    getConcursoLotofacil(conc : number): Observable<Lotofacil> {
       //const paramertros = new HttpParams().append('','300')
       //return this.http.get<any[]>(this.API_LOTOFACIL , {params : paramertros});
       // geraria uma URL https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/?=300
-      return this.http.get<Lotofacil>(this.API_LOTOFACIL + conc );
+      return this.http.get<Lotofacil>(this.API_LOTOFACIL + conc )
+        .pipe(
+          tap((retornoAPI) => console.log('Fluxo do tap no service' , retornoAPI)), // Usado para debug
+          //map(resultado => resultado.localSorteio), // Usado para transformação
+          tap(resultado => console.log('Fluxo do tap após o map no service' , resultado))
+        )
     }
 
-    validateLogin(credentials: { username: string; senha: string }): Observable<boolean> {
-      this.debugService.log('credentials:' , credentials);
-
-      return this.http.post<boolean>(`${this.API_LOTOFACIL}/validate`, credentials);
-    }
-
-    registerUser(user: User): Observable<User>{
-      this.debugService.log('user: ', user);
-      return this.http.post<User>(`${this.API_LOTOFACIL}`, user);
+    // Transforma toda a resposta da API em um array de string com as dezenas
+    getDezenasLotofacil(conc : number): Observable<string[]> {
+      return this.http.get<Lotofacil>(this.API_LOTOFACIL + conc )
+        .pipe(
+          tap((retornoAPI) => console.log('Fluxo do tap no service' , retornoAPI)), // Usado para debug
+          map(resultado => resultado.listaDezenas), // Usado para transformação
+          tap(resultado => console.log('Fluxo do tap após o map no service' , resultado))
+        )
     }
 
 }
