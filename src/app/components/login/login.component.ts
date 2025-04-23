@@ -11,18 +11,17 @@ import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    TemplateModalComponent,
-    MatIconModule,
-    MatSlideToggle,
-    MatSlideToggleModule,
-],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        TemplateModalComponent,
+        MatIconModule,
+        MatSlideToggle,
+        MatSlideToggleModule,
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit, OnDestroy{
 

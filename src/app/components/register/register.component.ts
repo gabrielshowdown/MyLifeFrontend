@@ -12,17 +12,16 @@ import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    MatIconModule,
-    MatSlideToggle,
-    MatSlideToggleModule,
-],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+    selector: 'app-register',
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        MatIconModule,
+        MatSlideToggle,
+        MatSlideToggleModule,
+    ],
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.scss'
 })
 
 export class RegisterComponent implements OnInit, OnDestroy {

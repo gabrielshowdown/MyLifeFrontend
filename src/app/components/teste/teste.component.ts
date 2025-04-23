@@ -9,16 +9,15 @@ import { Subscription } from 'rxjs';
 import { Concurso, ConcursoResumo } from '../../interfaces/loterias';
 
 @Component({
-  selector: 'app-teste',
-  standalone: true,
-  imports: [MatIconModule,
-    MatSlideToggle,
-    MatSlideToggleModule,
-    CommonModule,
-    FormsModule
-  ],
-  templateUrl: './teste.component.html',
-  styleUrl: './teste.component.scss'
+    selector: 'app-teste',
+    imports: [MatIconModule,
+        MatSlideToggle,
+        MatSlideToggleModule,
+        CommonModule,
+        FormsModule
+    ],
+    templateUrl: './teste.component.html',
+    styleUrl: './teste.component.scss'
 })
 export class TesteComponent implements OnDestroy{
 
