@@ -6,9 +6,9 @@ import { UsersService } from '../../services/users.service';
 import { TemplateModalComponent } from "../views/template-modal/template-modal.component";
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ThemeService } from '../../services/theme.service';
+import { ThemeService } from '../../config/theme.service';
 import { Subscription } from 'rxjs';
-import { DebugService } from '../../services/debug.service';
+import { DebugService } from '../../config/debug.service';
 
 @Component({
     selector: 'app-login',

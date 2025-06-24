@@ -1,7 +1,7 @@
 import { Concurso } from '../interfaces/loterias';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DebugService } from './debug.service';
+import { DebugService } from '../config/debug.service';
 import { map, Observable, tap } from 'rxjs';
 
 @Injectable({

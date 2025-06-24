@@ -7,9 +7,9 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
 import { birthdayValidator } from '../../validations/dateValidator';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../interfaces/user';
-import { ThemeService } from '../../services/theme.service';
+import { ThemeService } from '../../config/theme.service';
 import { Subscription } from 'rxjs';
-import { DebugService } from '../../services/debug.service';
+import { DebugService } from '../../config/debug.service';
 
 @Component({
     selector: 'app-register',

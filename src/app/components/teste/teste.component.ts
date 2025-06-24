@@ -3,7 +3,7 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DebugService } from '../../services/debug.service';
+import { DebugService } from '../../config/debug.service';
 import { LoteriasService } from '../../services/loterias.service';
 import { Subscription } from 'rxjs';
 import { Concurso, ConcursoResumo } from '../../interfaces/loterias';
