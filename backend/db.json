@@ -1,0 +1,60 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "gabriel",
+      "senha": "senha123",
+      "genero": "male",
+      "localizacao": "Jundiaí-SP",
+      "dataNascimento": "2000-11-20"
+    },
+    {
+      "id": 2,
+      "username": "super",
+      "senha": "super",
+      "genero": "male",
+      "localizacao": "Praia Grande-SP",
+      "dataNascimento": "2000-11-20"
+    },
+    {
+      "id": 3,
+      "username": "eoijfirjirfm",
+      "senha": "mmm",
+      "genero": "maleeeek",
+      "localizacao": "koko",
+      "dataNascimento": "0222-02-20"
+    },
+    {
+      "id": 4,
+      "username": "kokoo",
+      "senha": "abc",
+      "genero": "Masculino",
+      "localizacao": "www",
+      "dataNascimento": "1990-03-03"
+    },
+    {
+      "id": 5,
+      "username": "zezinho",
+      "senha": "abc",
+      "genero": "Masculino",
+      "localizacao": "Jundiaí-SP",
+      "dataNascimento": "2001-11-20"
+    },
+    {
+      "id": 6,
+      "username": "gabriel2",
+      "senha": "senha123",
+      "genero": "Masculino",
+      "localizacao": "Jundiaí",
+      "dataNascimento": "2000-11-20"
+    },
+    {
+      "id": "f05c",
+      "username": "8989",
+      "senha": "8989",
+      "genero": "Masculino",
+      "localizacao": "kooooo",
+      "dataNascimento": "2000-02-20"
+    }
+  ]
+}
