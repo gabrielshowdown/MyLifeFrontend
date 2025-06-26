@@ -79,10 +79,21 @@
         <label [ngClass]="theme">Localização</label>
       </div>
 
+      <!-- Mensagem de formato da localização inválida -->
+      <div *ngIf="form.get('location')?.touched && form.get('location')?.errors?.['pattern']" class="invalid-data" [ngClass]="theme">
+        Use: Cidade-UF
+      </div>
+
       <!-- Data de Nascimento -->
       <div class="input-box">
         <label [ngClass]="theme">Data de Nascimento</label>
         <input type="date" formControlName="birthdate" required [ngClass]="theme" />
+      </div>
+
+      <!-- Mensagem de Data de Nascimento futura (inválida) -->
+      <div *ngIf="form.get('birthdate')?.touched && form.get('birthdate')?.errors?.['futureDate']"
+           class="invalid-data" [ngClass]="theme">
+        Data de Nascimento não pode ser futura
       </div>
 
       <!-- Botão de Cadastrar -->

@@ -75,7 +75,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       password: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/(.|\s)*\S(.|\s)*/),]],
       confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.pattern(/(.|\s)*\S(.|\s)*/)])], // Compose não é obrigatório
       gender: ['', Validators.required],
-      location: ['', [Validators.required, Validators.minLength(3)]],
+      location: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+-[A-Z]{2}$/)]],
       birthdate: ['', Validators.compose([Validators.required, birthdayValidator])],
     });
   }
