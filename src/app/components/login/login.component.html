@@ -38,7 +38,7 @@
 
         <!-- Mensagem de login inválido -->
         <div *ngIf="loginError==true" class="incorret-password" [ngClass]="theme">
-          Usuário/Senha incorreto
+          {{ messageErrorLogin }}
         </div>
 
         <!-- Esqueceu a senha -->

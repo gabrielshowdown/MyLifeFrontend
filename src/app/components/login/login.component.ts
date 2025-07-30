@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   sun : string;
   moon: string;
   subscription!: Subscription;
+  messageErrorLogin: string = '';
 
   forgotPasswordMessage = {
     title: 'Esqueceu sua senha? ',
@@ -130,6 +131,18 @@ export class LoginComponent implements OnInit, OnDestroy{
       error: (err) => {
         console.error('Erro ao validar login:', err);
         this.loginError = true;
+         if (err.status === 0) {
+        // Erro de conexão com o backend
+        this.messageErrorLogin = 'Não foi possível conectar ao servidor';
+      } 
+      else if (err.status === 401) {
+        // Usuário ou senha inválidos
+        this.messageErrorLogin = 'Usuário ou senha incorretos.';
+      } 
+      else {
+        // Outros erros
+        this.messageErrorLogin = `Erro inesperado (${err.status}): ${err.message}`;
+      }
       },
     });
 

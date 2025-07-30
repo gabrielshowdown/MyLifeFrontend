@@ -141,7 +141,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   showStatusRequestMsg(status : string) {
     // Se o status for success , faz o
     this.typeMessage = (status === 'success' ? "alert-success" : 'alert-danger');
-    this.msgAfterClickRegister = status === 'success' ? "Usuário cadastrado com sucesso!" : 'Erro ao registrar';
+    this.msgAfterClickRegister = status === 'success' ? "Usuário cadastrado com sucesso!" : 'Não foi possível conectar ao servidor';
     this.afterRequestRegister = true;
   }
 
