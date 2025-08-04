@@ -192,4 +192,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.passwordsDifferents = false;
   }
 
+  getBirthdateErrorMessage(): string | null {
+    const birthdateControl = this.form.get('birthdate');
+
+    if (birthdateControl?.touched && birthdateControl?.errors) {
+
+      if (birthdateControl.errors['futureDate']) {
+        return 'Data de Nascimento não pode ser futura';
+      }
+      if (birthdateControl.errors['yearBefore1900']) {
+        return 'Data não pode ser anterior a 1900';
+      }
+    }
+    
+    return null;
+  }
+
 }

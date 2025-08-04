@@ -90,10 +90,9 @@
         <input type="date" formControlName="birthdate" required [ngClass]="theme" />
       </div>
 
-      <!-- Mensagem de Data de Nascimento futura (inválida) -->
-      <div *ngIf="form.get('birthdate')?.touched && form.get('birthdate')?.errors?.['futureDate']"
-           class="invalid-data" [ngClass]="theme">
-        Data de Nascimento não pode ser futura
+      <!-- Mensagem de Data de Nascimento inválida -->
+      <div *ngIf="getBirthdateErrorMessage()" class="invalid-data" [ngClass]="theme">
+        {{ getBirthdateErrorMessage() }}
       </div>
 
       <!-- Botão de Cadastrar -->
