@@ -10,6 +10,7 @@ import { User } from '../../interfaces/user';
 import { ThemeService } from '../../config/theme.service';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../config/debug.service';
+import { shownStateTrigger } from '../../animations/animations';
 
 @Component({
     selector: 'app-register',
@@ -21,7 +22,8 @@ import { DebugService } from '../../config/debug.service';
         MatSlideToggleModule,
     ],
     templateUrl: './register.component.html',
-    styleUrl: './register.component.scss'
+    styleUrl: './register.component.scss',
+    animations: [shownStateTrigger]
 })
 
 export class RegisterComponent implements OnInit, OnDestroy {

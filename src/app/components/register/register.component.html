@@ -23,7 +23,7 @@
     <form [formGroup]="form" (ngSubmit)="register()" class="grid-container">
 
       <!-- Mensagem de usuário registrado com sucesso -->
-      <div *ngIf="afterRequestRegister" [ngClass]="typeMessage" class="alert alert-dismissible fade show" role="alert">
+      <div @shownState *ngIf="afterRequestRegister" [ngClass]="typeMessage" class="alert alert-dismissible fade show" role="alert">
         {{msgAfterClickRegister}}
         <button type="button" class="btn-close" aria-label="Close" (click)="afterRequestRegister = false"></button>
       </div>
