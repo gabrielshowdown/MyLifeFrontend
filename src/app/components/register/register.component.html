@@ -35,7 +35,7 @@
       </div>
 
       <!-- Mensagem de Usuário já cadastrado no sistema -->
-      <div *ngIf="userAlreadyRegistered==true" class="invalid-data" [ngClass]="theme">
+      <div @shakeAnimation *ngIf="userAlreadyRegistered==true" class="invalid-data" [ngClass]="theme">
         Já existe um usuário com esse nome
       </div>
 
@@ -58,7 +58,7 @@
       </div>
 
       <!-- Mensagem de senhas diferentes -->
-      <div *ngIf="passwordsDifferents==true" class="invalid-data" [ngClass]="theme">
+      <div @shakeAnimation *ngIf="passwordsDifferents==true" class="invalid-data" [ngClass]="theme">
         Senhas não correspondem
       </div>
 

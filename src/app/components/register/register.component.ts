@@ -10,7 +10,7 @@ import { User } from '../../interfaces/user';
 import { ThemeService } from '../../config/theme.service';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../config/debug.service';
-import { shownStateTrigger } from '../../animations/animations';
+import { shakeTrigger, shownStateTrigger } from '../../animations/animations';
 
 @Component({
     selector: 'app-register',
@@ -23,7 +23,7 @@ import { shownStateTrigger } from '../../animations/animations';
     ],
     templateUrl: './register.component.html',
     styleUrl: './register.component.scss',
-    animations: [shownStateTrigger]
+    animations: [shownStateTrigger, shakeTrigger]
 })
 
 export class RegisterComponent implements OnInit, OnDestroy {
@@ -98,8 +98,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.clearMessages();
 
+    // Só colocando o this.passwordsDifferents = true resolveria, porém a animação não pegaria, igual pega no userAlreadyRegistered = true no else.
+    /* O Angular vê isso como “só mudou o valor”, mas o elemento nunca chegou a ser removido e recriado → não há :enter → sem animação na segunda tentativa. ou seja, bug*/
     if (this.form.get('password')?.value != this.form.get('confirmPassword')?.value){
-      this.passwordsDifferents = true;
+      this.passwordsDifferents = false; // garante remoção
+      setTimeout(() => {
+        this.passwordsDifferents = true; // força entrar de novo
+      });
+      return
     }
     else {
       if (this.form.valid) {

@@ -9,6 +9,7 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
 import { ThemeService } from '../../config/theme.service';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../config/debug.service';
+import { shakeTrigger } from '../../animations/animations';
 
 @Component({
     selector: 'app-login',
@@ -21,7 +22,8 @@ import { DebugService } from '../../config/debug.service';
         MatSlideToggleModule,
     ],
     templateUrl: './login.component.html',
-    styleUrl: './login.component.scss'
+    styleUrl: './login.component.scss',
+    animations: [shakeTrigger]
 })
 export class LoginComponent implements OnInit, OnDestroy{
 
@@ -106,6 +108,9 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   login(): void{
+
+    this.clearMessages();
+
     this.debugService.log(this.form.value);
     this.debugService.log('usuario valid: ' + this.form.get('username')?.valid);
     this.debugService.log('senha valid: ' + this.form.get('password')?.valid);
@@ -163,6 +168,10 @@ export class LoginComponent implements OnInit, OnDestroy{
   onToggleChange(event: any): void {
     // this.theme = event.checked ? 'night' : 'day';
     this.theme = this.themeService.changeTheme(event.checked)
+  }
+
+    clearMessages(): void {
+    this.loginError = false;
   }
 
 }

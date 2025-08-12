@@ -37,7 +37,7 @@
         </div>
 
         <!-- Mensagem de login inválido -->
-        <div *ngIf="loginError==true" class="incorret-password" [ngClass]="theme">
+        <div @shakeAnimation *ngIf="loginError==true" class="incorret-password" [ngClass]="theme">
           {{ messageErrorLogin }}
         </div>
 
