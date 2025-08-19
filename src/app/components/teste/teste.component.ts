@@ -7,6 +7,7 @@ import { DebugService } from '../../config/debug.service';
 import { LoteriasService } from '../../services/loterias.service';
 import { Subscription } from 'rxjs';
 import { Concurso, ConcursoResumo } from '../../interfaces/loterias';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-teste',
@@ -23,7 +24,8 @@ export class TesteComponent implements OnDestroy{
 
   constructor(
     private debugService: DebugService,
-    private service: LoteriasService
+    private service: LoteriasService,
+    private router: Router,
   ) {
 
   }
@@ -108,6 +110,10 @@ export class TesteComponent implements OnDestroy{
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  goScreenLotofacil(): void{
+    this.router.navigate(['/lotofacil']);
   }
 
 }

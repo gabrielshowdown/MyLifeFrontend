@@ -19,7 +19,8 @@
     <mat-slide-toggle #darkModeSwitch></mat-slide-toggle>
 
     <p></p>
-
+    <button (click)="goScreenLotofacil()">Tela Lotofácil</button>
+    <p></p>
     <mat-slide-toggle>Dark Mode</mat-slide-toggle>
 
     <!-- app.component.html -->
@@ -30,6 +31,7 @@
 
     <p></p>
     <p>Lotofácil</p>
+    <button (click)="goScreenLotofacil()">Tela Lotofácil</button>
     <input type="text" [(ngModel)]="numConcurso"/>
     <button (click)="buscar()">Buscar</button>
     <button (click)="buscarDezenas()">Buscar Dezenas</button>

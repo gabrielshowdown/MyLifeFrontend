@@ -3,6 +3,7 @@ import { TesteComponent } from './components/teste/teste.component';
 import { Teste2Component } from './components/teste2/teste2.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { LotofacilComponent } from './components/lotofacil/lotofacil.component';
 
 export const routes: Routes = [
   {
@@ -25,5 +26,9 @@ export const routes: Routes = [
   {
     path: 'teste2',
     component: Teste2Component
+  },
+  {
+    path: 'lotofacil',
+    component: LotofacilComponent
   },
 ];
