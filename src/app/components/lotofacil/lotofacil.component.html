@@ -1,1 +1,136 @@
-<p>lotofacil works!</p>
+<div class="container-fluid p-4">
+  <h2 class="mb-4">Jogos Lotofácil</h2>
+
+  <mat-card class="mb-4">
+    <mat-card-content class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <button mat-raised-button color="primary" (click)="adicionarJogo()">Adicionar</button>
+      
+      <div class="d-flex align-items-center gap-2">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput placeholder="Número do concurso" [(ngModel)]="jogoConsultado">
+        </mat-form-field>
+        <button mat-flat-button color="primary" (click)="consultarJogo()">Consultar Jogo</button>
+      </div>
+
+      <div class="total-jogos">
+        <strong>Total de jogos:</strong>
+        <span class="total-badge">{{ totalDeJogos }}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      
+      <mat-card class="mb-4">
+        <mat-card-content>
+          <div class="row align-items-center">
+            <div class="col-md-5">
+              <label class="form-label">Repetição ao jogo anterior</label>
+              <mat-radio-group [(ngModel)]="repeticaoSelecionada">
+                <mat-radio-button class="radio-option" *ngFor="let opt of ['N/D', 6, 7, 8, 9, 10, 11, 12]" [value]="opt">{{opt}}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="col-md-5">
+              <label class="form-label">Relação de paridade (Ímpares / Pares)</label>
+              <mat-radio-group [(ngModel)]="paridadeSelecionada">
+                 <mat-radio-button class="radio-option" *ngFor="let opt of ['N/D', '4/11', '5/10', '6/9', '7/8', '8/7', '9/6', '10/5', '11/4']" [value]="opt">{{opt}}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="col-md-2 d-grid">
+              <button mat-raised-button color="accent" (click)="gerarJogo()">Gerar Jogo</button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h4>Últimos Resultados</h4>
+        <div>
+          <button mat-icon-button aria-label="Página anterior"><mat-icon>chevron_left</mat-icon></button>
+          <button mat-icon-button aria-label="Próxima página"><mat-icon>chevron_right</mat-icon></button>
+        </div>
+      </div>
+      <div class="concursos-grid">
+        <mat-card *ngFor="let concurso of concursos" class="concurso-card">
+          <mat-card-title>Concurso {{ concurso.numero }}</mat-card-title>
+          <mat-card-content>
+            <div class="dezenas-grid">
+              <div *ngFor="let dezena of concurso.dezenas" class="dezena">
+                {{ dezena }}
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-footer>
+            <small>Paridade: {{ concurso.paridade }} / Rep: {{ concurso.repetidas }}</small>
+          </mat-card-footer>
+        </mat-card>
+      </div>
+
+    </div>
+
+    <div class="col-lg-4">
+      <div class="d-flex flex-column gap-4">
+        <div class="stat-table-container">
+          <h6 class="text-center">Repetição</h6>
+          <table mat-table [dataSource]="estatisticasRepeticao">
+            <ng-container matColumnDef="item">
+              <th mat-header-cell *matHeaderCellDef> Repetição </th>
+              <td mat-cell *matCellDef="let element"> {{element.item}} </td>
+            </ng-container>
+            <ng-container matColumnDef="qtd">
+              <th mat-header-cell *matHeaderCellDef> Qtd </th>
+              <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
+            </ng-container>
+            <ng-container matColumnDef="percentual">
+              <th mat-header-cell *matHeaderCellDef> % </th>
+              <td mat-cell *matCellDef="let element"> {{element.percentual}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="colunasRepeticao"></tr>
+            <tr mat-row *matRowDef="let row; columns: colunasRepeticao;"></tr>
+          </table>
+        </div>
+
+        <div class="stat-table-container">
+          <h6 class="text-center">Paridade</h6>
+          <table mat-table [dataSource]="estatisticasParidade">
+            <ng-container matColumnDef="item">
+              <th mat-header-cell *matHeaderCellDef> Paridade </th>
+              <td mat-cell *matCellDef="let element"> {{element.item}} </td>
+            </ng-container>
+            <ng-container matColumnDef="qtd">
+              <th mat-header-cell *matHeaderCellDef> Qtd </th>
+              <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
+            </ng-container>
+            <ng-container matColumnDef="percentual">
+              <th mat-header-cell *matHeaderCellDef> % </th>
+              <td mat-cell *matCellDef="let element"> {{element.percentual}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="colunasParidade"></tr>
+            <tr mat-row *matRowDef="let row; columns: colunasParidade;"></tr>
+          </table>
+        </div>
+
+        <div class="stat-table-container">
+          <h6 class="text-center">Número</h6>
+          <table mat-table [dataSource]="estatisticasNumero">
+             <ng-container matColumnDef="item">
+              <th mat-header-cell *matHeaderCellDef> Número </th>
+              <td mat-cell *matCellDef="let element"> {{element.item}} </td>
+            </ng-container>
+            <ng-container matColumnDef="qtd">
+              <th mat-header-cell *matHeaderCellDef> Qtd </th>
+              <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
+            </ng-container>
+            <ng-container matColumnDef="percentual">
+              <th mat-header-cell *matHeaderCellDef> % </th>
+              <td mat-cell *matCellDef="let element"> {{element.percentual}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="colunasNumero"></tr>
+            <tr mat-row *matRowDef="let row; columns: colunasNumero;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

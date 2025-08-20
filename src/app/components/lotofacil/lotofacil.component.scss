@@ -1,0 +1,70 @@
+// Variáveis para cores (opcional, mas bom para manutenção)
+$primary-color: #3f51b5; // Cor primária do Angular Material (indigo)
+$accent-color: #ff4081; // Cor de destaque
+$dezena-bg: #e3f2fd; // Azul claro para o fundo das dezenas
+$dezena-border: #90caf9; // Borda das dezenas
+
+// Estilo do badge de total de jogos
+.total-badge {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+// Grid para exibir os concursos
+.concursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.concurso-card {
+  display: flex;
+  flex-direction: column;
+
+  mat-card-footer {
+    padding: 8px 16px;
+    background-color: #fafafa;
+    margin-top: auto; // Empurra o rodapé para o fundo do card
+  }
+}
+
+// Grid interna para as dezenas de um concurso
+.dezenas-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.dezena {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $dezena-bg;
+  border: 1px solid $dezena-border;
+  border-radius: 50%; // Deixa o número redondo
+  aspect-ratio: 1 / 1; // Garante que seja um círculo perfeito
+  font-weight: bold;
+  color: #333;
+}
+
+// Ajustes nos radio buttons para ficarem mais compactos
+.radio-option {
+    margin-right: 15px;
+}
+
+// Container das tabelas de estatísticas
+.stat-table-container {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: auto; // Adiciona scroll se a tela for pequena
+  max-height: 250px; // Altura máxima para a lista de números
+  
+  table {
+    width: 100%;
+  }
+}
