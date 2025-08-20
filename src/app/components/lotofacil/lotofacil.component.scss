@@ -58,12 +58,19 @@ $dezena-border: #90caf9; // Borda das dezenas
 }
 
 // Container das tabelas de estatísticas
+// Container das tabelas de estatísticas
 .stat-table-container {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
-  overflow: auto; // Adiciona scroll se a tela for pequena
-  max-height: 250px; // Altura máxima para a lista de números
+  overflow: auto; 
   
+  // Aumentamos a altura para quando estão lado a lado
+  max-height: 450px; 
+  
+  // Garante que as tabelas dividam o espaço horizontalmente
+  flex: 1; 
+  min-width: 0; // Previne problemas de overflow do flexbox com tabelas
+
   table {
     width: 100%;
   }
