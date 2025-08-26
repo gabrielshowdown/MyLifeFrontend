@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 // Interfaces para tipar nossos dados (boa prática)
 export interface Concurso {
@@ -32,7 +33,8 @@ export interface Estatistica {
     MatInputModule,
     MatRadioModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatButtonToggleModule 
   ],
   templateUrl: './lotofacil.component.html',
   styleUrls: ['./lotofacil.component.scss']
@@ -88,6 +90,14 @@ export class LotofacilComponent {
   colunasRepeticao: string[] = ['item', 'qtd', 'percentual'];
   colunasParidade: string[] = ['item', 'qtd', 'percentual'];
   colunasNumero: string[] = ['item', 'qtd', 'percentual'];
+
+  options = [
+  { value: 'angular', label: 'Angular' },
+  { value: 'react', label: 'React' },
+  { value: 'vue', label: 'Vue' }
+];
+
+  selectedOption = 'angular'; // valor inicial
 
   constructor() { }
 

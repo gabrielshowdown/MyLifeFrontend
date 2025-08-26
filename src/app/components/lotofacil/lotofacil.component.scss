@@ -75,3 +75,22 @@ $dezena-border: #90caf9; // Borda das dezenas
     width: 100%;
   }
 }
+
+// Adicione este estilo ao final do arquivo
+.button-group-condensed {
+  // Diminui a altura dos botões
+  .mat-button-toggle {
+    height: 36px;
+    line-height: 36px;
+  }
+  
+  // Ajusta o padding interno para caber melhor o texto
+  .mat-button-toggle-label-content {
+    padding: 0 12px;
+  }
+}
+
+mat-radio-group {
+  // Força os radio buttons a tentarem ficar na mesma linha
+  flex-wrap: nowrap;
+}
