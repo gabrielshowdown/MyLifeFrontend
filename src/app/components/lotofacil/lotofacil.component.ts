@@ -110,6 +110,10 @@ export class LotofacilComponent {
     console.log('Botão Adicionar clicado');
   }
 
+   sincronizarJogos(): void {
+    console.log('Botão Sincronizar clicado');
+  }
+
   gerarJogo(): void {
     console.log('Gerando jogo com as opções:', this.repeticaoSelecionada, this.paridadeSelecionada);
   }

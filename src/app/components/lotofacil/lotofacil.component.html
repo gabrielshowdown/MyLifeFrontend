@@ -3,8 +3,13 @@
 
   <mat-card class="mb-4">
     <mat-card-content class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-      <button mat-raised-button color="primary" (click)="adicionarJogo()">Adicionar</button>
-      
+
+     <div class="d-flex align-items-center gap-2">
+        <button mat-raised-button color="primary" (click)="adicionarJogo()">Adicionar</button>
+        <button mat-raised-button color="accent" (click)="sincronizarJogos()">Sincronizar</button>
+        <small class="text-muted">Última sincronização as 09h</small>
+      </div>
+
       <div class="d-flex align-items-center gap-2">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <input matInput placeholder="Número do concurso" [(ngModel)]="jogoConsultado">
@@ -47,18 +52,18 @@
           <div>
             <label class="form-label">Relação de paridade (Ímpares / Pares)</label>
             <mat-button-toggle-group class="button-group-condensed" [(ngModel)]="paridadeSelecionada">
-                <mat-radio-group aria-label="Select an option">
-                  <mat-radio-button value="1">N/D</mat-radio-button>
-                  <mat-radio-button value="2">4/11</mat-radio-button>
-                  <mat-radio-button value="3">5/10</mat-radio-button>
-                  <mat-radio-button value="4">6/9</mat-radio-button>
-                  <mat-radio-button value="5">7/8</mat-radio-button>
-                  <mat-radio-button value="6">8/7</mat-radio-button>
-                  <mat-radio-button value="7">9/6</mat-radio-button>
-                  <mat-radio-button value="8">10/6</mat-radio-button>
-                  <mat-radio-button value="9">11/5</mat-radio-button>
-                </mat-radio-group>
-              </mat-button-toggle-group>
+              <mat-radio-group aria-label="Select an option">
+                <mat-radio-button value="1">N/D</mat-radio-button>
+                <mat-radio-button value="2">4/11</mat-radio-button>
+                <mat-radio-button value="3">5/10</mat-radio-button>
+                <mat-radio-button value="4">6/9</mat-radio-button>
+                <mat-radio-button value="5">7/8</mat-radio-button>
+                <mat-radio-button value="6">8/7</mat-radio-button>
+                <mat-radio-button value="7">9/6</mat-radio-button>
+                <mat-radio-button value="8">10/6</mat-radio-button>
+                <mat-radio-button value="9">11/5</mat-radio-button>
+              </mat-radio-group>
+            </mat-button-toggle-group>
           </div>
         </mat-card-content>
       </mat-card>
