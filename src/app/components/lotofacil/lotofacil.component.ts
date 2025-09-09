@@ -113,7 +113,9 @@ export class LotofacilComponent implements OnInit {
   ngOnInit(): void{
     this.debugService.log('OnInit rodando');
     this.carregarEstatisticasParidade();
-    this.service.getTotalParidade().subscribe({
+    this.carregarEstatisticasRepeticoes();
+    this.carregarEstatisticasNumeros();
+    this.service.getTotalParidades().subscribe({
       next: (aa) => {
         console.log(aa);
         this.totaisParidades = aa;
@@ -127,7 +129,7 @@ export class LotofacilComponent implements OnInit {
 
   // MODIFICAÇÃO 2: Mover a lógica para uma função separada (boa prática)
   carregarEstatisticasParidade(): void {
-    this.service.getTotalParidade().subscribe({
+    this.service.getTotalParidades().subscribe({
       next: (dadosDaApi) => {
         this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
         this.totaisParidades = dadosDaApi; // Opcional, se precisar dos dados originais
@@ -142,6 +144,52 @@ export class LotofacilComponent implements OnInit {
         });
 
         this.debugService.log('Dados de paridade mapeados para a tabela:', this.estatisticasParidade);
+      },
+      error: (erro) => {
+        console.error('Erro ao buscar totais de paridade:', erro);
+        // Aqui você pode tratar o erro, como exibir uma mensagem para o usuário
+      }
+    });
+  }
+
+  carregarEstatisticasRepeticoes(): void {
+    this.service.getTotalRepeticoes().subscribe({
+      next: (dadosDaApi) => {
+        this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
+
+        // MODIFICAÇÃO 3: Mapear os dados da API para o formato da tabela
+        this.estatisticasRepeticao = dadosDaApi.map(item => {
+          return {
+            item: item.repetido, // de 'paridade' para 'item'
+            qtd: item.qtd,
+            percentual: `${item.porcentagem.toFixed(2)}%` // de 'porcentagem' para 'percentual' (string)
+          };
+        });
+
+        this.debugService.log('Dados de paridade mapeados para a tabela:', this.estatisticasRepeticao);
+      },
+      error: (erro) => {
+        console.error('Erro ao buscar totais de paridade:', erro);
+        // Aqui você pode tratar o erro, como exibir uma mensagem para o usuário
+      }
+    });
+  }
+
+  carregarEstatisticasNumeros(): void {
+    this.service.getTotalNumeros().subscribe({
+      next: (dadosDaApi) => {
+        this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
+
+        // MODIFICAÇÃO 3: Mapear os dados da API para o formato da tabela
+        this.estatisticasNumero = dadosDaApi.map(item => {
+          return {
+            item: item.id, // de 'paridade' para 'item'
+            qtd: item.qtd,
+            percentual: `${item.porcentagem.toFixed(2)}%` // de 'porcentagem' para 'percentual' (string)
+          };
+        });
+
+        this.debugService.log('Dados de paridade mapeados para a tabela:', this.estatisticasNumero);
       },
       error: (erro) => {
         console.error('Erro ao buscar totais de paridade:', erro);
