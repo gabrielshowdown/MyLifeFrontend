@@ -58,14 +58,13 @@ $dezena-border: #90caf9; // Borda das dezenas
 }
 
 // Container das tabelas de estatísticas
-// Container das tabelas de estatísticas
 .stat-table-container {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   overflow: auto; 
   
   // Aumentamos a altura para quando estão lado a lado
-  max-height: 450px; 
+  //max-height: 600px; 
   
   // Garante que as tabelas dividam o espaço horizontalmente
   flex: 1; 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { LoteriasService } from '../../services/loterias.service';
+import { DebugService } from '../../config/debug.service';
+import { DadosParidade } from '../../interfaces/lotofacil';
 
 // Interfaces para tipar nossos dados (boa prática)
 export interface Concurso {
@@ -39,7 +42,10 @@ export interface Estatistica {
   templateUrl: './lotofacil.component.html',
   styleUrls: ['./lotofacil.component.scss']
 })
-export class LotofacilComponent {
+export class LotofacilComponent implements OnInit {
+
+  // Atributos
+  totaisParidades: DadosParidade[] = [];
 
   // --- Propriedades do Componente ---
   totalDeJogos: number = 3306;
@@ -99,7 +105,50 @@ export class LotofacilComponent {
 
   selectedOption = 'angular'; // valor inicial
 
-  constructor() { }
+  constructor(
+    private service: LoteriasService,
+    private debugService: DebugService,
+  ) { }
+
+  ngOnInit(): void{
+    this.debugService.log('OnInit rodando');
+    this.carregarEstatisticasParidade();
+    this.service.getTotalParidade().subscribe({
+      next: (aa) => {
+        console.log(aa);
+        this.totaisParidades = aa;
+        console.log('Totais pariades: ' , this.totaisParidades);
+      }
+    })
+
+    console.log('Totais pariades: ' + this.totaisParidades);
+    
+  }
+
+  // MODIFICAÇÃO 2: Mover a lógica para uma função separada (boa prática)
+  carregarEstatisticasParidade(): void {
+    this.service.getTotalParidade().subscribe({
+      next: (dadosDaApi) => {
+        this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
+        this.totaisParidades = dadosDaApi; // Opcional, se precisar dos dados originais
+
+        // MODIFICAÇÃO 3: Mapear os dados da API para o formato da tabela
+        this.estatisticasParidade = dadosDaApi.map(item => {
+          return {
+            item: item.paridade, // de 'paridade' para 'item'
+            qtd: item.qtd,
+            percentual: `${item.porcentagem.toFixed(2)}%` // de 'porcentagem' para 'percentual' (string)
+          };
+        });
+
+        this.debugService.log('Dados de paridade mapeados para a tabela:', this.estatisticasParidade);
+      },
+      error: (erro) => {
+        console.error('Erro ao buscar totais de paridade:', erro);
+        // Aqui você pode tratar o erro, como exibir uma mensagem para o usuário
+      }
+    });
+  }
 
   // --- Métodos (placeholders) ---
   consultarJogo(): void {
