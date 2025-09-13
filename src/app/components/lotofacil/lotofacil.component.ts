@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,11 +6,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LoteriasService } from '../../services/loterias.service';
 import { DebugService } from '../../config/debug.service';
 import { DadosParidade } from '../../interfaces/lotofacil';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 
 // Interfaces para tipar nossos dados (boa prática)
 export interface Concurso {
@@ -37,7 +39,8 @@ export interface Estatistica {
     MatRadioModule,
     MatIconModule,
     MatTableModule,
-    MatButtonToggleModule 
+    MatButtonToggleModule,
+    MatSortModule
   ],
   templateUrl: './lotofacil.component.html',
   styleUrls: ['./lotofacil.component.scss']
@@ -46,6 +49,29 @@ export class LotofacilComponent implements OnInit {
 
   // Atributos
   totaisParidades: DadosParidade[] = [];
+  private _liveAnnouncer = inject(LiveAnnouncer);
+
+  estatisticasParidade: DadosParidade[] = [
+      {id: 1, paridade: 'aa', porcentagem: 0.2, qtd: 2},
+      {id: 2, paridade: 'ac', porcentagem: 0.1, qtd: 2},
+      {id: 3, paridade: 'ab', porcentagem: 0.6, qtd: 2},
+  ];
+
+  displayedColumns3: string[] = ['paridade', 'qtd', 'porcentagem'];
+  dataSource3: any;
+  @ViewChild('sort3') sort3!: MatSort;
+
+  announceSortChange(sortState: Sort) {
+    // This example uses English messages. If your application supports
+    // multiple language, you would internationalize these strings.
+    // Furthermore, you can customize the message to add additional
+    // details about the values being sorted.
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+  }
 
   // --- Propriedades do Componente ---
   totalDeJogos: number = 3306;
@@ -74,15 +100,6 @@ export class LotofacilComponent implements OnInit {
     // ... restante dos dados
   ];
 
-  estatisticasParidade: Estatistica[] = [
-    { item: '13I/02P', qtd: 0, percentual: '0.0%' },
-    { item: '12I/03P', qtd: 3, percentual: '0.09%' },
-    { item: '11I/04P', qtd: 31, percentual: '0.94%' },
-    { item: '10I/05P', qtd: 235, percentual: '7.11%' },
-    { item: '09I/06P', qtd: 683, percentual: '20.66%' },
-    // ... restante dos dados
-  ];
-
   estatisticasNumero: Estatistica[] = [
     { item: 1, qtd: 1990, percentual: '60.19%' },
     { item: 2, qtd: 1977, percentual: '59.8%' },
@@ -94,7 +111,6 @@ export class LotofacilComponent implements OnInit {
 
   // Colunas para as tabelas do Angular Material
   colunasRepeticao: string[] = ['item', 'qtd', 'percentual'];
-  colunasParidade: string[] = ['item', 'qtd', 'percentual'];
   colunasNumero: string[] = ['item', 'qtd', 'percentual'];
 
   options = [
@@ -115,15 +131,6 @@ export class LotofacilComponent implements OnInit {
     this.carregarEstatisticasParidade();
     this.carregarEstatisticasRepeticoes();
     this.carregarEstatisticasNumeros();
-    this.service.getTotalParidades().subscribe({
-      next: (aa) => {
-        console.log(aa);
-        this.totaisParidades = aa;
-        console.log('Totais pariades: ' , this.totaisParidades);
-      }
-    })
-
-    console.log('Totais pariades: ' + this.totaisParidades);
     
   }
 
@@ -132,18 +139,21 @@ export class LotofacilComponent implements OnInit {
     this.service.getTotalParidades().subscribe({
       next: (dadosDaApi) => {
         this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
-        this.totaisParidades = dadosDaApi; // Opcional, se precisar dos dados originais
-
+        
         // MODIFICAÇÃO 3: Mapear os dados da API para o formato da tabela
         this.estatisticasParidade = dadosDaApi.map(item => {
           return {
-            item: item.paridade, // de 'paridade' para 'item'
+            id: item.id,
+            paridade: item.paridade, // de 'paridade' para 'item'
             qtd: item.qtd,
-            percentual: `${item.porcentagem.toFixed(2)}%` // de 'porcentagem' para 'percentual' (string)
+            porcentagem: item.porcentagem, // de 'porcentagem' para 'percentual' (string)
           };
         });
 
+        this.dataSource3 = new MatTableDataSource(this.estatisticasParidade);
+        this.dataSource3.sort = this.sort3;
         this.debugService.log('Dados de paridade mapeados para a tabela:', this.estatisticasParidade);
+
       },
       error: (erro) => {
         console.error('Erro ao buscar totais de paridade:', erro);

@@ -8,32 +8,140 @@
   <i class="fas fa-camera"></i>
   <mat-icon>groups_2</mat-icon>
   <span class="material-symbols-outlined">
-    </span>
-    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_circle_left"></mat-icon>
+  </span>
+  <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_circle_left"></mat-icon>
 
 
   <mat-slide-toggle class="abc">Hide page size</mat-slide-toggle>
 
-    <p></p>
+  <p></p>
 
-    <mat-slide-toggle #darkModeSwitch></mat-slide-toggle>
+  <mat-slide-toggle #darkModeSwitch></mat-slide-toggle>
 
-    <p></p>
-    <button (click)="goScreenLotofacil()">Tela Lotofácil</button>
-    <p></p>
-    <mat-slide-toggle>Dark Mode</mat-slide-toggle>
+  <p></p>
+  <button (click)="goScreenLotofacil()">Tela Lotofácil</button>
+  <p></p>
+  <mat-slide-toggle>Dark Mode</mat-slide-toggle>
 
-    <!-- app.component.html -->
+  <!-- app.component.html -->
 
-    <!-- Exemplo de como o ngModel funciona -->
-    <input type="text" [(ngModel)]="textoTeste" placeholder="Digite seu nome" />
-    <p>:{{ textoTeste }}!</p>
+  <!-- Exemplo de como o ngModel funciona -->
+  <input type="text" [(ngModel)]="textoTeste" placeholder="Digite seu nome" />
+  <p>:{{ textoTeste }}!</p>
 
-    <p></p>
-    <p>Lotofácil</p>
-    <button (click)="goScreenLotofacil()">Tela Lotofácil</button>
-    <input type="text" [(ngModel)]="numConcurso"/>
-    <button (click)="buscar()">Buscar</button>
-    <button (click)="buscarDezenas()">Buscar Dezenas</button>
+  <p></p>
+  <p>Lotofácil</p>
+  <button (click)="goScreenLotofacil()">Tela Lotofácil</button>
+  <input type="text" [(ngModel)]="numConcurso" />
+  <button (click)="buscar()">Buscar</button>
+  <button (click)="buscarDezenas()">Buscar Dezenas</button>
 
+  <br>
+
+  <table mat-table [dataSource]="dataSource" matSort #sort1="matSort" (matSortChange)="announceSortChange($event)"
+    class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
+        No.
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+        Name
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="weight">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by weight">
+        Weight
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="symbol">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by symbol">
+        Symbol
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <br>
+  <b>Paridade1</b>
+
+  <table mat-table [dataSource]="dataSource2" matSort #sort2="matSort" (matSortChange)="announceSortChange($event)"
+    class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="paridade1">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by paridade1">
+        paridade.
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.paridade1}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="porcentagem">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">
+        porcentagem
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.porcentagem}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="qtd">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by qtd">
+        qtd
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+  </table>
+
+  <br>
+  <b>Paridade vinda da api</b>
+
+  <table mat-table [dataSource]="dataSource3" matSort #sort3="matSort" (matSortChange)="announceSortChange($event)"
+    class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="paridade">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by paridade">
+        paridade.
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.paridade}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="porcentagem">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">
+        porcentagem
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.porcentagem}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="qtd">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by qtd">
+        qtd
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+  </table>
 </div>
