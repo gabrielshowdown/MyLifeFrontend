@@ -96,23 +96,24 @@
     <div class="col-lg-6">
       <div class="d-flex flex-column flex-lg-row gap-3">
         <!-- <div class="d-flex flex-column gap-4"></div> Desse jeito, ficaria uma tabela embaixo da outra na direita -->
+
         <div class="stat-table-container">
           <h6 class="text-center">Repetição</h6>
-          <table mat-table [dataSource]="estatisticasRepeticao">
-            <ng-container matColumnDef="item">
-              <th mat-header-cell *matHeaderCellDef> Repetição </th>
-              <td mat-cell *matCellDef="let element"> {{element.item}} </td>
+          <table mat-table [dataSource]="dataSource4" matSort #sort4="matSort" (matSortChange)="announceSortChange($event)">
+            <ng-container matColumnDef="repetido">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by repetido">Repetido</th>
+              <td mat-cell *matCellDef="let element"> {{element.repetido}} </td>
             </ng-container>
             <ng-container matColumnDef="qtd">
-              <th mat-header-cell *matHeaderCellDef> Qtd </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by qtd">Qtd</th>
               <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
             </ng-container>
-            <ng-container matColumnDef="percentual">
-              <th mat-header-cell *matHeaderCellDef> % </th>
-              <td mat-cell *matCellDef="let element"> {{element.percentual}} </td>
+            <ng-container matColumnDef="porcentagem">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">%</th>
+              <td mat-cell *matCellDef="let element"> {{element.porcentagem}} </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="colunasRepeticao"></tr>
-            <tr mat-row *matRowDef="let row; columns: colunasRepeticao;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns4"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns4;"></tr>
           </table>
         </div>
 
@@ -137,24 +138,25 @@
         </div>
 
         <div class="stat-table-container">
-          <h6 class="text-center">Número</h6>
-          <table mat-table [dataSource]="estatisticasNumero">
-            <ng-container matColumnDef="item">
-              <th mat-header-cell *matHeaderCellDef> Número </th>
-              <td mat-cell *matCellDef="let element"> {{element.item}} </td>
+          <h6 class="text-center">Totais Números</h6>
+          <table mat-table [dataSource]="dataSource5" matSort #sort5="matSort" (matSortChange)="announceSortChange($event)">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">Número</th>
+              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
             </ng-container>
             <ng-container matColumnDef="qtd">
-              <th mat-header-cell *matHeaderCellDef> Qtd </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by qtd">Qtd</th>
               <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
             </ng-container>
-            <ng-container matColumnDef="percentual">
-              <th mat-header-cell *matHeaderCellDef> % </th>
-              <td mat-cell *matCellDef="let element"> {{element.percentual}} </td>
+            <ng-container matColumnDef="porcentagem">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">%</th>
+              <td mat-cell *matCellDef="let element"> {{element.porcentagem}} </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="colunasNumero"></tr>
-            <tr mat-row *matRowDef="let row; columns: colunasNumero;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns5"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns5;"></tr>
           </table>
         </div>
+
       </div>
     </div>
   </div>

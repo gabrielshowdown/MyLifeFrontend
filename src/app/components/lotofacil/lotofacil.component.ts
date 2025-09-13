@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LoteriasService } from '../../services/loterias.service';
 import { DebugService } from '../../config/debug.service';
-import { DadosParidade } from '../../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao } from '../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 
@@ -20,12 +20,6 @@ export interface Concurso {
   dezenas: string[];
   paridade: string;
   repetidas: number;
-}
-
-export interface Estatistica {
-  item: string | number;
-  qtd: number;
-  percentual: string;
 }
 
 @Component({
@@ -48,7 +42,6 @@ export interface Estatistica {
 export class LotofacilComponent implements OnInit {
 
   // Atributos
-  totaisParidades: DadosParidade[] = [];
   private _liveAnnouncer = inject(LiveAnnouncer);
 
   estatisticasParidade: DadosParidade[] = [
@@ -57,15 +50,29 @@ export class LotofacilComponent implements OnInit {
       {id: 3, paridade: 'ab', porcentagem: 0.6, qtd: 2},
   ];
 
+  estatisticasRepeticao: DadosRepeticao[] = [
+      {id: 1, repetido: 6, porcentagem: 0.2, qtd: 2},
+      {id: 2, repetido: 7, porcentagem: 0.1, qtd: 2},
+      {id: 3, repetido: 8, porcentagem: 0.6, qtd: 2},
+  ];
+
+  estatisticasNumeros: DadosNumero[] = [
+      {id: 1, porcentagem: 0.2, qtd: 2},
+      {id: 2, porcentagem: 0.1, qtd: 2},
+      {id: 3, porcentagem: 0.6, qtd: 2},
+  ];
+
   displayedColumns3: string[] = ['paridade', 'qtd', 'porcentagem'];
+  displayedColumns4: string[] = ['repetido', 'qtd', 'porcentagem'];
+  displayedColumns5: string[] = ['id', 'qtd', 'porcentagem'];
   dataSource3: any;
+  dataSource4: any;
+  dataSource5: any;
   @ViewChild('sort3') sort3!: MatSort;
+  @ViewChild('sort4') sort4!: MatSort;
+  @ViewChild('sort5') sort5!: MatSort;
 
   announceSortChange(sortState: Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
@@ -88,30 +95,6 @@ export class LotofacilComponent implements OnInit {
     { numero: 3305, dezenas: ['03', '04', '05', '07', '08', '09', '12', '13', '17', '19', '20', '21', '23', '24', '25'], paridade: '10I/5P', repetidas: 10 },
     { numero: 3306, dezenas: ['04', '05', '06', '08', '09', '10', '11', '14', '15', '17', '18', '19', '21', '22', '24'], paridade: '7I/8P', repetidas: 8 },
   ];
-
-  estatisticasRepeticao: Estatistica[] = [
-    { item: 5, qtd: 1, percentual: '0.03%' },
-    { item: 6, qtd: 47, percentual: '1.42%' },
-    { item: 7, qtd: 313, percentual: '9.47%' },
-    { item: 8, qtd: 804, percentual: '24.3%' },
-    { item: 9, qtd: 1077, percentual: '32.5%' },
-    { item: 10, qtd: 724, percentual: '21.9%' },
-    { item: 11, qtd: 276, percentual: '8.35%' },
-    // ... restante dos dados
-  ];
-
-  estatisticasNumero: Estatistica[] = [
-    { item: 1, qtd: 1990, percentual: '60.19%' },
-    { item: 2, qtd: 1977, percentual: '59.8%' },
-    { item: 3, qtd: 1998, percentual: '60.44%' },
-    { item: 4, qtd: 1997, percentual: '60.41%' },
-    { item: 5, qtd: 1993, percentual: '60.28%' },
-    // ... restante dos dados
-  ];
-
-  // Colunas para as tabelas do Angular Material
-  colunasRepeticao: string[] = ['item', 'qtd', 'percentual'];
-  colunasNumero: string[] = ['item', 'qtd', 'percentual'];
 
   options = [
   { value: 'angular', label: 'Angular' },
@@ -166,17 +149,21 @@ export class LotofacilComponent implements OnInit {
     this.service.getTotalRepeticoes().subscribe({
       next: (dadosDaApi) => {
         this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
-
+        
         // MODIFICAÇÃO 3: Mapear os dados da API para o formato da tabela
         this.estatisticasRepeticao = dadosDaApi.map(item => {
           return {
-            item: item.repetido, // de 'paridade' para 'item'
+            id: item.id,
+            repetido: item.repetido, // de 'paridade' para 'item'
             qtd: item.qtd,
-            percentual: `${item.porcentagem.toFixed(2)}%` // de 'porcentagem' para 'percentual' (string)
+            porcentagem: item.porcentagem, // de 'porcentagem' para 'percentual' (string)
           };
         });
 
+        this.dataSource4 = new MatTableDataSource(this.estatisticasRepeticao);
+        this.dataSource4.sort = this.sort4;
         this.debugService.log('Dados de paridade mapeados para a tabela:', this.estatisticasRepeticao);
+
       },
       error: (erro) => {
         console.error('Erro ao buscar totais de paridade:', erro);
@@ -189,17 +176,20 @@ export class LotofacilComponent implements OnInit {
     this.service.getTotalNumeros().subscribe({
       next: (dadosDaApi) => {
         this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
-
+        
         // MODIFICAÇÃO 3: Mapear os dados da API para o formato da tabela
-        this.estatisticasNumero = dadosDaApi.map(item => {
+        this.estatisticasNumeros = dadosDaApi.map(item => {
           return {
-            item: item.id, // de 'paridade' para 'item'
+            id: item.id,
             qtd: item.qtd,
-            percentual: `${item.porcentagem.toFixed(2)}%` // de 'porcentagem' para 'percentual' (string)
+            porcentagem: item.porcentagem, // de 'porcentagem' para 'percentual' (string)
           };
         });
 
-        this.debugService.log('Dados de paridade mapeados para a tabela:', this.estatisticasNumero);
+        this.dataSource5 = new MatTableDataSource(this.estatisticasNumeros);
+        this.dataSource5.sort = this.sort5;
+        this.debugService.log('Dados de paridade mapeados para a tabela:', this.estatisticasNumeros);
+
       },
       error: (erro) => {
         console.error('Erro ao buscar totais de paridade:', erro);
