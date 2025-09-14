@@ -19,7 +19,7 @@
 
       <div class="total-jogos">
         <strong>Total de jogos:</strong>
-        <span class="total-badge">{{ totalDeJogos }}</span>
+        <span class="total-badge">{{ totalNumberLotofacilContest }}</span>
       </div>
     </mat-card-content>
   </mat-card>
@@ -99,7 +99,7 @@
 
         <div class="stat-table-container">
           <h6 class="text-center">Repetição</h6>
-          <table mat-table [dataSource]="dataSource4" matSort #sort4="matSort" (matSortChange)="announceSortChange($event)">
+          <table mat-table [dataSource]="dataSourceRepetition" matSort #sortRepetition="matSort" (matSortChange)="announceSortChange($event)">
             <ng-container matColumnDef="repetido">
               <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by repetido">Repetido</th>
               <td mat-cell *matCellDef="let element"> {{element.repetido}} </td>
@@ -112,14 +112,14 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">%</th>
               <td mat-cell *matCellDef="let element"> {{ (element.porcentagem).toFixed(2).replace('.',',') }}% </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns4"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns4;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsRepetition"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsRepetition;"></tr>
           </table>
         </div>
 
         <div class="stat-table-container">
           <h6 class="text-center">Paridade</h6>
-          <table mat-table [dataSource]="dataSource3" matSort #sort3="matSort" (matSortChange)="announceSortChange($event)">
+          <table mat-table [dataSource]="dataSourceParity" matSort #sortParity="matSort" (matSortChange)="announceSortChange($event)">
             <ng-container matColumnDef="paridade">
               <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by paridade">Paridade</th>
               <td mat-cell *matCellDef="let element"> {{element.paridade}} </td>
@@ -132,14 +132,14 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">%</th>
               <td mat-cell *matCellDef="let element"> {{ (element.porcentagem).toFixed(2).replace('.',',') }}% </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsParity"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsParity;"></tr>
           </table>
         </div>
 
         <div class="stat-table-container">
           <h6 class="text-center">Totais Números</h6>
-          <table mat-table [dataSource]="dataSource5" matSort #sort5="matSort" (matSortChange)="announceSortChange($event)">
+          <table mat-table [dataSource]="dataSourceNumber" matSort #sortNumber="matSort" (matSortChange)="announceSortChange($event)">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">Número</th>
               <td mat-cell *matCellDef="let element"> {{element.id}} </td>
@@ -152,8 +152,8 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">%</th>
               <td mat-cell *matCellDef="let element"> {{ (element.porcentagem).toFixed(2).replace('.',',') }}% </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns5"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns5;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsNumber"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsNumber;"></tr>
           </table>
         </div>
 

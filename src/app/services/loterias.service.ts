@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../config/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, DadosConcurso } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,12 @@ export class LoteriasService {
   private readonly API_TOTALPARIDADES = 'http://localhost:8080/totaisParidadesLotofacil';
   private readonly API_TOTALREPETICOES = 'http://localhost:8080/totaisRepeticoesLotofacil';
   private readonly API_TOTALNUMEROS = 'http://localhost:8080/totaisNumerosLotofacil';
+  private readonly API_TOTALCONCURSOS= 'http://localhost:8080/concursoLotofacil';
 
     constructor(private http: HttpClient, private debugService: DebugService,) { }
 
     // Obtem todo o retorno da API
-    getConcursoLotofacil(conc : number): Observable<Concurso> {
+    getContestLotofacilCaixa(conc : number): Observable<Concurso> {
       //const paramertros = new HttpParams().append('','300')
       //return this.http.get<any[]>(this.API_LOTOFACIL , {params : paramertros});
       // geraria uma URL https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/?=300
@@ -40,7 +41,7 @@ export class LoteriasService {
         )
     }
 
-    getTotalParidades(): Observable<DadosParidade[]> {
+    getAllParities(): Observable<DadosParidade[]> {
       console.log('getTotalParidade');
       
       return this.http.get<DadosParidade[]>(this.API_TOTALPARIDADES )
@@ -51,7 +52,7 @@ export class LoteriasService {
         )
     }
 
-    getTotalRepeticoes(): Observable<DadosRepeticao[]> { 
+    getAllRepetitions(): Observable<DadosRepeticao[]> { 
       return this.http.get<DadosRepeticao[]>(this.API_TOTALREPETICOES )
         .pipe(
           tap((retornoAPI) => console.log('Fluxo do tap no service' , retornoAPI)), // Usado para debug
@@ -60,12 +61,27 @@ export class LoteriasService {
         )
     }
 
-    getTotalNumeros(): Observable<DadosNumero[]> {  
+    getAllNumbers(): Observable<DadosNumero[]> {  
       return this.http.get<DadosNumero[]>(this.API_TOTALNUMEROS )
         .pipe(
           tap((retornoAPI) => console.log('Fluxo do tap no service' , retornoAPI)), // Usado para debug
           // map(resultado => resultado.listaDezenas), // Usado para transformação
            tap(resultado => console.log('Fluxo do tap após o map no service' , resultado))
         )
+    }
+
+    getLastContestLotofacilRegistered(): Observable<number> {
+      return this.http.get<DadosConcurso[]>(this.API_TOTALCONCURSOS).pipe(
+      map(contests => {
+        if (contests.length === 0) {
+          throw new Error('Nenhum concurso encontrado');
+        }
+        const lastContests = contests[contests.length - 1];
+        console.log('ultimo iddd: ',  lastContests.id);
+        
+        return lastContests.id;
+      })
+    );
+
     }
 }

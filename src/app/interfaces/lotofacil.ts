@@ -17,3 +17,10 @@ export interface DadosNumero {
   qtd: number;
   porcentagem: number;
 }
+
+export interface DadosConcurso {
+  id: number;
+  qtdPares: number;
+  qtdImpares: number;
+  qtdRepetidos: number;
+}

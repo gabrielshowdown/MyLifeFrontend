@@ -140,7 +140,7 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
   concursoLotofacil!: ConcursoResumo;
 
   carregarEstatisticasParidade(): void {
-    this.service.getTotalParidades().subscribe({
+    this.service.getAllParities().subscribe({
       next: (dadosDaApi) => {
         this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
         
@@ -180,7 +180,7 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
   }
 
   buscar(): void {
-    this.subscription = this.service.getConcursoLotofacil(this.numConcurso)
+    this.subscription = this.service.getContestLotofacilCaixa(this.numConcurso)
     .subscribe({
       next: concurso => {
         //this.debugService.log(users); // Manipulação de sucesso
