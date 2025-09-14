@@ -13,6 +13,7 @@ import { DebugService } from '../../config/debug.service';
 import { DadosNumero, DadosParidade, DadosRepeticao } from '../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-lotofacil',
@@ -35,6 +36,7 @@ export class LotofacilComponent implements OnInit {
 
   // Atributos
   private _liveAnnouncer = inject(LiveAnnouncer);
+  subscription!: Subscription;
   
   totalNumberLotofacilContest: number | undefined;
 
@@ -73,6 +75,13 @@ export class LotofacilComponent implements OnInit {
     this.loadTablesData();
   }
 
+  
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   loadTablesData() {
     this.loadDataRepetitions();
     this.loadDataParities();
@@ -80,7 +89,7 @@ export class LotofacilComponent implements OnInit {
   }
 
   loadGeneralData() {
-    this.service.getLastContestLotofacilRegistered().subscribe({
+    this.subscription = this.service.getLastContestLotofacilRegistered().subscribe({ // 'O this.subscription =' é boas práticas, não obrigatório
       next: (lastContest) => {
         this.debugService.log('Valor do ultimo concursoo', lastContest);
         this.totalNumberLotofacilContest = lastContest;
@@ -97,7 +106,7 @@ export class LotofacilComponent implements OnInit {
   }
   // MODIFICAÇÃO 2: Mover a lógica para uma função separada (boa prática)
   loadDataParities(): void {
-    this.service.getAllParities().subscribe({
+    this.subscription = this.service.getAllParities().subscribe({ // 'O this.subscription =' é boas práticas, não obrigatório
       next: (dadosDaApi) => {
         this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
         
@@ -124,7 +133,7 @@ export class LotofacilComponent implements OnInit {
   }
 
   loadDataRepetitions(): void {
-    this.service.getAllRepetitions().subscribe({
+    this.subscription = this.service.getAllRepetitions().subscribe({ // 'O this.subscription =' é boas práticas, não obrigatório
       next: (dadosDaApi) => {
         this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
         
@@ -151,7 +160,7 @@ export class LotofacilComponent implements OnInit {
   }
 
   loadDataNumbers(): void {
-    this.service.getAllNumbers().subscribe({
+    this.subscription = this.service.getAllNumbers().subscribe({ // 'O this.subscription =' é boas práticas, não obrigatório
       next: (dadosDaApi) => {
         this.debugService.log('Dados de paridade recebidos da API:', dadosDaApi);
         
