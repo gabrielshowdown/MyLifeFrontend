@@ -72,6 +72,13 @@ $dezena-border: #90caf9; // Borda das dezenas
 
   table {
     width: 100%;
+
+    // --- ADIÇÃO PARA CENTRALIZAR O CONTEÚDO ---
+    // Centraliza o texto tanto nos cabeçalhos (th) quanto nas células (td)
+    th, td {
+      text-align: center;
+      vertical-align: middle; // Opcional: Garante o alinhamento vertical também
+    }
   }
 }
 
