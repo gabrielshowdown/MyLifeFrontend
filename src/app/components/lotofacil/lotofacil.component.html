@@ -11,10 +11,13 @@
       </div>
 
       <div class="d-flex align-items-center gap-2">
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <input matInput placeholder="Número do concurso" [(ngModel)]="jogoConsultado">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="consultar-jogo-input">
+          <input matInput type="number" placeholder="Número do concurso" [(ngModel)]="contestConsulted">
         </mat-form-field>
-        <button mat-flat-button color="primary" (click)="consultarJogo()">Consultar Jogo</button>
+        <button mat-flat-button color="primary" (click)="consultContest()">Consultar Jogo</button>
+        <div @shownState *ngIf="showAlert" class="alert alert-warning m-0 d-flex align-items-center" role="alert">
+          Concurso {{contestConsulted}} não cadastrado <mat-icon class="me-2 mat-icon-clickable" (click)="showAlert = false">close</mat-icon>
+        </div>
       </div>
 
       <div class="total-jogos">
@@ -76,7 +79,7 @@
         </div>
       </div>
       <div class="concursos-grid">
-        <mat-card *ngFor="let concurso of concursos" class="concurso-card">
+        <!-- <mat-card *ngFor="let concurso of concursos" class="concurso-card">
           <mat-card-title>Concurso {{ concurso.numero }}</mat-card-title>
           <mat-card-content>
             <div class="dezenas-grid">
@@ -88,7 +91,7 @@
           <mat-card-footer>
             <small>Paridade: {{ concurso.paridade }} / Rep: {{ concurso.repetidas }}</small>
           </mat-card-footer>
-        </mat-card>
+        </mat-card> -->
       </div>
 
     </div>

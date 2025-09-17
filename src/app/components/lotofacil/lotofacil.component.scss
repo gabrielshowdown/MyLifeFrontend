@@ -52,6 +52,16 @@ $dezena-border: #90caf9; // Borda das dezenas
   color: #333;
 }
 
+// Reduz o tamanho do input de consulta
+.consultar-jogo-input {
+  width: 100px; // Largura fixa
+  
+}
+
+.mat-icon-clickable {
+  cursor: pointer;
+}
+
 // Ajustes nos radio buttons para ficarem mais compactos
 .radio-option {
     margin-right: 15px;

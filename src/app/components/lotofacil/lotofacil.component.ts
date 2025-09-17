@@ -14,10 +14,13 @@ import { DadosNumero, DadosParidade, DadosRepeticao } from '../../interfaces/lot
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { shownStateTrigger } from '../../animations/animations';
 
 @Component({
   selector: 'app-lotofacil',
   imports:[
+    CommonModule,
     FormsModule,
     MatCardModule,
     MatButtonModule,
@@ -30,7 +33,8 @@ import { Subscription } from 'rxjs';
     MatSortModule
   ],
   templateUrl: './lotofacil.component.html',
-  styleUrls: ['./lotofacil.component.scss']
+  styleUrls: ['./lotofacil.component.scss'],
+  animations: [shownStateTrigger]
 })
 export class LotofacilComponent implements OnInit {
 
@@ -38,7 +42,9 @@ export class LotofacilComponent implements OnInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
   subscription!: Subscription;
   
-  totalNumberLotofacilContest: number | undefined;
+  totalNumberLotofacilContest: number = 0;
+  contestConsulted: number = 0;
+  showAlert: boolean = false;
 
   paritiesData: DadosParidade[] = [];
   repetitionsData: DadosRepeticao[] = [];
@@ -55,9 +61,6 @@ export class LotofacilComponent implements OnInit {
   @ViewChild('sortParity') sortParity!: MatSort;
   @ViewChild('sortRepetition') sortRepetition!: MatSort;
   @ViewChild('sortNumber') sortNumber!: MatSort;
-
-  // --- Propriedades do Componente ---
-  jogoConsultado: string = '';
   
   // Opções para os filtros de geração
   repeticaoSelecionada: string = 'N/D';
@@ -186,8 +189,23 @@ export class LotofacilComponent implements OnInit {
   }
 
   // --- Métodos (placeholders) ---
-  consultarJogo(): void {
-    console.log('Consultando jogo:', this.jogoConsultado);
+  consultContest() {
+    this.showAlert = false; // Esconde o alerta antes de uma nova consulta
+    
+    console.log('Consultando jogo:');
+    console.log('último cadastrado:', this.totalNumberLotofacilContest);
+
+    if (this.contestConsulted > this.totalNumberLotofacilContest) {
+      //this.alertMessage = 'Jogo ainda não registrado na nossa base de dados.';
+      this.showAlert = true;
+    } else {
+      // Implemente aqui a lógica para buscar os dados do jogo consultado.
+      // Você vai precisar chamar o service para obter os dados.
+      // Exemplo: this.loteriasService.getContestLotofacilCaixa(this.contestConsulted).subscribe(...)
+      
+      // Supondo que a consulta foi bem-sucedida, você pode ocultar o alerta
+      this.showAlert = false;
+    }
   }
 
   adicionarJogo(): void {
