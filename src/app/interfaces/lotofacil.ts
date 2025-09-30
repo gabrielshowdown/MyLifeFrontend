@@ -24,3 +24,10 @@ export interface DadosConcurso {
   qtdImpares: number;
   qtdRepetidos: number;
 }
+
+export interface NumerosSorteado {
+  id: number;
+  numero: number;
+  repetido: boolean;
+  sorteio: DadosConcurso;
+}

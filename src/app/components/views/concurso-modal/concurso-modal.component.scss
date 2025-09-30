@@ -1,0 +1,37 @@
+// Em: src/app/components/consulta-concurso-dialog/consulta-concurso-dialog.component.scss
+
+// Cores para o modal
+$dezena-sorteada-bg: #f5f5f5;
+$dezena-sorteada-border: #bdbdbd;
+$dezena-repetida-bg: #bbdefb; // Azul claro para dezenas repetidas
+$dezena-repetida-border: #64b5f6;
+
+.dezenas-grid-dialog {
+  display: grid;
+  // Usar 5 colunas mantém o layout padrão da Lotofácil (3 linhas de 5)
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+// Estilo base para todos os 15 números sorteados
+.dezena {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $dezena-sorteada-bg;
+  border: 1px solid $dezena-sorteada-border;
+  border-radius: 8px;
+  aspect-ratio: 1 / 1;
+  font-weight: bold;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+// MUDANÇA: Estilo de sobreposição APENAS para a dezena que for repetida
+.dezena.repetido {
+  background-color: $dezena-repetida-bg;
+  border-color: $dezena-repetida-border;
+  color: #1e88e5;
+}

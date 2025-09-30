@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../config/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, DadosConcurso } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, DadosConcurso, NumerosSorteado } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,7 @@ export class LoteriasService {
   private readonly API_TOTALREPETICOES = 'http://localhost:8080/totaisRepeticoesLotofacil';
   private readonly API_TOTALNUMEROS = 'http://localhost:8080/totaisNumerosLotofacil';
   private readonly API_TOTALCONCURSOS= 'http://localhost:8080/concursoLotofacil';
+  private readonly API_TOTALNUMEROSCONCURSO= 'http://localhost:8080/numeroConcursoLotofacil/concurso';
 
     constructor(private http: HttpClient, private debugService: DebugService,) { }
 
@@ -72,16 +73,20 @@ export class LoteriasService {
 
     getLastContestLotofacilRegistered(): Observable<number> {
       return this.http.get<DadosConcurso[]>(this.API_TOTALCONCURSOS).pipe(
-      map(contests => {
-        if (contests.length === 0) {
-          throw new Error('Nenhum concurso encontrado');
-        }
-        const lastContests = contests[contests.length - 1];
-        console.log('ultimo iddd: ',  lastContests.id);
-        
-        return lastContests.id;
-      })
-    );
+        map(contests => {
+          if (contests.length === 0) {
+            throw new Error('Nenhum concurso encontrado');
+          }
+          const lastContests = contests[contests.length - 1];
+          console.log('ultimo iddd: ',  lastContests.id);
+          
+          return lastContests.id;
+        })
+      );
+    }
 
+    getContestById(id: number): Observable<NumerosSorteado[]> {
+      // A URL final será: http://localhost:8080/concursoLotofacil/3000
+      return this.http.get<NumerosSorteado[]>(`${this.API_TOTALNUMEROSCONCURSO}/${id}`);
     }
 }

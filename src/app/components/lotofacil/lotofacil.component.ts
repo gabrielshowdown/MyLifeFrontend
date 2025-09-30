@@ -16,6 +16,8 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { shownStateTrigger } from '../../animations/animations';
+import { ConcursoModalComponent } from '../views/concurso-modal/concurso-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-lotofacil',
@@ -30,7 +32,9 @@ import { shownStateTrigger } from '../../animations/animations';
     MatIconModule,
     MatTableModule,
     MatButtonToggleModule,
-    MatSortModule
+    MatSortModule,
+    MatDialogModule,
+    ConcursoModalComponent
   ],
   templateUrl: './lotofacil.component.html',
   styleUrls: ['./lotofacil.component.scss'],
@@ -71,6 +75,7 @@ export class LotofacilComponent implements OnInit {
   constructor(
     private service: LoteriasService,
     private debugService: DebugService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void{
@@ -190,22 +195,42 @@ export class LotofacilComponent implements OnInit {
 
   // --- Métodos (placeholders) ---
   consultContest() {
-    this.showAlert = false; // Esconde o alerta antes de uma nova consulta
-    
-    console.log('Consultando jogo:');
-    console.log('último cadastrado:', this.totalNumberLotofacilContest);
+    this.showAlert = false;
+
+    if (!this.contestConsulted || this.contestConsulted <= 0) {
+      // Poderia adicionar uma validação para número inválido
+      return;
+    }
 
     if (this.contestConsulted > this.totalNumberLotofacilContest) {
-      //this.alertMessage = 'Jogo ainda não registrado na nossa base de dados.';
       this.showAlert = true;
     } else {
-      // Implemente aqui a lógica para buscar os dados do jogo consultado.
-      // Você vai precisar chamar o service para obter os dados.
-      // Exemplo: this.loteriasService.getContestLotofacilCaixa(this.contestConsulted).subscribe(...)
-      
-      // Supondo que a consulta foi bem-sucedida, você pode ocultar o alerta
-      this.showAlert = false;
+      // Lógica para buscar os dados e abrir o modal
+      this.service.getContestById(this.contestConsulted).subscribe({
+        next: (resultadoConcurso) => {
+          if (resultadoConcurso && resultadoConcurso.length > 0) {
+            this.openConsultaDialog(this.contestConsulted, resultadoConcurso);
+          } else {
+            // Caso a API retorne um array vazio para um concurso válido
+            this.showAlert = true; 
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao consultar concurso:', err);
+          this.showAlert = true; // Mostra o alerta em caso de erro na API
+        }
+      });
     }
+  }
+
+  openConsultaDialog(concursoId: number, resultado: any): void {
+    this.dialog.open(ConcursoModalComponent, {
+      width: '450px', // Define uma largura para o modal
+      data: { // Envia os dados para o componente do modal
+        concursoId: concursoId,
+        resultado: resultado
+      }
+    });
   }
 
   adicionarJogo(): void {
