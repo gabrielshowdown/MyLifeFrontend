@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LoteriasService } from '../../services/loterias.service';
 import { DebugService } from '../../config/debug.service';
-import { ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao } from '../../interfaces/lotofacil';
+import { ConcursoDetalhado, DadosConcurso, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, NumerosSorteado } from '../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
@@ -68,7 +68,28 @@ export class LotofacilComponent implements OnInit {
   
   // Opções para os filtros de geração
   repeticaoSelecionada: string = 'N/D';
+  private repeticaoMap: { [key: string]: string | null } = {
+    'N/D': '0',
+    '6': '6',
+    '7': '7',
+    '8': '8',
+    '9': '9',
+    '10': '10',
+    '11': '11',
+    '12': '12'
+  };
   paridadeSelecionada: string = 'N/D';
+  private paridadeMap: { [key: string]: { impares: string, pares: string } | null } = {
+    'N/D': { impares: '0', pares: '0' },
+    '4/11': { impares: '4', pares: '11' }, // 4/11
+    '5/10': { impares: '5', pares: '10' }, // 5/10
+    '6/9': { impares: '6', pares: '9' },  // 6/9
+    '7/8': { impares: '7', pares: '8' },  // 7/8
+    '8/7': { impares: '8', pares: '7' },  // 8/7
+    '9/6': { impares: '9', pares: '6' },  // 9/6
+    '10/5': { impares: '10', pares: '6' }, // 10/6 (conforme seu HTML)
+    '11/64': { impares: '11', pares: '5' }  // 11/5 (conforme seu HTML)
+  };
 
   selectedOption = 'angular'; // valor inicial
 
@@ -243,5 +264,40 @@ export class LotofacilComponent implements OnInit {
 
   generateContest(): void {
     console.log('Gerando jogo com as opções:', this.repeticaoSelecionada, this.paridadeSelecionada);
+
+    if(this.totalNumberLotofacilContest === 0){
+      console.error('Número do último concurso ainda não carregado. Tente novamente em alguns segundos.');
+      // O ideal seria desabilitar o botão 'Gerar Jogo' até totalNumberLotofacilContest > 0
+      return;
+    }
+
+    // 1. Obter os valores dos filtros usando os mapas
+    const repetidos = this.repeticaoMap[this.repeticaoSelecionada];
+    const paridade = this.paridadeMap[this.paridadeSelecionada];
+
+    console.log('repetidos ', repetidos);
+    console.log('paridade ', paridade);
+
+    // 2. Montar o body da requisição
+    const requestBody: GenerateContestRequest = {
+      concursoAnteriorId: this.totalNumberLotofacilContest.toString(),
+      qtdRepetidos: repetidos,
+      qtdImpares: paridade ? paridade.impares : null,
+      qtdPares: paridade ? paridade.pares : null
+    };
+
+    this.subscription = this.service.generateContest(requestBody).subscribe({
+      next: (resultadoConcurso: ConcursoDetalhado) => {
+        this.debugService.log('Jogo gerado com sucesso:', resultadoConcurso);
+
+        if (resultadoConcurso) {
+            this.openConsultaDialog(resultadoConcurso); // MODIFICADO: Passar o objeto inteiro
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao gerar jogo:', err);
+        // Aqui você pode adicionar um feedback visual para o usuário (ex: um toast ou snackbar)
+      }
+    });
   }
 }

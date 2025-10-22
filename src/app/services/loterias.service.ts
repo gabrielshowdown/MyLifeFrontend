@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../config/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, DadosConcurso, NumerosSorteado, ConcursoDetalhado } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, DadosConcurso, NumerosSorteado, ConcursoDetalhado, GenerateContestRequest } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -88,5 +88,9 @@ export class LoteriasService {
     getContestById(id: number): Observable<ConcursoDetalhado> {
       // A URL final será: http://localhost:8080/concursoLotofacil/3000
       return this.http.get<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/${id}`);
+    }
+
+    generateContest(request: GenerateContestRequest): Observable<ConcursoDetalhado> {
+      return this.http.post<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/generate`, request);
     }
 }

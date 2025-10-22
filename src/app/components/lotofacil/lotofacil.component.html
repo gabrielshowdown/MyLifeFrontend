@@ -4,7 +4,7 @@
   <mat-card class="mb-4">
     <mat-card-content class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-     <div class="d-flex align-items-center gap-2">
+      <div class="d-flex align-items-center gap-2">
         <button mat-raised-button color="primary" (click)="adicionarJogo()">Adicionar</button>
         <button mat-raised-button color="accent" (click)="synchronizeContests()">Sincronizar</button>
         <small class="text-muted">Última sincronização as 09h</small>
@@ -16,7 +16,8 @@
         </mat-form-field>
         <button mat-flat-button color="primary" (click)="consultContest()">Consultar Jogo</button>
         <div @shownState *ngIf="showAlert" class="alert alert-warning m-0 d-flex align-items-center" role="alert">
-          Concurso {{contestIdConsulted}} não cadastrado <mat-icon class="me-2 mat-icon-clickable" (click)="showAlert = false">close</mat-icon>
+          Concurso {{contestIdConsulted}} não cadastrado <mat-icon class="me-2 mat-icon-clickable"
+            (click)="showAlert = false">close</mat-icon>
         </div>
       </div>
 
@@ -29,23 +30,22 @@
 
   <div class="row g-4">
     <div class="col-lg-6">
-      
+
       <mat-card class="mb-4">
         <mat-card-content>
           <label class="form-label">Repetição ao jogo anterior</label>
           <div class="row align-items-center mb-4">
             <div class="col-md-10">
-              <mat-button-toggle-group class="button-group-condensed" [(ngModel)]="repeticaoSelecionada">
-                <mat-radio-group aria-label="Select an option">
-                  <mat-radio-button value="1">N/D</mat-radio-button>
-                  <mat-radio-button value="2">6</mat-radio-button>
-                  <mat-radio-button value="3">7</mat-radio-button>
-                  <mat-radio-button value="4">9</mat-radio-button>
-                  <mat-radio-button value="5">10</mat-radio-button>
-                  <mat-radio-button value="6">11</mat-radio-button>
-                  <mat-radio-button value="7">12</mat-radio-button>
-                </mat-radio-group>
-              </mat-button-toggle-group>
+              <mat-radio-group class="button-group-condensed" [(ngModel)]="repeticaoSelecionada"
+                aria-label="Seleção de repetição">
+                <mat-radio-button value="N/D">N/D</mat-radio-button>
+                <mat-radio-button value="6">6</mat-radio-button>
+                <mat-radio-button value="7">7</mat-radio-button>
+                <mat-radio-button value="9">9</mat-radio-button>
+                <mat-radio-button value="10">10</mat-radio-button>
+                <mat-radio-button value="11">11</mat-radio-button>
+                <mat-radio-button value="12">12</mat-radio-button>
+              </mat-radio-group>
             </div>
             <div class="col-md-2 d-grid">
               <button mat-raised-button color="accent" (click)="generateContest()">Gerar Jogo</button>
@@ -54,19 +54,17 @@
 
           <div>
             <label class="form-label">Relação de paridade (Ímpares / Pares)</label>
-            <mat-button-toggle-group class="button-group-condensed" [(ngModel)]="paridadeSelecionada">
-              <mat-radio-group aria-label="Select an option">
-                <mat-radio-button value="1">N/D</mat-radio-button>
-                <mat-radio-button value="2">4/11</mat-radio-button>
-                <mat-radio-button value="3">5/10</mat-radio-button>
-                <mat-radio-button value="4">6/9</mat-radio-button>
-                <mat-radio-button value="5">7/8</mat-radio-button>
-                <mat-radio-button value="6">8/7</mat-radio-button>
-                <mat-radio-button value="7">9/6</mat-radio-button>
-                <mat-radio-button value="8">10/6</mat-radio-button>
-                <mat-radio-button value="9">11/5</mat-radio-button>
-              </mat-radio-group>
-            </mat-button-toggle-group>
+            <mat-radio-group class="button-group-condensed" [(ngModel)]="paridadeSelecionada"
+              aria-label="Seleção de paridade">
+              <mat-radio-button value="N/D">N/D</mat-radio-button>
+              <mat-radio-button value="4/11">4/11</mat-radio-button>
+              <mat-radio-button value="5/10">5/10</mat-radio-button>
+              <mat-radio-button value="6/9">6/9</mat-radio-button>
+              <mat-radio-button value="7/8">7/8</mat-radio-button>
+              <mat-radio-button value="8/7">8/7</mat-radio-button>
+              <mat-radio-button value="9/6">9/6</mat-radio-button>
+              <mat-radio-button value="10/5">10/5</mat-radio-button> 
+              <mat-radio-button value="11/4">11/4</mat-radio-button> </mat-radio-group>
           </div>
         </mat-card-content>
       </mat-card>
@@ -102,9 +100,11 @@
 
         <div class="stat-table-container">
           <h6 class="text-center">Repetição</h6>
-          <table mat-table [dataSource]="dataSourceRepetition" matSort #sortRepetition="matSort" (matSortChange)="announceSortChange($event)">
+          <table mat-table [dataSource]="dataSourceRepetition" matSort #sortRepetition="matSort"
+            (matSortChange)="announceSortChange($event)">
             <ng-container matColumnDef="repetido">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by repetido">Repetido</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by repetido">Repetido
+              </th>
               <td mat-cell *matCellDef="let element"> {{element.repetido}} </td>
             </ng-container>
             <ng-container matColumnDef="qtd">
@@ -122,9 +122,11 @@
 
         <div class="stat-table-container">
           <h6 class="text-center">Paridade</h6>
-          <table mat-table [dataSource]="dataSourceParity" matSort #sortParity="matSort" (matSortChange)="announceSortChange($event)">
+          <table mat-table [dataSource]="dataSourceParity" matSort #sortParity="matSort"
+            (matSortChange)="announceSortChange($event)">
             <ng-container matColumnDef="paridade">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by paridade">Paridade</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by paridade">Paridade
+              </th>
               <td mat-cell *matCellDef="let element"> {{element.paridade}} </td>
             </ng-container>
             <ng-container matColumnDef="qtd">
@@ -142,7 +144,8 @@
 
         <div class="stat-table-container">
           <h6 class="text-center">Totais Números</h6>
-          <table mat-table [dataSource]="dataSourceNumber" matSort #sortNumber="matSort" (matSortChange)="announceSortChange($event)">
+          <table mat-table [dataSource]="dataSourceNumber" matSort #sortNumber="matSort"
+            (matSortChange)="announceSortChange($event)">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">Número</th>
               <td mat-cell *matCellDef="let element"> {{element.id}} </td>

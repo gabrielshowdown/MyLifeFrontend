@@ -54,3 +54,10 @@ export interface ConcursoDetalhado {
   qtdRepetidos: number;
   numerosConcurso: NumeroSorteadoDetalhe[];
 }
+
+export interface GenerateContestRequest {
+  concursoAnteriorId: string;
+  qtdPares: string | null;
+  qtdImpares: string | null;
+  qtdRepetidos: string | null;
+}
