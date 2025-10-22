@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LoteriasService } from '../../services/loterias.service';
 import { DebugService } from '../../config/debug.service';
-import { DadosNumero, DadosParidade, DadosRepeticao } from '../../interfaces/lotofacil';
+import { ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao } from '../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
@@ -47,7 +47,7 @@ export class LotofacilComponent implements OnInit {
   subscription!: Subscription;
   
   totalNumberLotofacilContest: number = 0;
-  contestConsulted: number = 0;
+  contestIdConsulted: number = 0;
   showAlert: boolean = false;
 
   paritiesData: DadosParidade[] = [];
@@ -197,51 +197,51 @@ export class LotofacilComponent implements OnInit {
   consultContest() {
     this.showAlert = false;
 
-    if (!this.contestConsulted || this.contestConsulted <= 0) {
-      // Poderia adicionar uma validação para número inválido
+    if (!this.contestIdConsulted || this.contestIdConsulted <= 0) {
       return;
     }
 
-    if (this.contestConsulted > this.totalNumberLotofacilContest) {
+    if (this.contestIdConsulted > this.totalNumberLotofacilContest) {
       this.showAlert = true;
     } else {
       // Lógica para buscar os dados e abrir o modal
-      this.service.getContestById(this.contestConsulted).subscribe({
-        next: (resultadoConcurso) => {
-          if (resultadoConcurso && resultadoConcurso.length > 0) {
-            this.openConsultaDialog(this.contestConsulted, resultadoConcurso);
+      this.service.getContestById(this.contestIdConsulted).subscribe({
+        // MODIFICADO: Esperar ConcursoDetalhado
+        next: (resultadoConcurso: ConcursoDetalhado) => {
+          // MODIFICADO: Checar se o objeto existe (não mais o length)
+          if (resultadoConcurso) {
+            this.openConsultaDialog(resultadoConcurso); // MODIFICADO: Passar o objeto inteiro
           } else {
-            // Caso a API retorne um array vazio para um concurso válido
+            // Caso a API retorne um objeto nulo
             this.showAlert = true; 
           }
         },
         error: (err) => {
           console.error('Erro ao consultar concurso:', err);
-          this.showAlert = true; // Mostra o alerta em caso de erro na API
+          this.showAlert = true; 
         }
       });
     }
   }
 
-  openConsultaDialog(concursoId: number, resultado: any): void {
+  openConsultaDialog(resultado: ConcursoDetalhado): void {
+
     this.dialog.open(ConcursoModalComponent, {
-      width: '450px', // Define uma largura para o modal
-      data: { // Envia os dados para o componente do modal
-        concursoId: concursoId,
-        resultado: resultado
-      }
+      width: '450px',
+      data: resultado // MODIFICADO: Enviar os dados mapeados
     });
+    
   }
 
   adicionarJogo(): void {
     console.log('Botão Adicionar clicado');
   }
 
-  sincronizarJogos(): void {
+  synchronizeContests(): void {
     console.log('Botão Sincronizar clicado');
   }
 
-  gerarJogo(): void {
+  generateContest(): void {
     console.log('Gerando jogo com as opções:', this.repeticaoSelecionada, this.paridadeSelecionada);
   }
 }

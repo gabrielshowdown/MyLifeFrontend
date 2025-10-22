@@ -6,17 +6,17 @@
 
      <div class="d-flex align-items-center gap-2">
         <button mat-raised-button color="primary" (click)="adicionarJogo()">Adicionar</button>
-        <button mat-raised-button color="accent" (click)="sincronizarJogos()">Sincronizar</button>
+        <button mat-raised-button color="accent" (click)="synchronizeContests()">Sincronizar</button>
         <small class="text-muted">Última sincronização as 09h</small>
       </div>
 
       <div class="d-flex align-items-center gap-2">
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="consultar-jogo-input">
-          <input matInput type="number" placeholder="Número do concurso" [(ngModel)]="contestConsulted">
+          <input matInput type="number" placeholder="Número do concurso" [(ngModel)]="contestIdConsulted">
         </mat-form-field>
         <button mat-flat-button color="primary" (click)="consultContest()">Consultar Jogo</button>
         <div @shownState *ngIf="showAlert" class="alert alert-warning m-0 d-flex align-items-center" role="alert">
-          Concurso {{contestConsulted}} não cadastrado <mat-icon class="me-2 mat-icon-clickable" (click)="showAlert = false">close</mat-icon>
+          Concurso {{contestIdConsulted}} não cadastrado <mat-icon class="me-2 mat-icon-clickable" (click)="showAlert = false">close</mat-icon>
         </div>
       </div>
 
@@ -48,7 +48,7 @@
               </mat-button-toggle-group>
             </div>
             <div class="col-md-2 d-grid">
-              <button mat-raised-button color="accent" (click)="gerarJogo()">Gerar Jogo</button>
+              <button mat-raised-button color="accent" (click)="generateContest()">Gerar Jogo</button>
             </div>
           </div>
 
