@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LoteriasService } from '../../services/loterias.service';
 import { DebugService } from '../../config/debug.service';
-import { ConcursoDetalhado, DadosConcurso, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, NumerosSorteado } from '../../interfaces/lotofacil';
+import { ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest } from '../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';

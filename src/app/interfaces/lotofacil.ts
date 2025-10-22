@@ -21,21 +21,6 @@ export interface DadosNumero {
   porcentagem: number;
 }
 
-// Interface para ver informações do último concurso cadastrado
-export interface DadosConcurso {
-  id: number;
-  qtdPares: number;
-  qtdImpares: number;
-  qtdRepetidos: number;
-}
-
-export interface NumerosSorteado {
-  id: number;
-  numero: number;
-  repetido: boolean;
-  sorteio: DadosConcurso;
-}
-
 // [Arquivo: lotofacil.ts]
 // ... (Interfaces existentes: DadosParidade, DadosRepeticao, etc.)
 
@@ -55,6 +40,7 @@ export interface ConcursoDetalhado {
   numerosConcurso: NumeroSorteadoDetalhe[];
 }
 
+// Igual a classe DTO no backend
 export interface GenerateContestRequest {
   concursoAnteriorId: string;
   qtdPares: string | null;

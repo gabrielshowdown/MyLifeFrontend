@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../config/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, DadosConcurso, NumerosSorteado, ConcursoDetalhado, GenerateContestRequest } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, ConcursoDetalhado, GenerateContestRequest } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
