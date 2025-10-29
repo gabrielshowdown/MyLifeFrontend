@@ -45,6 +45,7 @@ export class LotofacilComponent implements OnInit {
   // Atributos
   private _liveAnnouncer = inject(LiveAnnouncer);
   subscription!: Subscription;
+  isSyncing: boolean = false; // Nova flag para feedback visual (spinner)
   
   totalNumberLotofacilContest: number = 0;
   contestIdConsulted: number = 0;
@@ -258,10 +259,6 @@ export class LotofacilComponent implements OnInit {
     console.log('Botão Adicionar clicado');
   }
 
-  synchronizeContests(): void {
-    console.log('Botão Sincronizar clicado');
-  }
-
   generateContest(): void {
     console.log('Gerando jogo com as opções:', this.repeticaoSelecionada, this.paridadeSelecionada);
 
@@ -297,6 +294,33 @@ export class LotofacilComponent implements OnInit {
       error: (err) => {
         console.error('Erro ao gerar jogo:', err);
         // Aqui você pode adicionar um feedback visual para o usuário (ex: um toast ou snackbar)
+      }
+    });
+  }
+
+  synchronizeContests(): void {
+    if (this.isSyncing) return; // Previne cliques duplos
+
+    this.isSyncing = true;
+    this.debugService.log('Iniciando sincronização...');
+    // (Opcional: desabilitar o botão no HTML usando [disabled]="isSyncing")
+
+    this.subscription = this.service.synchronizeDatabase().subscribe({
+      next: (responseMessage) => {
+        this.isSyncing = false;
+        this.debugService.log('Sincronização concluída:', responseMessage);
+        // alert(responseMessage); // Feedback simples
+        // this.snackBar.open(responseMessage, 'Fechar', { duration: 5000 }); // Feedback melhor
+
+        // CRUCIAL: Recarregar os dados da tela após a sincronização
+        this.loadGeneralData();
+        this.loadTablesData();
+      },
+      error: (err) => {
+        this.isSyncing = false;
+        console.error('Erro ao sincronizar:', err);
+        // alert('Erro ao sincronizar. Veja o console.');
+        // this.snackBar.open('Erro ao sincronizar. Tente novamente.', 'Fechar', { duration: 5000 });
       }
     });
   }

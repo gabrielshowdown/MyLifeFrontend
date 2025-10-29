@@ -93,4 +93,10 @@ export class LoteriasService {
     generateContest(request: GenerateContestRequest): Observable<ConcursoDetalhado> {
       return this.http.post<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/generate`, request);
     }
+    
+    synchronizeDatabase(): Observable<string> {
+      // Usamos POST para uma ação que modifica o estado do servidor
+      // O { responseType: 'text' } é crucial porque o backend retorna uma string, não um JSON
+      return this.http.post(`${this.API_TOTALCONCURSOS}/synchronize`, {}, { responseType: 'text' });
+    }
 }
