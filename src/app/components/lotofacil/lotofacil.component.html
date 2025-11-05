@@ -2,33 +2,47 @@
   <h2 class="mb-4">Jogos Lotofácil</h2>
 
   <mat-card class="mb-4">
-    <mat-card-content class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <mat-card-content>
 
-      <div class="d-flex align-items-center gap-2">
-        <button mat-raised-button color="primary" (click)="adicionarJogo()">Adicionar</button>
-        <button mat-raised-button color="accent" (click)="synchronizeContests()" [disabled]="isSyncing">
-
-          <span *ngIf="isSyncing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-
-          <span *ngIf="!isSyncing">Sincronizar</span>
-        </button>
-        <small class="text-muted">Última sincronização as 09h</small>
+      <div *ngIf="showSyncAlert" @shownState class="alert d-flex justify-content-between align-items-center m-0 mb-3"
+           [ngClass]="{
+             'alert-warning': syncAlertType === 'warning',
+             'alert-success': syncAlertType === 'success',
+             'alert-info': syncAlertType === 'info',
+             'alert-danger': syncAlertType === 'danger'
+           }"
+           role="alert">
+        <span>{{ syncAlertMessage }}</span>
+        <button type="button" class="btn-close" (click)="showSyncAlert = false" aria-label="Close"></button>
       </div>
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-      <div class="d-flex align-items-center gap-2">
-        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="consultar-jogo-input">
-          <input matInput type="number" placeholder="Número do concurso" [(ngModel)]="contestIdConsulted">
-        </mat-form-field>
-        <button mat-flat-button color="primary" (click)="consultContest()">Consultar Jogo</button>
-        <div @shownState *ngIf="showAlert" class="alert alert-warning m-0 d-flex align-items-center" role="alert">
-          Concurso {{contestIdConsulted}} não cadastrado <mat-icon class="me-2 mat-icon-clickable"
-            (click)="showAlert = false">close</mat-icon>
+        <div class="d-flex align-items-center gap-2">
+          <button mat-raised-button color="primary" (click)="adicionarJogo()">Adicionar</button>
+          <button mat-raised-button color="accent" (click)="synchronizeContests()" [disabled]="isSyncing">
+
+            <span *ngIf="isSyncing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span *ngIf="!isSyncing">Sincronizar</span>
+          </button>
+          
+          </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="consultar-jogo-input">
+            <input matInput type="number" placeholder="Número do concurso" [(ngModel)]="contestIdConsulted">
+          </mat-form-field>
+          <button mat-flat-button color="primary" (click)="consultContest()">Consultar Jogo</button>
+          
+          <div @shownState *ngIf="showConsultAlert" class="alert alert-warning m-0 d-flex align-items-center" role="alert">
+            Concurso {{contestIdConsulted}} não cadastrado 
+            <mat-icon class="me-2 mat-icon-clickable" (click)="showConsultAlert = false">close</mat-icon>
+          </div>
         </div>
-      </div>
 
-      <div class="total-jogos">
-        <strong>Total de jogos:</strong>
-        <span class="total-badge">{{ totalNumberLotofacilContest }}</span>
+        <div class="total-jogos">
+          <strong>Total de jogos:</strong>
+          <span class="total-badge">{{ totalNumberLotofacilContest }}</span>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

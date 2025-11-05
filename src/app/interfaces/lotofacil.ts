@@ -47,3 +47,11 @@ export interface GenerateContestRequest {
   qtdImpares: string | null;
   qtdRepetidos: string | null;
 }
+
+export interface SynchronizeResponse {
+  lastConcCadastrado: number;
+  totContestSyncronized: number;
+  dateNextContest: Date;
+  textReturnedSyoncronized: string;
+  nextContest: number;
+}
