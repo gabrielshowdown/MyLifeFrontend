@@ -29,7 +29,8 @@
 
         <div class="d-flex align-items-center gap-2">
           <mat-form-field appearance="outline" subscriptSizing="dynamic" class="consultar-jogo-input">
-            <input matInput type="number" placeholder="Número do concurso" [(ngModel)]="contestIdConsulted">
+            <input matInput type="number" placeholder="Número do concurso" [(ngModel)]="contestIdConsulted"
+              (keyup.enter)="consultContest()">
           </mat-form-field>
           <button mat-flat-button color="primary" (click)="consultContest()">Consultar Jogo</button>
 
