@@ -54,6 +54,7 @@ export class LotofacilComponent implements OnInit {
   showSyncAlert: boolean = false;
   syncAlertMessage: string = '';
   syncAlertType: 'success' | 'warning' | 'info' | 'danger' = 'info'; // Cores do Bootstrap
+  syncAlertIcon: string = 'info_outline';
 
   paritiesData: DadosParidade[] = [];
   repetitionsData: DadosRepeticao[] = [];
@@ -131,45 +132,58 @@ export class LotofacilComponent implements OnInit {
     forkJoin({
       lastLocal: this.service.getLastContestLotofacilRegistered(),
       lastCaixa: this.service.getContestLotofacilCaixa()
-    }).subscribe(({ lastLocal, lastCaixa }) => {
-      this.totalNumberLotofacilContest = lastLocal;
-      this.lastContestApiCaixa = lastCaixa.numero;
-      this.dateNextContesCaixa = lastCaixa.dataProximoConcurso;
+    }).subscribe({
+      next: ({ lastLocal, lastCaixa }) => {
+        this.totalNumberLotofacilContest = lastLocal;
+        this.lastContestApiCaixa = lastCaixa.numero;
+        this.dateNextContesCaixa = lastCaixa.dataProximoConcurso;
 
-      console.log('Valores carregados:');
-      console.log('totalNumberLotofacilContest', this.totalNumberLotofacilContest);
-      console.log('lastContestApiCaixa', this.lastContestApiCaixa);
+        console.log('Valores carregados:');
+        console.log('totalNumberLotofacilContest', this.totalNumberLotofacilContest);
+        console.log('lastContestApiCaixa', this.lastContestApiCaixa);
 
-      // LÓGICA DE ALERTA ATUALIZADA
-      if (this.lastContestApiCaixa > this.totalNumberLotofacilContest) {
-        const diff = this.lastContestApiCaixa - this.totalNumberLotofacilContest;
-        
-        // 3. Verifica se esta chamada foi resultado de uma sincronização
-        if (syncResponse && syncResponse.totContestSyncronized > 0) {
-          // Cenário: "Sincronizou 100, mas ainda faltam 2150"
-          this.syncAlertMessage = `Sincronizados ${syncResponse.totContestSyncronized} concursos! Restam ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`;
-          // Mantemos 'warning' (amarelo) porque a ação principal (sincronizar tudo) não terminou.
-          this.syncAlertType = 'warning'; 
+        if (this.lastContestApiCaixa > this.totalNumberLotofacilContest) {
+          const diff = this.lastContestApiCaixa - this.totalNumberLotofacilContest;
+
+          if (syncResponse && syncResponse.totContestSyncronized > 0) {
+            // *** Cenário 3 (INFO) ***
+            this.syncAlertMessage = `Sincronizados ${syncResponse.totContestSyncronized} concursos! Restam ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`;
+            this.syncAlertType = 'info';
+            this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check (conforme solicitado)
+          } else {
+            // *** Cenário 2 (WARNING) ***
+            this.syncAlertMessage = `Existem ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`;
+            this.syncAlertType = 'warning';
+            this.syncAlertIcon = 'warning_amber'; // Ícone de Aviso
+          }
+          this.showSyncAlert = true;
+
         } else {
-          // Cenário: ngOnInit, usuário acabou de carregar a página
-          this.syncAlertMessage = `Existem ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`;
-          this.syncAlertType = 'warning';
+          // Base está 100% atualizada
+
+          if (syncResponse && syncResponse.totContestSyncronized > 0) {
+            // *** Cenário 4 (SUCCESS) ***
+            const dataFormatada = syncResponse.dateNextContest
+              ? new Date(syncResponse.dateNextContest).toLocaleDateString('pt-BR')
+              : 'N/D';
+            this.syncAlertMessage = `Sincronizados com sucesso! Próximo concurso: ${dataFormatada}`;
+            this.syncAlertType = 'success';
+            this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check
+          } else {
+            // *** Cenário 5 (INFO) ***
+            this.syncAlertMessage = `Concursos Sincronizados. Próximo concurso: ${this.dateNextContesCaixa}`;
+            this.syncAlertType = 'info';
+            this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check (conforme solicitado)
+          }
+          this.showSyncAlert = true;
         }
-        this.showSyncAlert = true;
-      
-      } else {
-        // Cenário: Base está 100% atualizada
-        
-        // 3. Verifica se esta chamada foi resultado da *última* sincronização
-        if (syncResponse && syncResponse.totContestSyncronized > 0) {
-          // Cenário: "Sincronizou os últimos 50 e terminou"
-          this.syncAlertMessage = `Sincronização concluída! ${syncResponse.totContestSyncronized} concurso(s) adicionado(s). Base atualizada. Próximo concurso: ${this.dateNextContesCaixa}`;
-          this.syncAlertType = 'success'; // Agora sim, 'success' (verde)
-        } else {
-          // Cenário: ngOnInit, usuário carregou e já estava tudo atualizado
-          this.syncAlertMessage = `Base de dados atualizada. Próximo concurso: ${this.dateNextContesCaixa}`;
-          this.syncAlertType = 'info'; // 'info' (azul)
-        }
+      },
+      error: (err) => {
+        // *** Cenário 1 (DANGER) ***
+        console.error('Erro ao buscar dados gerais (Caixa ou Local):', err);
+        this.syncAlertMessage = 'Erro ao se comunicar com a API da Caixa.';
+        this.syncAlertType = 'danger';
+        this.syncAlertIcon = 'error_outline'; // Ícone de Erro
         this.showSyncAlert = true;
       }
     });
@@ -197,7 +211,6 @@ export class LotofacilComponent implements OnInit {
             porcentagem: item.porcentagem, // de 'porcentagem' para 'percentual' (string)
           };
         });
-
         this.dataSourceParity = new MatTableDataSource(this.paritiesData);
         this.dataSourceParity.sort = this.sortParity;
         this.debugService.log('Dados de paridade mapeados para a tabela:', this.paritiesData);
@@ -266,7 +279,7 @@ export class LotofacilComponent implements OnInit {
   // --- Métodos (placeholders) ---
   consultContest() {
     // ATUALIZADO: Usa showConsultAlert
-    this.showConsultAlert = false; 
+    this.showConsultAlert = false;
 
     if (!this.contestIdConsulted || this.contestIdConsulted <= 0) {
       return;
@@ -274,13 +287,13 @@ export class LotofacilComponent implements OnInit {
 
     if (this.contestIdConsulted > this.totalNumberLotofacilContest) {
       // ATUALIZADO: Usa showConsultAlert
-      this.showConsultAlert = true; 
+      this.showConsultAlert = true;
     } else {
       // Lógica para buscar os dados e abrir o modal
       this.service.getContestById(this.contestIdConsulted).subscribe({
         next: (resultadoConcurso: ConcursoDetalhado) => {
           if (resultadoConcurso) {
-            this.openConsultaDialog(resultadoConcurso); 
+            this.openConsultaDialog(resultadoConcurso);
           } else {
             // ATUALIZADO: Usa showConsultAlert
             this.showConsultAlert = true;
@@ -348,10 +361,10 @@ export class LotofacilComponent implements OnInit {
   }
 
   synchronizeContests(): void {
-    if (this.isSyncing) return; 
+    if (this.isSyncing) return;
 
     this.isSyncing = true;
-    this.showSyncAlert = false; 
+    this.showSyncAlert = false;
     this.debugService.log('Iniciando sincronização...');
 
     this.subscription = this.service.synchronizeDatabase().subscribe({
@@ -367,7 +380,7 @@ export class LotofacilComponent implements OnInit {
       error: (err) => {
         this.isSyncing = false;
         console.error('Erro ao sincronizar:', err);
-        
+
         // O feedback de erro permanece o mesmo
         this.syncAlertMessage = 'Erro ao sincronizar. Tente novamente mais tarde.';
         this.syncAlertType = 'danger';

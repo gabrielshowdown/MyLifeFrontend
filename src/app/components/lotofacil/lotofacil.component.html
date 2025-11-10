@@ -14,13 +14,15 @@
             <span *ngIf="!isSyncing">Sincronizar</span>
           </button>
 
-          <div *ngIf="showSyncAlert" @shownState class="alert d-flex justify-content-between align-items-center m-0"
-            [ngClass]="{
+          <div *ngIf="showSyncAlert" @shownState class="alert d-flex align-items-center m-0" [ngClass]="{
                'alert-warning': syncAlertType === 'warning',
                'alert-success': syncAlertType === 'success',
                'alert-info': syncAlertType === 'info',
                'alert-danger': syncAlertType === 'danger'
              }" role="alert">
+
+            <mat-icon class="me-2">{{ syncAlertIcon }}</mat-icon>
+
             <span>{{ syncAlertMessage }}</span>
           </div>
         </div>
