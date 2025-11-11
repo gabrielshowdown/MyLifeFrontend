@@ -55,3 +55,8 @@ export interface SynchronizeResponse {
   textReturnedSyoncronized: string;
   nextContest: number;
 }
+
+export interface ModalData {
+  concurso: ConcursoDetalhado;
+  isGerado: boolean;
+}

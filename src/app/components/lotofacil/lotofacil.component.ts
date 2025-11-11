@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LoteriasService } from '../../services/loterias.service';
 import { DebugService } from '../../config/debug.service';
-import { ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, SynchronizeResponse } from '../../interfaces/lotofacil';
+import { ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, ModalData, SynchronizeResponse } from '../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { forkJoin, Subscription } from 'rxjs';
@@ -293,7 +293,7 @@ export class LotofacilComponent implements OnInit {
       this.service.getContestById(this.contestIdConsulted).subscribe({
         next: (resultadoConcurso: ConcursoDetalhado) => {
           if (resultadoConcurso) {
-            this.openConsultaDialog(resultadoConcurso);
+            this.openConsultaDialog(resultadoConcurso, false);
           } else {
             // ATUALIZADO: Usa showConsultAlert
             this.showConsultAlert = true;
@@ -308,11 +308,14 @@ export class LotofacilComponent implements OnInit {
     }
   }
 
-  openConsultaDialog(resultado: ConcursoDetalhado): void {
+  openConsultaDialog(resultado: ConcursoDetalhado, isGerado: boolean = false): void {
 
     this.dialog.open(ConcursoModalComponent, {
       width: '450px',
-      data: resultado // MODIFICADO: Enviar os dados mapeados
+      data: {
+        concurso: resultado,
+        isGerado: isGerado 
+      } as ModalData
     });
 
   }
@@ -350,7 +353,7 @@ export class LotofacilComponent implements OnInit {
         this.debugService.log('Jogo gerado com sucesso:', resultadoConcurso);
 
         if (resultadoConcurso) {
-          this.openConsultaDialog(resultadoConcurso); // MODIFICADO: Passar o objeto inteiro
+          this.openConsultaDialog(resultadoConcurso, true); // MODIFICADO: Passar o objeto inteiro
         }
       },
       error: (err) => {

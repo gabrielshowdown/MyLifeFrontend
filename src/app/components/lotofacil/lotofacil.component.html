@@ -8,7 +8,7 @@
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
         <div class="d-flex align-items-center gap-2">
-          <button mat-raised-button color="primary" (click)="adicionarJogo()">Adicionar</button>
+          <button mat-raised-button color="primary" (click)="adicionarJogo()" [disabled]="isSyncing">Adicionar</button>
           <button mat-raised-button color="accent" (click)="synchronizeContests()" [disabled]="isSyncing">
             <span *ngIf="isSyncing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             <span *ngIf="!isSyncing">Sincronizar</span>
@@ -74,7 +74,7 @@
           </div>
 
           <div>
-            <label class="form-label">Relação de paridade (Ímpares / Pares)</label>
+            <label class="form-label">Relação de paridade (Ímpares/Pares)</label>
             <mat-radio-group class="button-group-condensed" [(ngModel)]="paridadeSelecionada"
               aria-label="Seleção de paridade">
               <mat-radio-button value="N/D">N/D</mat-radio-button>

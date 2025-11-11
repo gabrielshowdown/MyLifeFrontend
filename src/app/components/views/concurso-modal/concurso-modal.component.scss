@@ -35,3 +35,22 @@ $dezena-repetida-border: #64b5f6;
   border-color: $dezena-repetida-border;
   color: #1e88e5;
 }
+
+.custom-dialog-actions {
+  display: flex;
+  justify-content: space-between; // Joga os itens para as pontas (esquerda e direita)
+  align-items: center;           // Centraliza verticalmente
+  width: 100%;                   // Garante a ocupação total
+  
+  // O mat-dialog-actions já tem padding, 
+  // mas podemos garantir aqui se quisermos:
+  padding: 8px 24px;
+  box-sizing: border-box;
+}
+
+// 2. Estilo para o texto de observação
+.obs-text {
+  font-size: 0.85em;       // Tamanho menor
+  font-style: italic;      // Itálico
+  color: rgba(0, 0, 0, 0.6); // Cor de texto secundária (cinza)
+}
