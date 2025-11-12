@@ -72,6 +72,9 @@ export class LotofacilComponent implements OnInit {
   lastContestApiCaixa: number = 0;
   dateNextContesCaixa: any;
 
+  showGenerateAlert: boolean = false;
+  generateAlertMessage: string = '';
+
   @ViewChild('sortParity') sortParity!: MatSort;
   @ViewChild('sortRepetition') sortRepetition!: MatSort;
   @ViewChild('sortNumber') sortNumber!: MatSort;
@@ -143,6 +146,7 @@ export class LotofacilComponent implements OnInit {
         console.log('lastContestApiCaixa', this.lastContestApiCaixa);
 
         if (this.lastContestApiCaixa > this.totalNumberLotofacilContest) {
+          /** Há concursos para sincronizar */
           const diff = this.lastContestApiCaixa - this.totalNumberLotofacilContest;
 
           if (syncResponse && syncResponse.totContestSyncronized > 0) {
@@ -166,7 +170,7 @@ export class LotofacilComponent implements OnInit {
             const dataFormatada = syncResponse.dateNextContest
               ? new Date(syncResponse.dateNextContest).toLocaleDateString('pt-BR')
               : 'N/D';
-            this.syncAlertMessage = `Sincronizados com sucesso! Próximo concurso: ${dataFormatada}`;
+            this.syncAlertMessage = `Sincronizados com sucesso! Próximo concurso: ${this.dateNextContesCaixa}`;
             this.syncAlertType = 'success';
             this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check
           } else {
@@ -325,6 +329,9 @@ export class LotofacilComponent implements OnInit {
   }
 
   generateContest(): void {
+
+    this.showGenerateAlert = false;
+    
     console.log('Gerando jogo com as opções:', this.repeticaoSelecionada, this.paridadeSelecionada);
 
     if (this.totalNumberLotofacilContest === 0) {
@@ -358,7 +365,16 @@ export class LotofacilComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erro ao gerar jogo:', err);
-        // Aqui você pode adicionar um feedback visual para o usuário (ex: um toast ou snackbar)
+        // ESTA É A LÓGICA PRINCIPAL DE TRATAMENTO DO ERRO
+        if (err.status === 422 && err.error && err.error.message) {
+          // Captura a mensagem específica do backend
+          this.generateAlertMessage = err.error.message.replace('Parâmetros inválidos ', '');
+        } else {
+          // Fallback para outros tipos de erro (ex: 500, rede)
+          this.generateAlertMessage = 'Erro inesperado ao gerar o jogo. Tente novamente.';
+        }
+        // Ativa a exibição do alerta
+        this.showGenerateAlert = true;
       }
     });
   }
@@ -372,6 +388,7 @@ export class LotofacilComponent implements OnInit {
 
     this.subscription = this.service.synchronizeDatabase().subscribe({
       next: (response) => {
+        this.showGenerateAlert = false;
         this.isSyncing = false;
         this.debugService.log('Sincronização concluída:', response);
 

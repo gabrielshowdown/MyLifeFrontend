@@ -4,7 +4,6 @@
   <mat-card class="mb-4">
     <mat-card-content>
 
-
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
         <div class="d-flex align-items-center gap-2">
@@ -55,6 +54,7 @@
       <mat-card class="mb-4">
         <mat-card-content>
           <label class="form-label">Repetição ao jogo anterior</label>
+
           <div class="row align-items-center mb-4">
             <div class="col-md-10">
               <mat-radio-group class="button-group-condensed" [(ngModel)]="repeticaoSelecionada"
@@ -73,6 +73,14 @@
             </div>
           </div>
 
+          <div @shownState *ngIf="showGenerateAlert"
+            class="alert alert-danger m-0 mb-3 d-flex align-items-center justify-content-between" role="alert">
+            <div class="d-flex align-items-center">
+              <mat-icon class="me-2">error_outline</mat-icon>
+              <span>{{ generateAlertMessage }}</span>
+              <!-- <mat-icon class="mat-icon-clickable" (click)="showGenerateAlert = false">close</mat-icon> -->
+            </div>
+          </div>
           <div>
             <label class="form-label">Relação de paridade (Ímpares/Pares)</label>
             <mat-radio-group class="button-group-condensed" [(ngModel)]="paridadeSelecionada"
