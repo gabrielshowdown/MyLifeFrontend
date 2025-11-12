@@ -72,11 +72,11 @@ export class AddConcursoModalComponent implements OnInit {
   }
 
   salvar(): void {
-    // 1. Validar ID
-    if (!this.concursoId || this.concursoId <= 0) {
-      this.mostrarErro('Número do concurso é inválido.');
-      return;
-    }
+    // 1. Validar ID , necessário quando o input com o número é editável
+    // if (!this.concursoId || this.concursoId <= 0) {
+    //   this.mostrarErro('Número do concurso é inválido.');
+    //   return;
+    // }
 
     // 2. Validar Dezenas
     const dezenasLimpa = this.dezenasInput;

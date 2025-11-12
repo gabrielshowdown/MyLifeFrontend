@@ -6,7 +6,7 @@
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
     <mat-label>Número do Concurso</mat-label>
-    <input matInput type="number" [(ngModel)]="concursoId" placeholder="Ex: 3001">
+    <input matInput type="number" [(ngModel)]="concursoId" placeholder="Ex: 3001" [readonly]="true"> <!-- Se quiser deixar editavel, tirar o readyonly -->
   </mat-form-field>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
