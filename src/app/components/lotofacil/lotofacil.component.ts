@@ -18,6 +18,8 @@ import { CommonModule } from '@angular/common';
 import { shownStateTrigger } from '../../animations/animations';
 import { ConcursoModalComponent } from '../views/concurso-modal/concurso-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AddConcursoModalComponent } from '../views/add-concurso-modal/add-concurso-modal.component';
+import { AdicionarConcursoRequest } from '../../interfaces/lotofacil';
 
 @Component({
   selector: 'app-lotofacil',
@@ -325,7 +327,47 @@ export class LotofacilComponent implements OnInit {
   }
 
   adicionarJogo(): void {
-    console.log('Botão Adicionar clicado');
+    const dialogRef = this.dialog.open(AddConcursoModalComponent, {
+      width: '500px',
+      // Passamos o próximo ID de concurso esperado como sugestão
+      data: { proximoConcursoSugerido: this.totalNumberLotofacilContest + 1 }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // 'result' é o que o modal retorna ao ser fechado (se o usuário salvar)
+      if (result && result.concursoId && result.dezenas) {
+        this.salvarNovoConcursoManual(result);
+      }
+    });
+  }
+
+  private salvarNovoConcursoManual(data: { concursoId: number, dezenas: string[] }): void {
+    
+    const request: AdicionarConcursoRequest = {
+      concursoId: data.concursoId,
+      dezenas: data.dezenas
+    };
+
+    // Chamar o serviço (próximo passo)
+    this.subscription = this.service.addContestManually(request).subscribe({
+      next: (novoConcurso) => {
+        // Sucesso! Recarregar dados e mostrar alerta
+        this.loadGeneralData(); 
+        this.loadTablesData(); 
+        
+        this.syncAlertMessage = `Concurso ${novoConcurso.id} adicionado manualmente!`;
+        this.syncAlertType = 'success';
+        this.syncAlertIcon = 'check_circle_outline';
+        this.showSyncAlert = true;
+      },
+      error: (err) => {
+        // Tratar erro
+        this.syncAlertMessage = `Erro ao salvar concurso ${request.concursoId}. (Erro: ${err.error?.message || err.message})`;
+        this.syncAlertType = 'danger';
+        this.syncAlertIcon = 'error_outline';
+        this.showSyncAlert = true;
+      }
+    });
   }
 
   generateContest(): void {

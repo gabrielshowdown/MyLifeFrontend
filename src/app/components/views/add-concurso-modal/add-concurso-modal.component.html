@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Adicionar Concurso Manualmente</h2>
+
+<mat-dialog-content class="d-flex flex-column gap-3">
+  
+  <p>Use esta tela para cadastrar um concurso manualmente em caso de falha na sincronização.</p>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Número do Concurso</mat-label>
+    <input matInput type="number" [(ngModel)]="concursoId" placeholder="Ex: 3001">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Dezenas Sorteadas (15)</mat-label>
+    
+    <input 
+      matInput 
+      [value]="dezenasFormatadas"
+      (input)="onDezenasInput($event)"
+      placeholder="01-06-07-08-10-11-12-13-14-15-16-18-23-24-25"
+      maxlength="44"> <mat-hint align="end">{{ dezenasInput.length / 2 | number:'1.0-0' }} / 15</mat-hint>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" (click)="salvar()">Salvar Concurso</button>
+</mat-dialog-actions>

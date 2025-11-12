@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../config/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, ConcursoDetalhado, GenerateContestRequest, SynchronizeResponse } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, ConcursoDetalhado, GenerateContestRequest, SynchronizeResponse, AdicionarConcursoRequest } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -100,4 +100,9 @@ export class LoteriasService {
       // O { responseType: 'text' } é crucial porque o backend retorna uma string, não um JSON
       return this.http.post<SynchronizeResponse>(`${this.API_TOTALCONCURSOS}/synchronize`, {});
     }
+
+    addContestManually(request: AdicionarConcursoRequest): Observable<ConcursoDetalhado> {
+    // Assumindo que o backend tenha um endpoint "manual" para isso
+    return this.http.post<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/manual`, request);
+  }
 }

@@ -60,3 +60,9 @@ export interface ModalData {
   concurso: ConcursoDetalhado;
   isGerado: boolean;
 }
+
+// DTO para salvar manualmente
+export interface AdicionarConcursoRequest {
+  concursoId: number;
+  dezenas: string[]; // Ex: ["01", "06", "07", ...]
+}
