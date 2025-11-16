@@ -347,7 +347,9 @@ export class LotofacilComponent implements OnInit {
       concursoId: data.concursoId,
       dezenas: data.dezenas
     };
-
+    console.log('AdicionarConcursoRequest id', request.concursoId);
+    console.log('AdicionarConcursoRequest dezenas', request.dezenas);
+    
     // Chamar o serviço (próximo passo)
     this.subscription = this.service.addContestManually(request).subscribe({
       next: (novoConcurso) => {

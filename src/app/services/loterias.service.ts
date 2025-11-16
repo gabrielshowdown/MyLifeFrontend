@@ -103,6 +103,6 @@ export class LoteriasService {
 
     addContestManually(request: AdicionarConcursoRequest): Observable<ConcursoDetalhado> {
     // Assumindo que o backend tenha um endpoint "manual" para isso
-    return this.http.post<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/manual`, request);
+    return this.http.post<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/insert`, request);
   }
 }
