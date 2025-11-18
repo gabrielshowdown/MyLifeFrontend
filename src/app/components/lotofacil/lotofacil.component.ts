@@ -13,7 +13,7 @@ import { DebugService } from '../../config/debug.service';
 import { ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, ModalData, SynchronizeResponse } from '../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
-import { forkJoin, Subscription } from 'rxjs';
+import { catchError, forkJoin, of, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { shownStateTrigger } from '../../animations/animations';
 import { ConcursoModalComponent } from '../views/concurso-modal/concurso-modal.component';
@@ -134,64 +134,100 @@ export class LotofacilComponent implements OnInit {
   }
 
   loadGeneralData(syncResponse: SynchronizeResponse | null = null) {
+    let temErroLocal: boolean = false;
+    let temErroAPI: boolean = false;
     forkJoin({
-      lastLocal: this.service.getLastContestLotofacilRegistered(),
-      lastCaixa: this.service.getContestLotofacilCaixa()
+      lastLocal: this.service.getLastContestLotofacilRegistered().pipe(
+        catchError(err => {
+          temErroLocal = true;
+          if (err.message === 'Nenhum concurso encontrado') {
+            this.syncAlertMessage = 'Nenhum concurso cadastrado no banco local.';
+            this.syncAlertType = 'info';
+            this.syncAlertIcon = 'info_outline';
+          } else {
+            this.syncAlertMessage = 'Erro ao buscar dados locais.';
+            this.syncAlertType = 'danger';
+            this.syncAlertIcon = 'error_outline';
+          }
+          this.showSyncAlert = true;
+          return of(null); // evita quebrar o forkJoin
+        })
+      ),
+      lastCaixa: this.service.getContestLotofacilCaixa().pipe(
+        catchError(err => {
+          temErroAPI = true;
+          this.syncAlertMessage = 'Erro ao buscar dados da API da Caixa.';
+          this.syncAlertType = 'danger';
+          this.syncAlertIcon = 'error_outline';
+          this.showSyncAlert = true;
+          return of(null);
+        })
+      )
     }).subscribe({
       next: ({ lastLocal, lastCaixa }) => {
-        this.totalNumberLotofacilContest = lastLocal;
-        this.lastContestApiCaixa = lastCaixa.numero;
-        this.dateNextContesCaixa = lastCaixa.dataProximoConcurso;
+
+        // Atualiza valores apenas se não forem nulos
+        if (lastLocal !== null) {
+          this.totalNumberLotofacilContest = lastLocal;
+        }
+
+        if (lastCaixa !== null) {
+          this.lastContestApiCaixa = lastCaixa.numero;
+          this.dateNextContesCaixa = lastCaixa.dataProximoConcurso;
+        }
 
         console.log('Valores carregados:');
         console.log('totalNumberLotofacilContest', this.totalNumberLotofacilContest);
         console.log('lastContestApiCaixa', this.lastContestApiCaixa);
 
-        if (this.lastContestApiCaixa > this.totalNumberLotofacilContest) {
-          /** Há concursos para sincronizar */
-          const diff = this.lastContestApiCaixa - this.totalNumberLotofacilContest;
+        if(temErroAPI == false && temErroLocal == false){
 
-          if (syncResponse && syncResponse.totContestSyncronized > 0) {
-            // *** Cenário 3 (INFO) ***
-            this.syncAlertMessage = `Sincronizados ${syncResponse.totContestSyncronized} concursos! Restam ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`;
-            this.syncAlertType = 'info';
-            this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check (conforme solicitado)
+          if (this.lastContestApiCaixa > this.totalNumberLotofacilContest) {
+            /** Há concursos para sincronizar */
+            const diff = this.lastContestApiCaixa - this.totalNumberLotofacilContest;
+  
+            if (syncResponse && syncResponse.totContestSyncronized > 0) {
+              // *** Cenário 3 (INFO) ***
+              this.syncAlertMessage = `Sincronizados ${syncResponse.totContestSyncronized} concursos! Restam ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`;
+              this.syncAlertType = 'info';
+              this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check (conforme solicitado)
+            } else {
+              // *** Cenário 2 (WARNING) ***
+              this.syncAlertMessage = `Existem ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`;
+              this.syncAlertType = 'warning';
+              this.syncAlertIcon = 'warning_amber'; // Ícone de Aviso
+            }
+            this.showSyncAlert = true;
+  
           } else {
-            // *** Cenário 2 (WARNING) ***
-            this.syncAlertMessage = `Existem ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`;
-            this.syncAlertType = 'warning';
-            this.syncAlertIcon = 'warning_amber'; // Ícone de Aviso
+            // Base está 100% atualizada
+  
+            if (syncResponse && syncResponse.totContestSyncronized > 0) {
+              // *** Cenário 4 (SUCCESS) ***
+              const dataFormatada = syncResponse.dateNextContest
+                ? new Date(syncResponse.dateNextContest).toLocaleDateString('pt-BR')
+                : 'N/D';
+              this.syncAlertMessage = `Sincronizados com sucesso! Próximo concurso: ${this.dateNextContesCaixa}`;
+              this.syncAlertType = 'success';
+              this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check
+            } else {
+              // *** Cenário 5 (INFO) ***
+              this.syncAlertMessage = `Concursos Sincronizados. Próximo concurso: ${this.dateNextContesCaixa}`;
+              this.syncAlertType = 'info';
+              this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check (conforme solicitado)
+            }
+            this.showSyncAlert = true;
           }
-          this.showSyncAlert = true;
-
-        } else {
-          // Base está 100% atualizada
-
-          if (syncResponse && syncResponse.totContestSyncronized > 0) {
-            // *** Cenário 4 (SUCCESS) ***
-            const dataFormatada = syncResponse.dateNextContest
-              ? new Date(syncResponse.dateNextContest).toLocaleDateString('pt-BR')
-              : 'N/D';
-            this.syncAlertMessage = `Sincronizados com sucesso! Próximo concurso: ${this.dateNextContesCaixa}`;
-            this.syncAlertType = 'success';
-            this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check
-          } else {
-            // *** Cenário 5 (INFO) ***
-            this.syncAlertMessage = `Concursos Sincronizados. Próximo concurso: ${this.dateNextContesCaixa}`;
-            this.syncAlertType = 'info';
-            this.syncAlertIcon = 'check_circle_outline'; // Ícone de Check (conforme solicitado)
-          }
-          this.showSyncAlert = true;
         }
       },
-      error: (err) => {
-        // *** Cenário 1 (DANGER) ***
-        console.error('Erro ao buscar dados gerais (Caixa ou Local):', err);
-        this.syncAlertMessage = 'Erro ao se comunicar com a API da Caixa.';
-        this.syncAlertType = 'danger';
-        this.syncAlertIcon = 'error_outline'; // Ícone de Erro
-        this.showSyncAlert = true;
-      }
+      // error: (err) => {
+      //   // *** Cenário 1 (DANGER) ***
+      //   console.error('Erro ao buscar dados gerais (Caixa ou Local):', err);
+      //   this.syncAlertMessage = 'Erro ao se comunicar com a API da Caixa.';
+      //   this.syncAlertType = 'danger';
+      //   this.syncAlertIcon = 'error_outline'; // Ícone de Erro
+      //   this.showSyncAlert = true;
+      // }
     });
   }
 
@@ -320,7 +356,7 @@ export class LotofacilComponent implements OnInit {
       width: '450px',
       data: {
         concurso: resultado,
-        isGerado: isGerado 
+        isGerado: isGerado
       } as ModalData
     });
 
@@ -342,21 +378,21 @@ export class LotofacilComponent implements OnInit {
   }
 
   private salvarNovoConcursoManual(data: { concursoId: number, dezenas: string[] }): void {
-    
+
     const request: AdicionarConcursoRequest = {
       concursoId: data.concursoId,
       dezenas: data.dezenas
     };
     console.log('AdicionarConcursoRequest id', request.concursoId);
     console.log('AdicionarConcursoRequest dezenas', request.dezenas);
-    
+
     // Chamar o serviço (próximo passo)
     this.subscription = this.service.addContestManually(request).subscribe({
       next: (novoConcurso) => {
         // Sucesso! Recarregar dados e mostrar alerta
-        this.loadGeneralData(); 
-        this.loadTablesData(); 
-        
+        this.loadGeneralData();
+        this.loadTablesData();
+
         this.syncAlertMessage = `Concurso ${novoConcurso.id} adicionado manualmente!`;
         this.syncAlertType = 'success';
         this.syncAlertIcon = 'check_circle_outline';
@@ -375,7 +411,7 @@ export class LotofacilComponent implements OnInit {
   generateContest(): void {
 
     this.showGenerateAlert = false;
-    
+
     console.log('Gerando jogo com as opções:', this.repeticaoSelecionada, this.paridadeSelecionada);
 
     if (this.totalNumberLotofacilContest === 0) {
