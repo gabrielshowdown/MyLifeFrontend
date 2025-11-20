@@ -1,11 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Importe o FormsModule
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'; // Para mostrar erros
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-add-concurso-modal',
@@ -32,7 +33,8 @@ export class AddConcursoModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddConcursoModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { proximoConcursoSugerido: number },
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -88,10 +90,28 @@ export class AddConcursoModalComponent implements OnInit {
     // 3. Transformar '010607...' em ['01', '06', '07', ...]
     this.dezenasArray = dezenasLimpa.match(/.{1,2}/g) || [];
 
-    // 4. Fechar o modal e retornar os dados
-    this.dialogRef.close({
-      concursoId: this.concursoId,
-      dezenas: this.dezenasArray
+    const dialogRefConfirm = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Confirmar Inclusão',
+        mensagem: `Deseja realmente salvar o concurso ${this.concursoId}?`,
+        textoConfirmar: 'Sim, Salvar',
+        corBotaoConfirmar: 'primary'
+      }
+    });
+
+    // 3. Aguarda a resposta
+    dialogRefConfirm.afterClosed().subscribe((confirmado: boolean) => {
+      
+      if (confirmado) {
+        // AQUI é o pulo do gato: Só fechamos o modal de adição (e enviamos os dados)
+        // SE o usuário tiver clicado em "Sim" na confirmação.
+        this.dialogRef.close({
+          concursoId: this.concursoId,
+          dezenas: this.dezenasArray
+        });
+      }
+
     });
   }
 
