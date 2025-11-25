@@ -110,3 +110,11 @@ mat-radio-group {
   // Força os radio buttons a tentarem ficar na mesma linha
   flex-wrap: nowrap;
 }
+
+.concursos-grid {
+  display: grid;
+  // Responsivo: 2 colunas em telas grandes, 1 em pequenas
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+  gap: 16px;
+  margin-bottom: 24px;
+}

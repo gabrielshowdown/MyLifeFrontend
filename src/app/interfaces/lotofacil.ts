@@ -66,3 +66,11 @@ export interface AdicionarConcursoRequest {
   concursoId: number;
   dezenas: string[]; // Ex: ["01", "06", "07", ...]
 }
+
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}

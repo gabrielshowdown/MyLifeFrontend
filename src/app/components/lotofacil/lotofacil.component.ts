@@ -20,6 +20,7 @@ import { ConcursoModalComponent } from '../views/concurso-modal/concurso-modal.c
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddConcursoModalComponent } from '../views/add-concurso-modal/add-concurso-modal.component';
 import { AdicionarConcursoRequest } from '../../interfaces/lotofacil';
+import { ConcursoCardComponent } from '../concurso-card/concurso-card.component';
 
 // Interface auxiliar para passar contexto para a atualização de status
 interface StatusContext {
@@ -42,7 +43,8 @@ interface StatusContext {
     MatButtonToggleModule,
     MatSortModule,
     MatDialogModule,
-    ConcursoModalComponent
+    ConcursoModalComponent,
+    ConcursoCardComponent
   ],
   templateUrl: './lotofacil.component.html',
   styleUrls: ['./lotofacil.component.scss'],
@@ -58,6 +60,11 @@ export class LotofacilComponent implements OnInit {
   totalNumberLotofacilContest: number = 0;
   contestIdConsulted: number = 0;
   showConsultAlert: boolean = false;
+
+  recentContests: ConcursoDetalhado[] = [];
+  currentPage: number = 0;
+  pageSize: number = 4; // Mostra 4 cards, igual ao print Java
+  totalPages: number = 0;
 
   // Alertas de Status
   showSyncAlert: boolean = false;
@@ -117,6 +124,7 @@ export class LotofacilComponent implements OnInit {
   ngOnInit(): void {
     this.loadTablesData();
     this.loadGeneralData();
+    this.loadRecentContests();
   }
 
   ngOnDestroy(): void {
@@ -171,6 +179,30 @@ export class LotofacilComponent implements OnInit {
         this.updateDashboardStatus(localErrorType, apiError, context);
       }
     });
+  }
+
+  loadRecentContests(): void {
+    this.service.getContestsPaginated(this.currentPage, this.pageSize)
+      .subscribe({
+        next: (pageData) => {
+          this.recentContests = pageData.content;
+          this.totalPages = pageData.totalPages;
+          
+          // Ordenar as dezenas dentro de cada concurso para visualização correta
+          this.recentContests.forEach(c => {
+            c.numerosConcurso.sort((a, b) => a.numero - b.numero);
+          });
+        },
+        error: (err) => console.error('Erro ao carregar concursos recentes', err)
+      });
+  }
+
+  changePage(delta: number): void {
+    const nextPage = this.currentPage + delta;
+    if (nextPage >= 0 && nextPage < this.totalPages) {
+      this.currentPage = nextPage;
+      this.loadRecentContests();
+    }
   }
 
   /**
@@ -240,7 +272,7 @@ export class LotofacilComponent implements OnInit {
           );
         } else {
           this.setAlert(
-            `Sincronizados com sucesso! Próximo concurso: ${nextDateFormatted}`,
+            `Sincronizados com sucesso! Próximo concurso: ${this.dateNextContesCaixa}`,
             'success',
             'check_circle_outline'
           );
@@ -308,6 +340,7 @@ export class LotofacilComponent implements OnInit {
         // Passamos o response como contexto para o loadGeneralData
         this.loadGeneralData({ syncResponse: response });
         this.loadTablesData();
+        this.loadRecentContests()
       },
       error: (err) => {
         this.isSyncing = false;
@@ -341,6 +374,7 @@ export class LotofacilComponent implements OnInit {
         this.loadTablesData();
         // Passamos o ID adicionado como contexto para o loadGeneralData
         this.loadGeneralData({ manualAddId: novoConcurso.id });
+        this.loadRecentContests();
       },
       error: (err) => {
         // Erro específico de adição manual (não recarrega o geral, só mostra erro)

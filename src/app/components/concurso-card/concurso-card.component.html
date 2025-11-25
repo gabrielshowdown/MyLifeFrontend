@@ -1,0 +1,24 @@
+<mat-card class="concurso-card h-100">
+  <mat-card-header class="justify-content-center mb-2">
+    <mat-card-title class="fs-5 fw-bold">
+      Concurso {{ concurso.id }}
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="dezenas-grid">
+      <div *ngFor="let n of concurso.numerosConcurso" 
+           class="dezena" 
+           [class.repetido]="n.repetido">
+        {{ formatNumber(n.numero) }}
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-footer>
+    <div class="d-flex justify-content-between px-3 py-2 text-muted small">
+      <span>Paridade: {{concurso.qtdImpares}}I / {{concurso.qtdPares}}P</span>
+      <span>Rep: {{ formatNumber(concurso.qtdRepetidos) }}</span>
+    </div>
+  </mat-card-footer>
+</mat-card>

@@ -98,27 +98,30 @@
         </mat-card-content>
       </mat-card>
 
-      <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="d-flex justify-content-between align-items-center mb-2 mt-4">
         <h4>Últimos Resultados</h4>
-        <div>
-          <button mat-icon-button aria-label="Página anterior"><mat-icon>chevron_left</mat-icon></button>
-          <button mat-icon-button aria-label="Próxima página"><mat-icon>chevron_right</mat-icon></button>
+        <div class="d-flex align-items-center gap-2">
+           <span class="text-muted small me-2">
+             Página {{ currentPage + 1 }} de {{ totalPages }}
+           </span>
+          <button mat-icon-button (click)="changePage(-1)" [disabled]="currentPage === 0">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <button mat-icon-button (click)="changePage(1)" [disabled]="currentPage >= totalPages - 1">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
         </div>
       </div>
+      
       <div class="concursos-grid">
-        <!-- <mat-card *ngFor="let concurso of concursos" class="concurso-card">
-          <mat-card-title>Concurso {{ concurso.numero }}</mat-card-title>
-          <mat-card-content>
-            <div class="dezenas-grid">
-              <div *ngFor="let dezena of concurso.dezenas" class="dezena">
-                {{ dezena }}
-              </div>
-            </div>
-          </mat-card-content>
-          <mat-card-footer>
-            <small>Paridade: {{ concurso.paridade }} / Rep: {{ concurso.repetidas }}</small>
-          </mat-card-footer>
-        </mat-card> -->
+        <app-concurso-card 
+            *ngFor="let concurso of recentContests" 
+            [concurso]="concurso">
+        </app-concurso-card>
+      </div>
+      
+      <div *ngIf="recentContests.length === 0" class="text-center p-4 text-muted">
+        Nenhum concurso recente para exibir.
       </div>
 
     </div>
