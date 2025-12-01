@@ -187,7 +187,7 @@ export class LotofacilComponent implements OnInit {
         next: (pageData) => {
           this.recentContests = pageData.content;
           this.totalPages = pageData.totalPages;
-          
+
           // Ordenar as dezenas dentro de cada concurso para visualização correta
           this.recentContests.forEach(c => {
             c.numerosConcurso.sort((a, b) => a.numero - b.numero);
@@ -199,6 +199,9 @@ export class LotofacilComponent implements OnInit {
 
   changePage(delta: number): void {
     const nextPage = this.currentPage + delta;
+
+    // A validação de limites continua a mesma, 
+    // pois o Backend ainda trata 0 como início e totalPages como fim.
     if (nextPage >= 0 && nextPage < this.totalPages) {
       this.currentPage = nextPage;
       this.loadRecentContests();
