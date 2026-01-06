@@ -15,12 +15,14 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { shownStateTrigger } from '../../animations/animations';
+import { listAnimation, shownStateTrigger } from '../../animations/animations';
 import { ConcursoModalComponent } from '../views/concurso-modal/concurso-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddConcursoModalComponent } from '../views/add-concurso-modal/add-concurso-modal.component';
 import { AdicionarConcursoRequest } from '../../interfaces/lotofacil';
 import { ConcursoCardComponent } from '../concurso-card/concurso-card.component';
+import { MatTabsModule } from '@angular/material/tabs'
+
 
 // Interface auxiliar para passar contexto para a atualização de status
 interface StatusContext {
@@ -44,11 +46,12 @@ interface StatusContext {
     MatSortModule,
     MatDialogModule,
     ConcursoModalComponent,
-    ConcursoCardComponent
+    ConcursoCardComponent,
+    MatTabsModule
   ],
   templateUrl: './lotofacil.component.html',
   styleUrls: ['./lotofacil.component.scss'],
-  animations: [shownStateTrigger]
+  animations: [shownStateTrigger, listAnimation]
 })
 export class LotofacilComponent implements OnInit {
 
@@ -111,8 +114,8 @@ export class LotofacilComponent implements OnInit {
     '7/8': { impares: '7', pares: '8' },
     '8/7': { impares: '8', pares: '7' },
     '9/6': { impares: '9', pares: '6' },
-    '10/5': { impares: '10', pares: '6' },
-    '11/4': { impares: '11', pares: '5' }
+    '10/5': { impares: '10', pares: '5' },
+    '11/4': { impares: '11', pares: '4' }
   };
 
   constructor(
@@ -356,6 +359,7 @@ export class LotofacilComponent implements OnInit {
   adicionarJogo(): void {
     const dialogRef = this.dialog.open(AddConcursoModalComponent, {
       width: '500px',
+      panelClass: 'no-padding-dialog',
       data: { proximoConcursoSugerido: this.totalNumberLotofacilContest + 1 }
     });
 
@@ -467,12 +471,14 @@ export class LotofacilComponent implements OnInit {
     }
   }
 
-  openConsultaDialog(resultado: ConcursoDetalhado, isGerado: boolean = false): void {
-    this.dialog.open(ConcursoModalComponent, {
-      width: '450px',
-      data: { concurso: resultado, isGerado: isGerado } as ModalData
-    });
-  }
+openConsultaDialog(resultado: ConcursoDetalhado, isGerado: boolean = false): void {
+  this.dialog.open(ConcursoModalComponent, {
+    width: '450px',
+    // Adicione esta linha abaixo. Ela permite customizar o container "pai"
+    panelClass: 'no-padding-dialog', 
+    data: { concurso: resultado, isGerado: isGerado } as ModalData
+  });
+}
 
   generateContest(): void {
     this.showGenerateAlert = false;

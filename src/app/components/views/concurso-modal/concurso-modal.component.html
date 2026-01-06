@@ -1,24 +1,33 @@
-<h2 mat-dialog-title class="text-center">Concurso {{ concursoInfo.numero }}</h2>
+<div class="modal-header-custom">
+  <h2>Concurso {{ concursoInfo.numero }}</h2>
+</div>
 
 <mat-dialog-content>
-  <div class="dezenas-grid-dialog mb-3">
+  <div class="dezenas-grid-dialog">
     <div *ngFor="let dezenaInfo of resultadoOrdenado" 
          class="dezena"
-         [class.repetido]="dezenaInfo.repetido"> {{ dezenaInfo.numero | number:'2.0-0' }}
+         [class.repetido]="dezenaInfo.repetido">
+         {{ dezenaInfo.numero | number:'2.0-0' }}
     </div>
   </div>
-  <p class="text-center">
-    <strong>Paridade:</strong> {{ concursoInfo.impares }}Í / {{ concursoInfo.pares }}P
-  </p>
+
+  <div class="stats-info">
+    <strong>Paridade:</strong>
+    <span class="highlight">{{ concursoInfo.impares }} Ímpares</span>
+    <span style="color: #ccc">|</span>
+    <span class="highlight">{{ concursoInfo.pares }} Pares</span>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions class="custom-dialog-actions">
-  
-  <span *ngIf="isGerado" class="obs-text">
-    * Concurso gerado com dados especificados
-  </span>
+  <div>
+    <span *ngIf="isGerado" class="obs-text">
+      <mat-icon style="font-size: 16px; height: 16px; width: 16px;">warning</mat-icon>
+      Simulação
+    </span>
+  </div>
 
-  <span *ngIf="!isGerado"></span>
-
-  <button mat-raised-button mat-dialog-close color="primary">Fechar</button>
+  <button mat-stroked-button color="primary" mat-dialog-close>
+    Fechar
+  </button>
 </mat-dialog-actions>

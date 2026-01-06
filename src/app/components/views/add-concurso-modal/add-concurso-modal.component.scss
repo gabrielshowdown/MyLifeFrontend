@@ -1,0 +1,56 @@
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+:host {
+  display: block;
+  overflow: hidden;
+}
+
+// 1. Cabeçalho Padronizado
+.modal-header-custom {
+  background: $primary-gradient;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+}
+
+// 2. Ajuste do Conteúdo (Formulário)
+mat-dialog-content {
+  margin: 0 !important;
+  padding: 24px 32px !important; // Padding lateral um pouco maior para o form
+  overflow: visible !important;
+
+  // Texto explicativo
+  p {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+}
+
+// 3. Rodapé
+.custom-dialog-actions {
+  padding: 16px 24px 24px 24px;
+  display: flex;
+  justify-content: flex-end; // Botões alinhados à direita
+  gap: 12px; // Espaço entre os botões
+  border-top: none;
+  background: white;
+}
+
+// 4. Estilo Especial para o botão Salvar (Gradiente)
+.btn-save-custom {
+  background: $primary-gradient !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(118, 75, 162, 0.3);
+}

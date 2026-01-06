@@ -1,120 +1,277 @@
-// Variáveis para cores (opcional, mas bom para manutenção)
-$primary-color: #3f51b5; // Cor primária do Angular Material (indigo)
-$accent-color: #ff4081; // Cor de destaque
-$dezena-bg: #e3f2fd; // Azul claro para o fundo das dezenas
-$dezena-border: #90caf9; // Borda das dezenas
+// Variáveis Baseadas no Concurso-Card
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$card-shadow: 0 4px 20px rgba(0,0,0,0.08);
+$card-radius: 16px;
+$bg-color: #f3f4f8;
 
-// Estilo do badge de total de jogos
-.total-badge {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-weight: bold;
-  margin-left: 8px;
+// Configuração Global do Componente
+:host {
+  display: block;
+  background-color: $bg-color;
+  min-height: 100vh;
 }
 
-// Grid para exibir os concursos
-.concursos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-}
+// 1. Hero Section (Cabeçalho de Status)
+.dashboard-header {
+  background: white;
+  border-radius: $card-radius;
+  padding: 1.5rem;
+  box-shadow: $card-shadow;
+  margin-bottom: 2rem;
+  border-left: 5px solid #764ba2;
 
-.concurso-card {
-  display: flex;
-  flex-direction: column;
+  .stat-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #6c757d;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
 
-  mat-card-footer {
-    padding: 8px 16px;
-    background-color: #fafafa;
-    margin-top: auto; // Empurra o rodapé para o fundo do card
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    
+    &.highlight {
+      background: $primary-gradient;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .status-pill {
+    // Aumentando o padding para o fundo ficar mais "gordinho"
+    padding: 8px 20px; 
+    border-radius: 50px;
+    
+    // Aumentando a fonte conforme solicitado (ex: de 0.85rem para 1rem)
+    font-size: 1rem; 
+    font-weight: 600;
+    
+    // Importante: fit-content garante que a largura se adapte ao conteúdo
+    width: fit-content; 
+    max-width: 100%; // Garante que não ultrapasse a tela em mobile
+    
+    transition: all 0.3s ease;
+    
+    // Mantém o texto em uma linha se houver espaço, 
+    // mas permite quebrar se a tela for muito pequena
+    white-space: normal; 
+    
+    // Ajuste do ícone para acompanhar o tamanho da fonte
+    .icon-medium {
+      font-size: 22px; // Um pouco maior que antes
+      width: 22px;
+      height: 22px;
+      line-height: 22px;
+      display: flex;     // Garante alinhamento
+      align-items: center;
+    }
+
+    // Cores (mantidas iguais)
+    &.success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+    &.info { background-color: #cff4fc; color: #055160; border: 1px solid #b6effb; }
+    &.warning { background-color: #fff3cd; color: #664d03; border: 1px solid #ffecb5; }
+    &.danger { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
   }
 }
 
-// Grid interna para as dezenas de um concurso
-.dezenas-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.dezena {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: $dezena-bg;
-  border: 1px solid $dezena-border;
-  border-radius: 50%; // Deixa o número redondo
-  aspect-ratio: 1 / 1; // Garante que seja um círculo perfeito
-  font-weight: bold;
-  color: #333;
-}
-
-// Reduz o tamanho do input de consulta
-.consultar-jogo-input {
-  width: 100px; // Largura fixa
+// Ajuste responsivo para telas menores (Tablets/Celulares)
+@media (max-width: 992px) {
+  .dashboard-header {
+    // Permite que os itens quebrem de linha se o status for muito longo
+    flex-wrap: wrap; 
+  }
   
+  .status-pill {
+    margin-top: 8px; // Dá um respiro se ele cair para a linha de baixo
+    font-size: 0.9rem; // Reduz um pouquinho apenas no mobile
+  }
 }
 
-.mat-icon-clickable {
-  cursor: pointer;
+// 2. Cards de Seção (Generator e Tabelas)
+.content-card {
+  background: white;
+  border-radius: $card-radius;
+  box-shadow: $card-shadow;
+  overflow: hidden;
+  // height: 100%; caso quiser um espaço embaixo das tabela, colocar novamente
+  border: none;
+
+  .card-header-custom {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h5 {
+      margin: 0;
+      font-weight: 600;
+      color: #444;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .card-body-custom {
+    padding: 1.5rem;
+  }
 }
 
-// Ajustes nos radio buttons para ficarem mais compactos
-.radio-option {
-    margin-right: 15px;
-}
+// 3. Melhoria nos Toggles (Antigos Radio Buttons)
+// Substituímos visualmente o radio group por algo parecido com botões
+::ng-deep .custom-toggle-group {
+  width: 100%;
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 6px;
+  border: none !important;
+  background: transparent !important;
 
-// Container das tabelas de estatísticas
-.stat-table-container {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  overflow: auto; 
-  
-  // Aumentamos a altura para quando estão lado a lado
-  max-height: 600px; 
-  
-  // Garante que as tabelas dividam o espaço horizontalmente
-  flex: 1; 
-  min-width: 0; // Previne problemas de overflow do flexbox com tabelas
+  .mat-button-toggle {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px !important;
+    border-left: 1px solid #e0e0e0 !important; // Override do material
+    flex: 1 0 auto;
+    min-width: 45px;
+    padding: 0 4px;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  table {
-    width: 100%;
-
-    // --- ADIÇÃO PARA CENTRALIZAR O CONTEÚDO ---
-    // Centraliza o texto tanto nos cabeçalhos (th) quanto nas células (td)
-    th, td {
-      text-align: center;
-      vertical-align: middle; // Opcional: Garante o alinhamento vertical também
+    &.mat-button-toggle-checked {
+      background: $primary-gradient;
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 10px rgba(118, 75, 162, 0.3);
+    }
+    
+    // Garante que o texto dentro do botão (label) não tenha padding extra do Material
+    .mat-button-toggle-label-content {
+      padding: 0 8px !important; // Padding interno reduzido
+      line-height: 32px !important; // Altura um pouco menor
+      font-size: 0.9rem; // Fonte levemente menor para caber tudo
     }
   }
 }
 
-// Adicione este estilo ao final do arquivo
-.button-group-condensed {
-  // Diminui a altura dos botões
-  .mat-button-toggle {
-    height: 36px;
-    line-height: 36px;
+// 4. Input de Consulta Integrado
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f1f3f4;
+  border-radius: 50px;
+  padding: 4px 4px 4px 20px;
+  transition: all 0.3s;
+
+  &:focus-within {
+    background: white;
+    box-shadow: 0 0 0 2px #764ba2;
   }
-  
-  // Ajusta o padding interno para caber melhor o texto
-  .mat-button-toggle-label-content {
-    padding: 0 12px;
+
+  input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 70px;
+    font-weight: 600;
+    color: #555;
+    
+    &::placeholder { color: #999; font-weight: 400; }
+  }
+
+  button {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
-mat-radio-group {
-  // Força os radio buttons a tentarem ficar na mesma linha
-  flex-wrap: nowrap;
+// 5. Tabelas Estilizadas
+.stat-table-wrapper {
+  border-radius: 12px;
+  border: 1px solid #eee;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    
+    th {
+      background-color: #f8f9fa;
+      color: #666;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 12px 8px;
+    }
+
+    td {
+      font-size: 0.9rem;
+      border-bottom: 1px solid #f0f0f0;
+      color: #444;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    
+    // Efeito de hover na linha
+    tr:hover td {
+      background-color: #fbfbfb;
+    }
+  }
 }
 
-.concursos-grid {
+// Ajuste responsivo para o grid de concursos
+.concursos-list {
   display: grid;
-  // Responsivo: 2 colunas em telas grandes, 1 em pequenas
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-  gap: 16px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.btn-gradient-action {
+  // Força o background do gradiente por cima da cor padrão do Material
+  background: $primary-gradient !important; 
+  color: white !important;
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  //text-transform: uppercase;
+  
+  // Sombra suave roxa para dar destaque (efeito "glow")
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.35);
+  transition: all 0.3s ease;
+
+  // Ícones dentro do botão
+  mat-icon {
+    transition: transform 0.3s ease;
+  }
+
+  // Efeito ao passar o mouse (levanta levemente)
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(118, 75, 162, 0.5);
+    filter: brightness(1.05); // Brilha um pouco mais
+
+    mat-icon {
+      transform: rotate(15deg); // Dá um charme no ícone
+    }
+  }
+
+  // Estado desabilitado (loading ou bloqueado)
+  &:disabled {
+    background: #e0e0e0 !important; // Cinza padrão
+    color: #9e9e9e !important;
+    box-shadow: none;
+    transform: none;
+    cursor: not-allowed;
+  }
 }

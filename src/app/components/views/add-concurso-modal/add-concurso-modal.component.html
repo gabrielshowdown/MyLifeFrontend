@@ -1,12 +1,15 @@
-<h2 mat-dialog-title>Adicionar Concurso Manualmente</h2>
+<div class="modal-header-custom">
+  <h2>Adicionar Concurso</h2>
+</div>
 
-<mat-dialog-content class="d-flex flex-column gap-3">
+<mat-dialog-content class="d-flex flex-column gap-2">
   
-  <p>Use esta tela para cadastrar um concurso manualmente em caso de falha na sincronização.</p>
+  <p>Cadastre um concurso manualmente em caso de falha na sincronização.</p>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
     <mat-label>Número do Concurso</mat-label>
-    <input matInput type="number" [(ngModel)]="concursoId" placeholder="Ex: 3001" [readonly]="true"> <!-- Se quiser deixar editavel, tirar o readyonly -->
+    <input matInput type="number" [(ngModel)]="concursoId" placeholder="Ex: 3001" [readonly]="true">
+    <mat-icon matSuffix>tag</mat-icon>
   </mat-form-field>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -16,13 +19,29 @@
       matInput 
       [value]="dezenasFormatadas"
       (input)="onDezenasInput($event)"
-      placeholder="01-06-07-08-10-11-12-13-14-15-16-18-23-24-25"
-      maxlength="44"> <mat-hint align="end">{{ dezenasInput.length / 2 | number:'1.0-0' }} / 15</mat-hint>
+      placeholder="01-02-03..."
+      maxlength="44">
+      
+      <mat-hint align="end">
+        <strong [class.text-primary]="dezenasInput.length === 30" 
+                [class.text-danger]="dezenasInput.length !== 30">
+          {{ dezenasInput.length / 2 | number:'1.0-0' }}
+        </strong> / 15
+      </mat-hint>
+      <mat-icon matSuffix>casino</mat-icon>
   </mat-form-field>
 
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-raised-button color="primary" (click)="salvar()">Salvar Concurso</button>
+<mat-dialog-actions class="custom-dialog-actions">
+  <button mat-stroked-button mat-dialog-close color="warn">
+    Cancelar
+  </button>
+
+  <button mat-raised-button 
+          class="btn-save-custom" 
+          (click)="salvar()">
+    <mat-icon class="me-2">save</mat-icon> 
+    Salvar Concurso
+  </button>
 </mat-dialog-actions>

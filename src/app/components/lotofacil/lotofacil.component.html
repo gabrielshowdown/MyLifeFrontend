@@ -1,203 +1,195 @@
 <div class="container-fluid p-4">
-  <h2 class="mb-4">Jogos Lotofácil</h2>
 
-  <mat-card class="mb-4">
-    <mat-card-content>
+  <div class="dashboard-header d-flex flex-column flex-xl-row justify-content-between align-items-center gap-3">
 
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div class="d-flex align-items-center gap-4 flex-wrap justify-content-center justify-content-xl-start flex-grow-1">
 
-        <div class="d-flex align-items-center gap-2">
-          <button mat-raised-button color="primary" (click)="adicionarJogo()" [disabled]="isSyncing">Adicionar</button>
-          <button mat-raised-button color="accent" (click)="synchronizeContests()" [disabled]="isSyncing">
-            <span *ngIf="isSyncing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            <span *ngIf="!isSyncing">Sincronizar</span>
-          </button>
+      <div>
+        <div class="stat-label">Total de Jogos</div>
+        <div class="stat-value highlight">{{ totalNumberLotofacilContest }}</div>
+      </div>
 
-          <div *ngIf="showSyncAlert" @shownState class="alert d-flex align-items-center m-0" [ngClass]="{
-               'alert-warning': syncAlertType === 'warning',
-               'alert-success': syncAlertType === 'success',
-               'alert-info': syncAlertType === 'info',
-               'alert-danger': syncAlertType === 'danger'
-             }" role="alert">
-
-            <mat-icon class="me-2">{{ syncAlertIcon }}</mat-icon>
-
-            <span>{{ syncAlertMessage }}</span>
-          </div>
-        </div>
-
-        <div class="d-flex align-items-center gap-2">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="consultar-jogo-input">
-            <input matInput type="number" placeholder="Número do concurso" [(ngModel)]="contestIdConsulted"
-              (keyup.enter)="consultContest()">
-          </mat-form-field>
-          <button mat-flat-button color="primary" (click)="consultContest()">Consultar Jogo</button>
-
-          <div @shownState *ngIf="showConsultAlert" class="alert alert-warning m-0 d-flex align-items-center"
-            role="alert">
-            Concurso {{contestIdConsulted}} não cadastrado
-            <mat-icon class="me-2 mat-icon-clickable" (click)="showConsultAlert = false">close</mat-icon>
-          </div>
-        </div>
-
-        <div class="total-jogos">
-          <strong>Total de jogos:</strong>
-          <span class="total-badge">{{ totalNumberLotofacilContest }}</span>
+      <div class="border-start ps-4">
+        <div class="stat-label">Próximo Concurso</div>
+        <div class="stat-value" style="font-size: 1.2rem">
+          {{ dateNextContesCaixa ? (dateNextContesCaixa) : '...' }}
         </div>
       </div>
-    </mat-card-content>
-  </mat-card>
+
+      <div *ngIf="showSyncAlert" @shownState class="status-pill d-flex align-items-center gap-2"
+        [ngClass]="syncAlertType">
+
+        <mat-icon class="icon-small">{{ syncAlertIcon }}</mat-icon>
+        <span class="text-truncate" [title]="syncAlertMessage">
+          {{ syncAlertMessage }}
+        </span>
+      </div>
+
+    </div>
+
+    <div class="d-flex align-items-center gap-3 flex-wrap justify-content-center mt-3 mt-xl-0">
+      <div class="search-box">
+        <input type="number" placeholder="Buscar Nº" [(ngModel)]="contestIdConsulted" (keyup.enter)="consultContest()">
+        <button mat-icon-button color="primary" (click)="consultContest()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
+
+      <button mat-stroked-button color="primary" (click)="adicionarJogo()" [disabled]="isSyncing">
+        <mat-icon class="me-2">add</mat-icon> Adicionar
+      </button>
+
+      <button mat-raised-button class="btn-gradient-action text-white" (click)="synchronizeContests()" [disabled]="isSyncing">
+        <span *ngIf="isSyncing" class="spinner-border spinner-border-sm me-2"></span>
+        <mat-icon *ngIf="!isSyncing" class="me-2">sync</mat-icon>
+        {{ isSyncing ? '' : 'Sincronizar' }} </button>
+    </div>
+  </div>
 
   <div class="row g-4">
-    <div class="col-lg-6">
 
-      <mat-card class="mb-4">
-        <mat-card-content>
-          <label class="form-label">Repetição ao jogo anterior</label>
+    <div class="col-lg-6 col-xl-6 d-flex flex-column gap-4">
 
-          <div class="row align-items-center mb-4">
-            <div class="col-md-10">
-              <mat-radio-group class="button-group-condensed" [(ngModel)]="repeticaoSelecionada"
-                aria-label="Seleção de repetição">
-                <mat-radio-button value="N/D">N/D</mat-radio-button>
-                <mat-radio-button value="6">6</mat-radio-button>
-                <mat-radio-button value="7">7</mat-radio-button>
-                <mat-radio-button value="9">9</mat-radio-button>
-                <mat-radio-button value="10">10</mat-radio-button>
-                <mat-radio-button value="11">11</mat-radio-button>
-                <mat-radio-button value="12">12</mat-radio-button>
-              </mat-radio-group>
-            </div>
-            <div class="col-md-2 d-grid">
-              <button mat-raised-button color="accent" (click)="generateContest()">Gerar Jogo</button>
-            </div>
-          </div>
+      <div class="content-card">
+        <div class="card-header-custom">
+          <h5><mat-icon class="text-primary">casino</mat-icon> Gerador de Jogos</h5>
+        </div>
+        <div class="card-body-custom">
 
-          <div @shownState *ngIf="showGenerateAlert"
-            class="alert alert-danger m-0 mb-3 d-flex align-items-center justify-content-between" role="alert">
-            <div class="d-flex align-items-center">
-              <mat-icon class="me-2">error_outline</mat-icon>
-              <span>{{ generateAlertMessage }}</span>
-              <!-- <mat-icon class="mat-icon-clickable" (click)="showGenerateAlert = false">close</mat-icon> -->
-            </div>
-          </div>
-          <div>
-            <label class="form-label">Relação de paridade (Ímpares/Pares)</label>
-            <mat-radio-group class="button-group-condensed" [(ngModel)]="paridadeSelecionada"
-              aria-label="Seleção de paridade">
-              <mat-radio-button value="N/D">N/D</mat-radio-button>
-              <mat-radio-button value="4/11">4/11</mat-radio-button>
-              <mat-radio-button value="5/10">5/10</mat-radio-button>
-              <mat-radio-button value="6/9">6/9</mat-radio-button>
-              <mat-radio-button value="7/8">7/8</mat-radio-button>
-              <mat-radio-button value="8/7">8/7</mat-radio-button>
-              <mat-radio-button value="9/6">9/6</mat-radio-button>
-              <mat-radio-button value="10/5">10/5</mat-radio-button>
-              <mat-radio-button value="11/4">11/4</mat-radio-button> </mat-radio-group>
-          </div>
-        </mat-card-content>
-      </mat-card>
+          <label class="stat-label mb-2 d-block">Repetição do Anterior</label>
+          <mat-button-toggle-group class="custom-toggle-group mb-4" [(ngModel)]="repeticaoSelecionada">
+            <mat-button-toggle value="N/D">Auto</mat-button-toggle>
+            <mat-button-toggle *ngFor="let v of ['6','7','9','10','11','12']" [value]="v">{{v}}</mat-button-toggle>
+          </mat-button-toggle-group>
 
-      <div class="d-flex justify-content-between align-items-center mb-2 mt-4">
-        <h4>Últimos Resultados</h4>
-        <div class="d-flex align-items-center gap-2">
-          <span class="text-muted small me-2" *ngIf="totalPages > 0">
-            {{ totalPages - currentPage }} de {{ totalPages }}
-          </span>
+          <label class="stat-label mb-2 d-block">Paridade (Ímpares/Pares)</label>
+          <mat-button-toggle-group class="custom-toggle-group mb-4" [(ngModel)]="paridadeSelecionada">
 
-          <button mat-icon-button (click)="changePage(1)" [disabled]="currentPage >= totalPages - 1"
-            matTooltip="Ver concursos anteriores">
-            <mat-icon>chevron_left</mat-icon>
+            <mat-button-toggle value="N/D">Auto</mat-button-toggle>
+
+            <mat-button-toggle value="4/11">4/11</mat-button-toggle>
+            <mat-button-toggle value="5/10">5/10</mat-button-toggle>
+            <mat-button-toggle value="6/9">6/9</mat-button-toggle>
+            <mat-button-toggle value="7/8">7/8</mat-button-toggle>
+            <mat-button-toggle value="8/7">8/7</mat-button-toggle>
+            <mat-button-toggle value="9/6">9/6</mat-button-toggle>
+            <mat-button-toggle value="10/5">10/5</mat-button-toggle>
+            <mat-button-toggle value="11/4">11/4</mat-button-toggle>
+
+          </mat-button-toggle-group>
+
+          <button mat-raised-button class="btn-gradient-action w-100 py-2 fs-6" (click)="generateContest()">
+            GERAR PALPITE
           </button>
 
-          <button mat-icon-button (click)="changePage(-1)" [disabled]="currentPage === 0"
-            matTooltip="Ver concursos mais recentes">
+          <div @shownState *ngIf="showGenerateAlert" class="alert alert-danger mt-3 mb-0 text-center small">
+            {{ generateAlertMessage }}
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center px-2">
+        <h5 class="m-0 fw-bold text-secondary">Últimos Resultados</h5>
+        <div class="d-flex gap-2">
+          <button mat-icon-button (click)="changePage(1)" [disabled]="currentPage >= totalPages - 1">
+            <mat-icon>chevron_left</mat-icon> </button>
+          <button mat-icon-button (click)="changePage(-1)" [disabled]="currentPage === 0">
             <mat-icon>chevron_right</mat-icon>
           </button>
         </div>
       </div>
 
-      <div class="concursos-grid">
+      <div class="concursos-list" [@listAnimation]="recentContests.length">
         <app-concurso-card *ngFor="let concurso of recentContests" [concurso]="concurso">
         </app-concurso-card>
       </div>
 
-      <div *ngIf="recentContests.length === 0" class="text-center p-4 text-muted">
-        Nenhum concurso recente para exibir.
-      </div>
-
     </div>
 
-    <div class="col-lg-6">
-      <div class="d-flex flex-column flex-lg-row gap-3">
-        <!-- <div class="d-flex flex-column gap-4"></div> Desse jeito, ficaria uma tabela embaixo da outra na direita -->
-
-        <div class="stat-table-container">
-          <h6 class="text-center">Repetição</h6>
-          <table mat-table [dataSource]="dataSourceRepetition" matSort #sortRepetition="matSort"
-            (matSortChange)="announceSortChange($event)">
-            <ng-container matColumnDef="repetido">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by repetido">Repetido
-              </th>
-              <td mat-cell *matCellDef="let element"> {{element.repetido}} </td>
-            </ng-container>
-            <ng-container matColumnDef="qtd">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by qtd">Qtd</th>
-              <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
-            </ng-container>
-            <ng-container matColumnDef="porcentagem">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">%</th>
-              <td mat-cell *matCellDef="let element"> {{ (element.porcentagem).toFixed(2).replace('.',',') }}% </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsRepetition"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsRepetition;"></tr>
-          </table>
+    <div class="col-lg-6 col-xl-6">
+      <div class="content-card">
+        <div class="card-header-custom">
+          <h5><mat-icon class="text-primary">bar_chart</mat-icon> Estatísticas Globais</h5>
         </div>
 
-        <div class="stat-table-container">
-          <h6 class="text-center">Paridade</h6>
-          <table mat-table [dataSource]="dataSourceParity" matSort #sortParity="matSort"
-            (matSortChange)="announceSortChange($event)">
-            <ng-container matColumnDef="paridade">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by paridade">Paridade
-              </th>
-              <td mat-cell *matCellDef="let element"> {{element.paridade}} </td>
-            </ng-container>
-            <ng-container matColumnDef="qtd">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by qtd">Qtd</th>
-              <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
-            </ng-container>
-            <ng-container matColumnDef="porcentagem">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">%</th>
-              <td mat-cell *matCellDef="let element"> {{ (element.porcentagem).toFixed(2).replace('.',',') }}% </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsParity"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsParity;"></tr>
-          </table>
-        </div>
+        <div class="card-body-custom">
+          <div class="row g-2">
 
-        <div class="stat-table-container">
-          <h6 class="text-center">Totais Números</h6>
-          <table mat-table [dataSource]="dataSourceNumber" matSort #sortNumber="matSort"
-            (matSortChange)="announceSortChange($event)">
-            <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">Número</th>
-              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-            </ng-container>
-            <ng-container matColumnDef="qtd">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by qtd">Qtd</th>
-              <td mat-cell *matCellDef="let element"> {{element.qtd}} </td>
-            </ng-container>
-            <ng-container matColumnDef="porcentagem">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by porcentagem">%</th>
-              <td mat-cell *matCellDef="let element"> {{ (element.porcentagem).toFixed(2).replace('.',',') }}% </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsNumber"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsNumber;"></tr>
-          </table>
-        </div>
+            <div class="col-md-4">
+              <div class="stat-table-wrapper">
+                <div class="text-center py-2 bg-light fw-bold text-primary border-bottom">Repetição</div>
+                <table mat-table [dataSource]="dataSourceRepetition" matSort #sortRepetition="matSort">
+                  <ng-container matColumnDef="repetido">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Rep</th>
+                    <td mat-cell *matCellDef="let el" class="text-center fw-bold">{{el.repetido}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="qtd">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Qtd</th>
+                    <td mat-cell *matCellDef="let el" class="text-center">{{el.qtd}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="porcentagem">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>%</th>
+                    <td mat-cell *matCellDef="let el" class="text-center text-muted small">{{ el.porcentagem |
+                      number:'1.1-1' }}%</td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsRepetition"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsRepetition;"></tr>
+                </table>
+              </div>
+            </div>
 
+            <div class="col-md-4">
+              <div class="stat-table-wrapper">
+                <div class="text-center py-2 bg-light fw-bold text-primary border-bottom">Paridade</div>
+                <table mat-table [dataSource]="dataSourceParity" matSort #sortParity="matSort">
+                  <ng-container matColumnDef="paridade">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Par</th>
+                    <td mat-cell *matCellDef="let el" class="text-center fw-bold">{{el.paridade}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="qtd">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Qtd</th>
+                    <td mat-cell *matCellDef="let el" class="text-center">{{el.qtd}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="porcentagem">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>%</th>
+                    <td mat-cell *matCellDef="let el" class="text-center text-muted small">{{ el.porcentagem |
+                      number:'1.1-1' }}%</td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsParity"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsParity;"></tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="stat-table-wrapper" style="max-height: 670px; overflow-y: auto;">
+                <div class="text-center py-2 bg-light fw-bold text-primary border-bottom">Frequência</div>
+                <table mat-table [dataSource]="dataSourceNumber" matSort #sortNumber="matSort">
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nº</th>
+                    <td mat-cell *matCellDef="let el" class="text-center">
+                      <span class="badge rounded-pill bg-secondary">{{el.id | number:'2.0-0'}}</span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="qtd">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Qtd</th>
+                    <td mat-cell *matCellDef="let el" class="text-center">{{el.qtd}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="porcentagem">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>%</th>
+                    <td mat-cell *matCellDef="let el" class="text-center text-muted small">{{ el.porcentagem |
+                      number:'1.1-1' }}%</td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsNumber"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsNumber;"></tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 </div>

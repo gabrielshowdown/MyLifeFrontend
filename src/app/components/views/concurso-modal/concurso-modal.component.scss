@@ -1,56 +1,115 @@
-// Em: src/app/components/consulta-concurso-dialog/consulta-concurso-dialog.component.scss
+// concurso-modal.component.scss
 
-// Cores para o modal
-$dezena-sorteada-bg: #f5f5f5;
-$dezena-sorteada-border: #bdbdbd;
-$dezena-repetida-bg: #bbdefb; // Azul claro para dezenas repetidas
-$dezena-repetida-border: #64b5f6;
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
-.dezenas-grid-dialog {
-  display: grid;
-  // Usar 5 colunas mantém o layout padrão da Lotofácil (3 linhas de 5)
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  max-width: 350px;
-  margin: 0 auto;
+// Garante que o componente ocupe tudo sem scrolls
+:host {
+  display: block;
+  overflow: hidden; 
 }
 
-// Estilo base para todos os 15 números sorteados
+// Cabeçalho
+.modal-header-custom {
+  background: $primary-gradient;
+  // Aumentei o padding vertical para o título não ficar colado
+  padding: 1.5rem 1rem; 
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: relative; // Para garantir que fique sobre o conteúdo se necessário
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    line-height: 1.2; // Melhora o espaçamento da fonte
+  }
+}
+
+// Conteúdo (Corpo)
+mat-dialog-content {
+  margin: 0 !important;
+  padding: 24px 24px 10px 24px !important; // Controlamos o padding aqui agora
+  max-height: none !important; // Remove limite de altura que causa scroll
+  overflow: visible !important; // Remove scroll interno
+}
+
+// Grid das Dezenas
+.dezenas-grid-dialog {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  justify-items: center;
+  margin-bottom: 1.5rem; // Espaço entre as bolinhas e a paridade
+}
+
 .dezena {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.1), -4px -4px 8px rgba(255,255,255,0.9);
+  color: #444;
+  
+  &.repetido {
+    background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+    color: #1976d2;
+    border: 1px solid rgba(25, 118, 210, 0.1);
+  }
+}
+
+// Card de Informação (Paridade)
+.stats-info {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: center;
+  border: 1px solid #edf2f7;
+  
+  // Centraliza o texto e ícones
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: $dezena-sorteada-bg;
-  border: 1px solid $dezena-sorteada-border;
-  border-radius: 8px;
-  aspect-ratio: 1 / 1;
-  font-weight: bold;
-  color: #333;
-  transition: background-color 0.3s ease;
-}
+  gap: 8px;
 
-// MUDANÇA: Estilo de sobreposição APENAS para a dezena que for repetida
-.dezena.repetido {
-  background-color: $dezena-repetida-bg;
-  border-color: $dezena-repetida-border;
-  color: #1e88e5;
-}
+  font-size: 0.95rem;
+  color: #555;
 
-.custom-dialog-actions {
-  display: flex;
-  justify-content: space-between; // Joga os itens para as pontas (esquerda e direita)
-  align-items: center;           // Centraliza verticalmente
-  width: 100%;                   // Garante a ocupação total
+  strong {
+    color: #333;
+    margin-right: 4px;
+  }
   
-  // O mat-dialog-actions já tem padding, 
-  // mas podemos garantir aqui se quisermos:
-  padding: 8px 24px;
-  box-sizing: border-box;
+  .highlight {
+    color: #764ba2;
+    font-weight: 700;
+  }
 }
 
-// 2. Estilo para o texto de observação
+// Rodapé (Botões)
+.custom-dialog-actions {
+  padding: 16px 24px 24px 24px; // Espaço generoso embaixo
+  display: flex;
+  justify-content: space-between; // Mantém aviso na esq e botão na dir
+  align-items: center;
+  border-top: none; // Remove borda para visual mais limpo
+  background: white; // Garante fundo branco
+}
+
 .obs-text {
-  font-size: 0.85em;       // Tamanho menor
-  font-style: italic;      // Itálico
-  color: rgba(0, 0, 0, 0.6); // Cor de texto secundária (cinza)
+  font-size: 0.8rem;
+  color: #e65100;
+  background: #fff3e0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }

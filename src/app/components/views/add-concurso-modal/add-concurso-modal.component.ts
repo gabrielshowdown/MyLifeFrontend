@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'; // Para mostrar erros
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-add-concurso-modal',
@@ -18,10 +19,11 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   templateUrl: './add-concurso-modal.component.html',
-  // styleUrls: ['./add-concurso-modal.component.scss'] // (Opcional)
+  styleUrls: ['./add-concurso-modal.component.scss'] // (Opcional)
 })
 export class AddConcursoModalComponent implements OnInit {
 

@@ -2,7 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common'; // Necessário para *ngFor, pipe 'number'
 import { MatButtonModule } from '@angular/material/button';
-import { ConcursoDetalhado, NumeroSorteadoDetalhe, ModalData } from '../../../interfaces/lotofacil';
+import { NumeroSorteadoDetalhe, ModalData } from '../../../interfaces/lotofacil';
+import { MatIconModule } from '@angular/material/icon';
 
 // 1. Importar as interfaces da API
 
@@ -21,7 +22,8 @@ interface ConcursoInfoVM {
   imports: [
     CommonModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './concurso-modal.component.html',
   styleUrls: ['./concurso-modal.component.scss']
