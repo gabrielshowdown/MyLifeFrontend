@@ -125,6 +125,7 @@ export class LotofacilComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.adjustPageSizeToScreen();
     this.loadTablesData();
     this.loadGeneralData();
     this.loadRecentContests();
@@ -141,6 +142,23 @@ export class LotofacilComponent implements OnInit {
     this.loadDataParities();
     this.loadDataNumbers();
   }
+
+  /*
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    const oldSize = this.pageSize;
+    
+    // Recalcula o tamanho ideal
+    this.adjustPageSizeToScreen();
+
+    // Só recarrega se o tamanho da página TIVER MUDADO (de 4 para 6 ou vice-versa)
+    // para evitar chamadas desnecessárias na API a cada pixel movido.
+    if (this.pageSize !== oldSize) {
+      this.currentPage = 0; // Volta para a primeira página para não quebrar a paginação
+      this.loadRecentContests();
+    }
+  }
+  */
 
   /**
    * Carrega dados gerais e define a mensagem de status baseada no contexto
@@ -198,6 +216,32 @@ export class LotofacilComponent implements OnInit {
         },
         error: (err) => console.error('Erro ao carregar concursos recentes', err)
       });
+  }
+
+  /**
+   * Verifica a largura da janela.
+   * Se for um monitor largo (ex: Full HD esticado ou maior que 1600px),
+   * define o tamanho da página para 6 para preencher o grid 3x2.
+   */
+  adjustPageSizeToScreen(): void {
+    // A largura da tela disponível
+    const screenWidth = window.innerWidth;
+
+    // DEFINIÇÃO DO PONTO DE QUEBRA (BREAKPOINT):
+    // Seu container de lista ocupa metade da tela (col-lg-6).
+    // Cada card tem min-width de 260px.
+    // Para caber 3 cards lado a lado, o container precisa de ~820px.
+    // Logo, a tela inteira precisa ter aproximadamente > 1650px.
+    
+    // Vamos usar 1600px como margem de segurança para monitores Wide
+    if (screenWidth >= 1600) {
+      this.pageSize = 6;
+    } else {
+      this.pageSize = 4;
+    }
+    
+    // Opcional: Log para você debugar qual tamanho foi escolhido
+    // console.log(`Largura: ${screenWidth}px | PageSize definido para: ${this.pageSize}`);
   }
 
   changePage(delta: number): void {
