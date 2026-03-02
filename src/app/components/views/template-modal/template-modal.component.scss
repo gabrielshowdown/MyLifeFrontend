@@ -1,29 +1,79 @@
-.parent {
-  display: flex;
-  justify-content: center;
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$night-bg: #1f293a;
+$night-text: #0ef;
+$day-bg: #fff;
+$day-text: #666;
+
+:host {
+  display: block;
+  overflow: hidden;
   font-family: 'Poppins', sans-serif;
-  border-radius: 30px;
-  &.night{
-    background: #1f293a;
-    color: #0ef;;
+}
+
+// 1. Cabeçalho Padronizado
+.modal-header-custom {
+  background: $primary-gradient;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
   }
-  &.day{
-    background: #fff;
-    color: #000000;
+
+  // Se quiser um cabeçalho diferente no tema escuro, pode ajustar aqui:
+  &.night {
+    background: #2c4766; 
+    color: $night-text;
   }
 }
 
-.btn-close{
-  margin-top: -40px;
+// 2. Ajuste do Conteúdo
+mat-dialog-content.custom-content {
+  margin: 0 !important;
+  padding: 24px 32px !important;
+  overflow: visible !important;
+
+  p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  &.night {
+    background: $night-bg;
+    color: $night-text;
+  }
+
+  &.day {
+    background: $day-bg;
+    color: $day-text;
+  }
 }
 
-.title{
-  margin-left: auto; // Deixa centralizado
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
+// 3. Rodapé
+.custom-dialog-actions {
+  padding: 16px 24px 24px 24px;
+  display: flex;
+  justify-content: center; // Centraliza o botão Fechar
+  border-top: none;
 
-.content{
-  margin-top: 15px;
-  margin-bottom: 15px;
+  &.night {
+    background: $night-bg;
+    
+    // Garante que o botão fique na cor neon no modo noite
+    button {
+      color: $night-text !important;
+      border-color: $night-text !important;
+    }
+  }
+
+  &.day {
+    background: $day-bg;
+  }
 }

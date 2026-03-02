@@ -1,13 +1,13 @@
-<div class="modal fade" id="templateModal" tabindex="-1" aria-labelledby="templateModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content parent {{theme}}">
-      <div class="modal-header">
-        <h5 class="modal-title title" id="templateModalLabel">{{ message.title }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body content">
-        <p>{{ message.content }}</p>
-      </div>
-    </div>
-  </div>
+<div class="modal-header-custom" [ngClass]="data.theme">
+  <h2>{{ data.title }}</h2>
 </div>
+
+<mat-dialog-content class="d-flex flex-column gap-2 custom-content" [ngClass]="data.theme">
+  <p>{{ data.content }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions class="custom-dialog-actions" [ngClass]="data.theme">
+  <button mat-stroked-button mat-dialog-close [color]="data.theme === 'day' ? 'primary' : 'accent'">
+    Fechar
+  </button>
+</mat-dialog-actions>

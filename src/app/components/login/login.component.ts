@@ -10,6 +10,7 @@ import { ThemeService } from '../../config/theme.service';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../config/debug.service';
 import { shakeTrigger } from '../../animations/animations';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-login',
@@ -55,6 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy{
     private service: UsersService,
     private themeService: ThemeService,
     private debugService: DebugService,
+    private dialog: MatDialog
   ){
     this.sun = this.themeService.getSun();
     this.moon = this.themeService.getMoon();
@@ -172,6 +174,20 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     clearMessages(): void {
     this.loginError = false;
+  }
+
+  abrirModalEsqueciSenha(event: Event): void {
+    event.preventDefault(); // Evita que o link '# ' recarregue a tela
+    
+    this.dialog.open(TemplateModalComponent, {
+      width: '400px',
+      panelClass: 'no-padding-dialog', // A mesma classe usada no AddConcurso
+      data: {
+        title: this.forgotPasswordMessage.title,
+        content: this.forgotPasswordMessage.content,
+        theme: this.theme
+      }
+    });
   }
 
 }

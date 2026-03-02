@@ -1,12 +1,7 @@
-
 <div class="parent" [ngClass]="theme">
   <div>
     <!-- Necessário colocar o ngIf para não ter aquele bug de inicializar o valor do toogle em microsegundos -->
-    <mat-slide-toggle
-      *ngIf="theme"
-      class="toogle-container"
-      #darkModeSwitch
-      [checked]="theme === 'night'"
+    <mat-slide-toggle *ngIf="theme" class="toogle-container" #darkModeSwitch [checked]="theme === 'night'"
       (change)="onToggleChange($event)">
       <!-- {{ theme === 'day' ? 'Day' : 'Night' }} -->
     </mat-slide-toggle>
@@ -43,13 +38,11 @@
 
         <!-- Esqueceu a senha -->
         <div class="forgot-pass">
-          <!-- Esse 'data-bs-toggle' é um atributo do b5 para identificar elementos que devem
-           ativar modais e o 'data-bs-target' é qual componente deve ser aberto -->
-          <a data-bs-toggle="modal" data-bs-target="#templateModal" [ngClass]="theme">Esqueceu sua senha?</a>
+          <a href="#" (click)="abrirModalEsqueciSenha($event)" [ngClass]="theme">Esqueceu sua senha?</a>
         </div>
 
         <!-- Botão de Logar -->
-        <button [disabled]="!form.valid" type="submit"  [ngClass]="[ enableButton(), theme ]">
+        <button [disabled]="!form.valid" type="submit" [ngClass]="[ enableButton(), theme ]">
           Login
         </button>
 
@@ -119,6 +112,3 @@
   </div>
 
 </div>
-
-<!-- Modal aberto -->
-<app-template-modal [message]="forgotPasswordMessage" [theme]="theme"></app-template-modal>
