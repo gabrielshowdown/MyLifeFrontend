@@ -4,6 +4,7 @@ import { Teste2Component } from './components/teste2/teste2.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LotofacilComponent } from './components/lotofacil/lotofacil.component';
+import { MenuComponent } from './components/menu/menu.component';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,10 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'menu',
+    component: MenuComponent
   },
   {
     path: 'teste',

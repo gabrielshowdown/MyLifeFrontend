@@ -1,0 +1,125 @@
+// Paleta adaptada da sua lógica existente
+$bg-day: #f3f4f8;
+$bg-night: #1f293a;
+$card-day: #ffffff;
+$card-night: #2c3e50;
+$text-day: #333333;
+$text-night: #f8f9fa;
+$border-night: #34495e;
+
+.parent-menu {
+  min-height: 100vh;
+  transition: background-color 0.5s ease;
+
+  &.day { background-color: $bg-day; }
+  &.night { background-color: $bg-night; }
+}
+
+.menu-logo {
+  max-width: 60px;
+  height: auto;
+  object-fit: contain;
+}
+
+// Estilos do Cabeçalho
+.menu-header {
+  transition: all 0.5s ease;
+  
+  &.day {
+    background-color: $card-day;
+    border-left: 5px solid #2870f5; // Cor primária do seu login day
+  }
+  
+  &.night {
+    background-color: $card-night;
+    border-left: 5px solid #0ef; // Cor primária do seu login night
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+  }
+}
+
+// Textos Universais que trocam baseados no elemento pai com classe .day / .night
+.day .title-text { color: $text-day; }
+.night .title-text { color: $text-night; }
+
+.night .text-muted { color: #adb5bd !important; }
+
+// Cards de Funcionalidade
+.feature-card {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid transparent;
+  
+  &.day { background-color: $card-day; }
+  &.night {
+    background-color: $card-night;
+    border-color: $border-night;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+  }
+
+  // Efeito Hover do Card Inteiro
+  &:hover {
+    transform: translateY(-5px);
+    
+    &.day { box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }
+    &.night {
+      box-shadow: 0 10px 25px rgba(0,238,255,0.15) !important;
+      border-color: rgba(0,238,255,0.3);
+    }
+
+    .arrow-icon {
+      transform: translateX(5px);
+      color: inherit !important; // Pega a cor do texto do card
+    }
+
+    .card-icon-wrapper {
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+
+  .feature-desc {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    padding-right: 24px; // Espaço para a setinha não sobrepor o texto
+  }
+
+  .arrow-icon {
+    transition: all 0.3s ease;
+  }
+}
+
+// Badges da Categoria
+.category-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &.day {
+    background-color: #e9ecef;
+    color: #495057;
+  }
+  &.night {
+    background-color: #1a2332;
+    color: #0ef;
+    border: 1px solid rgba(0,238,255,0.2);
+  }
+}
+
+// Gradientes Mapeados para os Ícones (dá um charme excelente de Dashboard)
+.card-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  transition: all 0.3s ease;
+  
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  &.gradient-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+  &.gradient-blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+  &.gradient-green { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+  &.gradient-orange { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+  &.gradient-gold { background: linear-gradient(135deg, #e6b980 0%, #eacda3 100%); }
+}

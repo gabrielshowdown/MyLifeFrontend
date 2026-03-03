@@ -133,7 +133,7 @@ export class LoginComponent implements OnInit, OnDestroy{
       next: (user) => {
         this.debugService.log('User:' , user);
         this.loginError = false;
-        this.router.navigate(['/teste']);
+        this.router.navigate(['/menu']);
       },
       error: (err) => {
         console.error('Erro ao validar login:', err);
