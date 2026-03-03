@@ -6,6 +6,7 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
 import { MatRippleModule } from '@angular/material/core';
 import { ThemeService } from '../../config/theme.service';
 import { listAnimation } from '../../animations/animations';
+import { MatButtonModule } from '@angular/material/button';
 
 interface MenuItem {
   title: string;
@@ -25,7 +26,8 @@ interface MenuItem {
     MatIconModule,
     MatSlideToggle,
     MatSlideToggleModule,
-    MatRippleModule // Adiciona aquele efeito visual de "onda" ao clicar no Material
+    MatRippleModule, // Adiciona aquele efeito visual de "onda" ao clicar no Material
+    MatButtonModule
   ],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
@@ -102,5 +104,12 @@ export class MenuComponent implements OnInit {
 
   navigateTo(route: string): void {
     this.router.navigate([route]);
+  }
+
+  logout(): void {
+    // Futuramente você pode adicionar aqui a limpeza do LocalStorage/Token, ex:
+    // localStorage.removeItem('userToken');
+    
+    this.router.navigate(['/login']);
   }
 }

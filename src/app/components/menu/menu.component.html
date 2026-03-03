@@ -1,9 +1,11 @@
 <div class="parent-menu" [ngClass]="theme">
-  
+
   <div class="container py-5">
-    
-    <div class="menu-header d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-5 p-4 rounded-4 shadow-sm" [ngClass]="theme">
-      
+
+    <div
+      class="menu-header d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-5 p-4 rounded-4 shadow-sm"
+      [ngClass]="theme">
+
       <div class="d-flex align-items-center gap-3">
         <img src="/img/my-life-{{theme}}.png" alt="MyLife Logo" class="menu-logo">
         <div>
@@ -13,32 +15,38 @@
       </div>
 
       <div class="d-flex align-items-center gap-3">
-        <mat-slide-toggle 
-          #darkModeSwitch 
-          [checked]="theme === 'night'"
-          (change)="onToggleChange($event)">
+
+        <mat-slide-toggle *ngIf="theme" #darkModeSwitch [checked]="theme === 'night'" (change)="onToggleChange($event)">
         </mat-slide-toggle>
+
+        <div class="vr" style="height: 25px; align-self: center;"
+          [ngClass]="theme === 'day' ? 'text-dark' : 'text-light'"></div>
+
+        <button mat-icon-button class="btn-logout d-flex align-items-center justify-content-center m-0"
+          [ngClass]="theme" (click)="logout()" title="Sair do sistema">
+          <mat-icon>logout</mat-icon>
+        </button>
+
       </div>
 
     </div>
 
     <div class="row g-4" [@listAnimation]="menuItems.length">
-      
+
       <div class="col-12 col-md-6 col-lg-4" *ngFor="let item of menuItems">
-        <div class="feature-card h-100 position-relative p-4 rounded-4 shadow-sm" 
-             [ngClass]="theme" 
-             matRipple 
-             (click)="navigateTo(item.route)">
-          
-          <div class="card-icon-wrapper mb-4 d-flex align-items-center justify-content-center text-white rounded-circle shadow" 
-               [ngClass]="item.gradientClass">
+        <div class="feature-card h-100 position-relative p-4 rounded-4 shadow-sm" [ngClass]="theme" matRipple
+          (click)="navigateTo(item.route)">
+
+          <div
+            class="card-icon-wrapper mb-4 d-flex align-items-center justify-content-center text-white rounded-circle shadow"
+            [ngClass]="item.gradientClass">
             <mat-icon>{{ item.icon }}</mat-icon>
           </div>
-          
+
           <span class="badge rounded-pill mb-2 px-3 py-2 category-badge" [ngClass]="theme">
             {{ item.category }}
           </span>
-          
+
           <h4 class="fw-bold mb-2 title-text">{{ item.title }}</h4>
           <p class="text-muted m-0 feature-desc">{{ item.description }}</p>
 

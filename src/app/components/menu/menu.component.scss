@@ -16,9 +16,25 @@ $border-night: #34495e;
 }
 
 .menu-logo {
-  max-width: 60px;
+  max-width: 100px;
   height: auto;
   object-fit: contain;
+}
+
+.btn-logout {
+  transition: transform 0.3s ease, color 0.3s ease;
+  
+  &.day { 
+    color: #dc3545; // Vermelho do Bootstrap para o modo claro
+  }
+  
+  &.night { 
+    color: #ff6b6b; // Um vermelho mais claro/pastel para destacar no fundo escuro
+  }
+
+  &:hover {
+    transform: scale(1.1); // Dá uma leve crescida ao passar o mouse
+  }
 }
 
 // Estilos do Cabeçalho
