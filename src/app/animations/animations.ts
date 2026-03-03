@@ -46,3 +46,24 @@ export const listAnimation = trigger('listAnimation', [
     ], { optional: true })
   ])
 ]);
+
+export const routeTransition = trigger('routeTransition', [
+  // O asterisco (*) significa que vai animar de QUALQUER rota para QUALQUER rota
+  transition('* <=> *', [
+    // Prepara os componentes que estão entrando e saindo para ficarem sobrepostos
+    query(':enter, :leave', [
+      style({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        opacity: 0
+      })
+    ], { optional: true }),
+    
+    // Anima o componente que está entrando (faz um fade-in suave)
+    query(':enter', [
+      animate('400ms ease-in-out', style({ opacity: 1 }))
+    ], { optional: true })
+  ])
+]);

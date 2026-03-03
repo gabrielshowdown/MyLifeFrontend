@@ -12,28 +12,28 @@ export const routes: Routes = [
     redirectTo: '/login',
     pathMatch: 'full' // Necessário quando o path é vazio, indica que é para ler toda a URL
   },
-  {
-    path: 'login',
-    component: LoginComponent
+  { 
+    path: 'login', 
+    loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)
   },
-  {
-    path: 'register',
-    component: RegisterComponent
+  { 
+    path: 'register', 
+    loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
   },
-  {
-    path: 'menu',
-    component: MenuComponent
+  { 
+    path: 'menu', 
+    loadComponent: () => import('./components/menu/menu.component').then(m => m.MenuComponent)
   },
-  {
-    path: 'teste',
-    component: TesteComponent
+  { 
+    path: 'lotofacil', 
+    loadComponent: () => import('./components/lotofacil/lotofacil.component').then(m => m.LotofacilComponent)
   },
   {
     path: 'teste2',
     component: Teste2Component
   },
   {
-    path: 'lotofacil',
-    component: LotofacilComponent
+    path: 'teste',
+    component: TesteComponent
   },
 ];
