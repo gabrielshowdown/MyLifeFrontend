@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { TesteComponent } from './components/teste/teste.component';
 import { Teste2Component } from './components/teste2/teste2.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { LotofacilComponent } from './components/lotofacil/lotofacil.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { LotofacilComponent } from './components/lotteries/lotofacil/lotofacil.component';
 import { MenuComponent } from './components/menu/menu.component';
 
 export const routes: Routes = [
@@ -14,11 +14,11 @@ export const routes: Routes = [
   },
   { 
     path: 'login', 
-    loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)
+    loadComponent: () => import('./components/auth/login/login.component').then(m => m.LoginComponent)
   },
   { 
     path: 'register', 
-    loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
+    loadComponent: () => import('./components/auth/register/register.component').then(m => m.RegisterComponent)
   },
   { 
     path: 'menu', 
@@ -26,7 +26,7 @@ export const routes: Routes = [
   },
   { 
     path: 'lotofacil', 
-    loadComponent: () => import('./components/lotofacil/lotofacil.component').then(m => m.LotofacilComponent)
+    loadComponent: () => import('./components/lotteries/lotofacil/lotofacil.component').then(m => m.LotofacilComponent)
   },
   {
     path: 'teste2',

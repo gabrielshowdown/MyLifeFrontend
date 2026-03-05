@@ -2,23 +2,20 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UsersService } from '../../services/users.service';
-import { TemplateModalComponent } from "../views/template-modal/template-modal.component";
-import { MatIconModule } from '@angular/material/icon';
+import { UsersService } from '../../../services/users.service';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ThemeService } from '../../config/theme.service';
 import { Subscription } from 'rxjs';
-import { DebugService } from '../../config/debug.service';
-import { shakeTrigger } from '../../animations/animations';
 import { MatDialog } from '@angular/material/dialog';
+import { TemplateModalComponent } from '../../../shared/template-modal/template-modal.component';
+import { shakeTrigger } from '../../../animations/animations';
+import { ThemeService } from '../../../core/services/theme.service';
+import { DebugService } from '../../../core/services/debug.service';
 
 @Component({
     selector: 'app-login',
     imports: [
         ReactiveFormsModule,
         CommonModule,
-        TemplateModalComponent,
-        MatIconModule,
         MatSlideToggle,
         MatSlideToggleModule,
     ],

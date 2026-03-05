@@ -4,11 +4,11 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 
 export interface ConfirmDialogData {
-  titulo: string;
-  mensagem: string;
-  textoConfirmar?: string;
-  textoCancelar?: string;
-  corBotaoConfirmar?: 'primary' | 'accent' | 'warn';
+  title: string;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+  confirmButtonColor?: 'primary' | 'accent' | 'warn';
 }
 
 @Component({

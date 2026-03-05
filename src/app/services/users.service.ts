@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../interfaces/user';
 import { Observable } from 'rxjs';
-import { DebugService } from '../config/debug.service';
+import { DebugService } from '../core/services/debug.service';
 import { desenvMode } from '../config/parameters';
 
 @Injectable({

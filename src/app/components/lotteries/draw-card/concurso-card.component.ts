@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { ConcursoDetalhado } from '../../interfaces/lotofacil'; // Ajuste o caminho
+import { ConcursoDetalhado } from '../../../interfaces/lotofacil';
 
 @Component({
   selector: 'app-concurso-card',

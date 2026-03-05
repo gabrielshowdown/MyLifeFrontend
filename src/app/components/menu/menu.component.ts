@@ -4,9 +4,9 @@ import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRippleModule } from '@angular/material/core';
-import { ThemeService } from '../../config/theme.service';
 import { listAnimation } from '../../animations/animations';
 import { MatButtonModule } from '@angular/material/button';
+import { ThemeService } from '../../core/services/theme.service';
 
 interface MenuItem {
   title: string;

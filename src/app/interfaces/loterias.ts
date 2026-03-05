@@ -1,3 +1,4 @@
+// Interface para receber dados da API Loterias Caixa
 export interface Concurso {
   acumulado:                      boolean;
   dataApuracao:                   string;
@@ -50,7 +51,7 @@ export interface ListaRateioPremio {
 }
 
 // Interface que representa o modelo que nós queremos tratar
-export interface ConcursoResumo {
+export interface LotteryDrawSummary {
   numero?:                         number;
   numeroConcursoAnterior?:         number;
   numeroConcursoProximo?:          number;

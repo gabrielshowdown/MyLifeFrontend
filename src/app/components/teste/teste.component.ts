@@ -3,10 +3,10 @@ import { AfterViewInit, Component, ElementRef, inject, OnDestroy, ViewChild } fr
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DebugService } from '../../config/debug.service';
+import { DebugService } from '../../core/services/debug.service';
 import { LoteriasService } from '../../services/loterias.service';
 import { Subscription } from 'rxjs';
-import { Concurso, ConcursoResumo } from '../../interfaces/loterias';
+import { Concurso, LotteryDrawSummary } from '../../interfaces/loterias';
 import { Router } from '@angular/router';
 import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
@@ -137,7 +137,7 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
 
   numConcurso: any;
 
-  concursoLotofacil!: ConcursoResumo;
+  concursoLotofacil!: LotteryDrawSummary;
 
   carregarEstatisticasParidade(): void {
     this.service.getAllParities().subscribe({

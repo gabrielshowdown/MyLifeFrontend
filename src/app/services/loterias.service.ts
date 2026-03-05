@@ -1,7 +1,7 @@
 import { Concurso } from '../interfaces/loterias';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DebugService } from '../config/debug.service';
+import { DebugService } from '../core/services/debug.service';
 import { map, Observable, tap } from 'rxjs';
 import { DadosNumero, DadosParidade, DadosRepeticao, ConcursoDetalhado, GenerateContestRequest, SynchronizeResponse, AdicionarConcursoRequest, Page } from '../interfaces/lotofacil';
 

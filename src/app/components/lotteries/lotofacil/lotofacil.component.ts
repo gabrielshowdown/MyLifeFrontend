@@ -8,20 +8,19 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { LoteriasService } from '../../services/loterias.service';
-import { DebugService } from '../../config/debug.service';
-import { ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, ModalData, SynchronizeResponse } from '../../interfaces/lotofacil';
+import { AdicionarConcursoRequest, ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, ModalData, SynchronizeResponse } from '../../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { listAnimation, shownStateTrigger } from '../../animations/animations';
-import { ConcursoModalComponent } from '../views/concurso-modal/concurso-modal.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { AddConcursoModalComponent } from '../views/add-concurso-modal/add-concurso-modal.component';
-import { AdicionarConcursoRequest } from '../../interfaces/lotofacil';
-import { ConcursoCardComponent } from '../concurso-card/concurso-card.component';
 import { MatTabsModule } from '@angular/material/tabs'
+import { ConcursoModalComponent } from '../draw-modal/concurso-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConcursoCardComponent } from '../draw-card/concurso-card.component';
+import { listAnimation, shownStateTrigger } from '../../../animations/animations';
+import { LoteriasService } from '../../../services/loterias.service';
+import { DebugService } from '../../../core/services/debug.service';
+import { AddConcursoModalComponent } from '../add-draw-modal/add-concurso-modal.component';
 
 
 // Interface auxiliar para passar contexto para a atualização de status
@@ -45,7 +44,6 @@ interface StatusContext {
     MatButtonToggleModule,
     MatSortModule,
     MatDialogModule,
-    ConcursoModalComponent,
     ConcursoCardComponent,
     MatTabsModule
   ],

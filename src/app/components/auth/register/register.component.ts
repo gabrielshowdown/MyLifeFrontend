@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { birthdayValidator } from '../../validations/dateValidator';
-import { UsersService } from '../../services/users.service';
-import { User } from '../../interfaces/user';
-import { ThemeService } from '../../config/theme.service';
 import { Subscription } from 'rxjs';
-import { DebugService } from '../../config/debug.service';
-import { shakeTrigger, shownStateTrigger } from '../../animations/animations';
+import { shakeTrigger, shownStateTrigger } from '../../../animations/animations';
+import { UsersService } from '../../../services/users.service';
+import { ThemeService } from '../../../core/services/theme.service';
+import { DebugService } from '../../../core/services/debug.service';
+import { birthdayValidator } from '../../../validations/dateValidator';
+import { User } from '../../../interfaces/user';
+
 
 @Component({
     selector: 'app-register',

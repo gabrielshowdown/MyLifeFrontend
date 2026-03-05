@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { debugMode, desenvMode } from './parameters';
+import { debugMode, desenvMode } from '../../config/parameters';
 
 @Injectable({
   providedIn: 'root' // Garante que o serviço seja um singleton
