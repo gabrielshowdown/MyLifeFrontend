@@ -4,13 +4,13 @@ import { MatCardModule } from '@angular/material/card';
 import { ConcursoDetalhado } from '../../../interfaces/lotofacil';
 
 @Component({
-  selector: 'app-concurso-card',
+  selector: 'app-draw-card',
   standalone: true,
   imports: [CommonModule, MatCardModule],
-  templateUrl: './concurso-card.component.html',
-  styleUrls: ['./concurso-card.component.scss']
+  templateUrl: './draw-card.component.html',
+  styleUrls: ['./draw-card.component.scss']
 })
-export class ConcursoCardComponent {
+export class DrawCardComponent {
   @Input() concurso!: ConcursoDetalhado;
 
   // Helper para formatar números menores que 10 com zero à esquerda

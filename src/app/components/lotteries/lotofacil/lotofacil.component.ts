@@ -14,13 +14,13 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs'
-import { ConcursoModalComponent } from '../draw-modal/concurso-modal.component';
+import { DrawModalComponent } from '../draw-modal/draw-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ConcursoCardComponent } from '../draw-card/concurso-card.component';
+import { DrawCardComponent } from '../draw-card/draw-card.component';
 import { listAnimation, shownStateTrigger } from '../../../animations/animations';
 import { LoteriasService } from '../../../services/loterias.service';
 import { DebugService } from '../../../core/services/debug.service';
-import { AddConcursoModalComponent } from '../add-draw-modal/add-concurso-modal.component';
+import { AddDrawModalComponent } from '../add-draw-modal/add-draw-modal.component';
 
 
 // Interface auxiliar para passar contexto para a atualização de status
@@ -44,7 +44,7 @@ interface StatusContext {
     MatButtonToggleModule,
     MatSortModule,
     MatDialogModule,
-    ConcursoCardComponent,
+    DrawCardComponent,
     MatTabsModule
   ],
   templateUrl: './lotofacil.component.html',
@@ -399,7 +399,7 @@ export class LotofacilComponent implements OnInit {
   }
 
   adicionarJogo(): void {
-    const dialogRef = this.dialog.open(AddConcursoModalComponent, {
+    const dialogRef = this.dialog.open(AddDrawModalComponent, {
       width: '500px',
       panelClass: 'no-padding-dialog',
       data: { proximoConcursoSugerido: this.totalNumberLotofacilContest + 1 }
@@ -514,7 +514,7 @@ export class LotofacilComponent implements OnInit {
   }
 
 openConsultaDialog(resultado: ConcursoDetalhado, isGerado: boolean = false): void {
-  this.dialog.open(ConcursoModalComponent, {
+  this.dialog.open(DrawModalComponent, {
     width: '450px',
     // Adicione esta linha abaixo. Ela permite customizar o container "pai"
     panelClass: 'no-padding-dialog', 

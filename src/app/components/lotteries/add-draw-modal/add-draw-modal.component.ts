@@ -10,7 +10,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-add-concurso-modal',
+  selector: 'app-add-draw-modal',
   standalone: true,
   imports: [
     CommonModule,
@@ -22,10 +22,10 @@ import { MatIconModule } from '@angular/material/icon';
     MatSnackBarModule,
     MatIconModule
   ],
-  templateUrl: './add-concurso-modal.component.html',
-  styleUrls: ['./add-concurso-modal.component.scss'] // (Opcional)
+  templateUrl: './add-draw-modal.component.html',
+  styleUrls: ['./add-draw-modal.component.scss'] // (Opcional)
 })
-export class AddConcursoModalComponent implements OnInit {
+export class AddDrawModalComponent implements OnInit {
 
   public concursoId!: number;
   public dezenasInput: string = ''; // Onde o usuário digita
@@ -33,7 +33,7 @@ export class AddConcursoModalComponent implements OnInit {
   public dezenasArray: string[] = [];
 
   constructor(
-    public dialogRef: MatDialogRef<AddConcursoModalComponent>,
+    public dialogRef: MatDialogRef<AddDrawModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { proximoConcursoSugerido: number },
     private _snackBar: MatSnackBar,
     private dialog: MatDialog

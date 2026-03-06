@@ -100,8 +100,8 @@
       </div>
 
       <div class="concursos-list" [@listAnimation]="recentContests.length">
-        <app-concurso-card *ngFor="let concurso of recentContests" [concurso]="concurso">
-        </app-concurso-card>
+        <app-draw-card *ngFor="let concurso of recentContests" [concurso]="concurso">
+        </app-draw-card>
       </div>
 
     </div>
