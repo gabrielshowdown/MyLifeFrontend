@@ -8,7 +8,7 @@
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
     <mat-label>Número do Concurso</mat-label>
-    <input matInput type="number" [(ngModel)]="concursoId" placeholder="Ex: 3001" [readonly]="true">
+    <input matInput type="number" [(ngModel)]="drawId" placeholder="Ex: 3001" [readonly]="true">
     <mat-icon matSuffix>tag</mat-icon>
   </mat-form-field>
 
@@ -17,15 +17,15 @@
     
     <input 
       matInput 
-      [value]="dezenasFormatadas"
-      (input)="onDezenasInput($event)"
+      [value]="formattedDozens"
+      (input)="onDozensInput($event)"
       placeholder="01-02-03..."
       maxlength="44">
       
       <mat-hint align="end">
-        <strong [class.text-primary]="dezenasInput.length === 30" 
-                [class.text-danger]="dezenasInput.length !== 30">
-          {{ dezenasInput.length / 2 | number:'1.0-0' }}
+        <strong [class.text-primary]="dozensInput.length === 30" 
+                [class.text-danger]="dozensInput.length !== 30">
+          {{ dozensInput.length / 2 | number:'1.0-0' }}
         </strong> / 15
       </mat-hint>
       <mat-icon matSuffix>casino</mat-icon>
@@ -40,7 +40,7 @@
 
   <button mat-raised-button 
           class="btn-save-custom" 
-          (click)="salvar()">
+          (click)="save()">
     <mat-icon class="me-2">save</mat-icon> 
     Salvar Concurso
   </button>

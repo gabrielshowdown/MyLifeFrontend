@@ -402,7 +402,7 @@ export class LotofacilComponent implements OnInit {
     const dialogRef = this.dialog.open(AddDrawModalComponent, {
       width: '500px',
       panelClass: 'no-padding-dialog',
-      data: { proximoConcursoSugerido: this.totalNumberLotofacilContest + 1 }
+      data: { nextSuggestedDraw: this.totalNumberLotofacilContest + 1 }
     });
 
     dialogRef.afterClosed().subscribe(result => {
