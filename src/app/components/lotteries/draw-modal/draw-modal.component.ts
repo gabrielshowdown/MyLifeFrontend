@@ -17,7 +17,7 @@ interface ConcursoInfoVM {
 }
 
 @Component({
-  selector: 'app-concurso-modal', // Certifique-se que o seletor está correto
+  selector: 'app-draw-modal', // Certifique-se que o seletor está correto
   standalone: true, // Assumindo standalone, como o lotofacil.component
   imports: [
     CommonModule,
@@ -25,10 +25,10 @@ interface ConcursoInfoVM {
     MatButtonModule,
     MatIconModule
   ],
-  templateUrl: './concurso-modal.component.html',
-  styleUrls: ['./concurso-modal.component.scss']
+  templateUrl: './draw-modal.component.html',
+  styleUrls: ['./draw-modal.component.scss']
 })
-export class ConcursoModalComponent implements OnInit {
+export class DrawModalComponent implements OnInit {
 
   // 3. Declarar as propriedades que o HTML (template) vai usar
   public concursoInfo!: ConcursoInfoVM;

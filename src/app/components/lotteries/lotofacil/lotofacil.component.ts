@@ -8,19 +8,19 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { AdicionarConcursoRequest, ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, ModalData, SynchronizeResponse } from '../../../interfaces/lotofacil';
+import { AddDrawRequest, DetailedDraw, DadosNumero, DadosParidade, DadosRepeticao, GenerateDrawRequest, ModalData, SynchronizeResponse } from '../../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs'
-import { ConcursoModalComponent } from '../draw-modal/concurso-modal.component';
+import { DrawModalComponent } from '../draw-modal/draw-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ConcursoCardComponent } from '../draw-card/concurso-card.component';
+import { DrawCardComponent } from '../draw-card/draw-card.component';
 import { listAnimation, shownStateTrigger } from '../../../animations/animations';
 import { LoteriasService } from '../../../services/loterias.service';
 import { DebugService } from '../../../core/services/debug.service';
-import { AddConcursoModalComponent } from '../add-draw-modal/add-concurso-modal.component';
+import { AddDrawModalComponent } from '../add-draw-modal/add-draw-modal.component';
 
 
 // Interface auxiliar para passar contexto para a atualização de status
@@ -44,7 +44,7 @@ interface StatusContext {
     MatButtonToggleModule,
     MatSortModule,
     MatDialogModule,
-    ConcursoCardComponent,
+    DrawCardComponent,
     MatTabsModule
   ],
   templateUrl: './lotofacil.component.html',
@@ -58,11 +58,11 @@ export class LotofacilComponent implements OnInit {
   subscription!: Subscription;
   isSyncing: boolean = false;
 
-  totalNumberLotofacilContest: number = 0;
-  contestIdConsulted: number = 0;
+  totalNumberLotofacilDraw: number = 0;
+  drawIdConsulted: number = 0;
   showConsultAlert: boolean = false;
 
-  recentContests: ConcursoDetalhado[] = [];
+  recentDraws: DetailedDraw[] = [];
   currentPage: number = 0;
   pageSize: number = 4; // Mostra 4 cards, igual ao print Java
   totalPages: number = 0;
@@ -86,8 +86,8 @@ export class LotofacilComponent implements OnInit {
   dataSourceRepetition: any;
   dataSourceNumber: any;
 
-  lastContestApiCaixa: number = 0;
-  dateNextContesCaixa: any;
+  lastDrawApiCaixa: number = 0;
+  dateNextDrawCaixa: any;
 
   // Alertas de Geração
   showGenerateAlert: boolean = false;
@@ -126,7 +126,7 @@ export class LotofacilComponent implements OnInit {
     this.adjustPageSizeToScreen();
     this.loadTablesData();
     this.loadGeneralData();
-    this.loadRecentContests();
+    this.loadRecentDraws();
   }
 
   ngOnDestroy(): void {
@@ -153,7 +153,7 @@ export class LotofacilComponent implements OnInit {
     // para evitar chamadas desnecessárias na API a cada pixel movido.
     if (this.pageSize !== oldSize) {
       this.currentPage = 0; // Volta para a primeira página para não quebrar a paginação
-      this.loadRecentContests();
+      this.loadRecentDraws();
     }
   }
   */
@@ -186,12 +186,12 @@ export class LotofacilComponent implements OnInit {
     }).subscribe({
       next: ({ lastLocal, lastCaixa }) => {
         // Atualiza variáveis de estado
-        if (lastLocal !== null) this.totalNumberLotofacilContest = lastLocal;
-        else if (localErrorType === 'EMPTY') this.totalNumberLotofacilContest = 0;
+        if (lastLocal !== null) this.totalNumberLotofacilDraw = lastLocal;
+        else if (localErrorType === 'EMPTY') this.totalNumberLotofacilDraw = 0;
 
         if (lastCaixa !== null) {
-          this.lastContestApiCaixa = lastCaixa.numero;
-          this.dateNextContesCaixa = lastCaixa.dataProximoConcurso;
+          this.lastDrawApiCaixa = lastCaixa.numero;
+          this.dateNextDrawCaixa = lastCaixa.dataProximoConcurso;
         }
 
         // Chama o centralizador de mensagens
@@ -200,15 +200,15 @@ export class LotofacilComponent implements OnInit {
     });
   }
 
-  loadRecentContests(): void {
+  loadRecentDraws(): void {
     this.service.getContestsPaginated(this.currentPage, this.pageSize)
       .subscribe({
         next: (pageData) => {
-          this.recentContests = pageData.content;
+          this.recentDraws = pageData.content;
           this.totalPages = pageData.totalPages;
 
           // Ordenar as dezenas dentro de cada concurso para visualização correta
-          this.recentContests.forEach(c => {
+          this.recentDraws.forEach(c => {
             c.numerosConcurso.sort((a, b) => a.numero - b.numero);
           });
         },
@@ -249,7 +249,7 @@ export class LotofacilComponent implements OnInit {
     // pois o Backend ainda trata 0 como início e totalPages como fim.
     if (nextPage >= 0 && nextPage < this.totalPages) {
       this.currentPage = nextPage;
-      this.loadRecentContests();
+      this.loadRecentDraws();
     }
   }
 
@@ -261,9 +261,9 @@ export class LotofacilComponent implements OnInit {
     apiError: boolean,
     context: StatusContext
   ) {
-    const diff = this.lastContestApiCaixa - this.totalNumberLotofacilContest;
-    const nextDateFormatted = this.dateNextContesCaixa
-      ? new Date(this.dateNextContesCaixa).toLocaleDateString('pt-BR') // Ajuste conforme formato da API
+    const diff = this.lastDrawApiCaixa - this.totalNumberLotofacilDraw;
+    const nextDateFormatted = this.dateNextDrawCaixa
+      ? new Date(this.dateNextDrawCaixa).toLocaleDateString('pt-BR') // Ajuste conforme formato da API
       : 'N/D';
     // Obs: Se a API já retorna string formatada ("dd/mm/yyyy"), remova o "new Date()"
 
@@ -278,9 +278,9 @@ export class LotofacilComponent implements OnInit {
     }
 
     // 2. Banco Local Vazio
-    if (localErrorType === 'EMPTY' || this.totalNumberLotofacilContest === 0) {
+    if (localErrorType === 'EMPTY' || this.totalNumberLotofacilDraw === 0) {
       this.setAlert(
-        `Nenhum concurso cadastrado no banco local. (Último na Caixa ${this.lastContestApiCaixa})`,
+        `Nenhum concurso cadastrado no banco local. (Último na Caixa ${this.lastDrawApiCaixa})`,
         'info',
         'info_outline'
       );
@@ -291,14 +291,14 @@ export class LotofacilComponent implements OnInit {
     if (context.manualAddId) {
       if (diff > 0) {
         this.setAlert(
-          `Concurso ${context.manualAddId} adicionado manualmente. (Último na caixa ${this.lastContestApiCaixa})`,
+          `Concurso ${context.manualAddId} adicionado manualmente. (Último na caixa ${this.lastDrawApiCaixa})`,
           'warning',
           'warning_amber'
         );
       } else {
         // Igualou
         this.setAlert(
-          `Concurso ${context.manualAddId} adicionado manualmente, Próximo concurso: ${this.dateNextContesCaixa}`,
+          `Concurso ${context.manualAddId} adicionado manualmente, Próximo concurso: ${this.dateNextDrawCaixa}`,
           'success',
           'check_circle_outline'
         );
@@ -314,13 +314,13 @@ export class LotofacilComponent implements OnInit {
         // Caso A: Houve processamento de novos dados
         if (diff > 0) {
           this.setAlert(
-            `Sincronizados ${syncedCount} concursos! Restam ${diff} concurso(s). (Último na Caixa: ${this.lastContestApiCaixa})`,
+            `Sincronizados ${syncedCount} concursos! Restam ${diff} concurso(s). (Último na Caixa: ${this.lastDrawApiCaixa})`,
             'info',
             'check_circle_outline'
           );
         } else {
           this.setAlert(
-            `Sincronizados com sucesso! Próximo concurso: ${this.dateNextContesCaixa}`,
+            `Sincronizados com sucesso! Próximo concurso: ${this.dateNextDrawCaixa}`,
             'success',
             'check_circle_outline'
           );
@@ -330,7 +330,7 @@ export class LotofacilComponent implements OnInit {
         if (diff === 0) {
           // AQUI ESTÁ O AJUSTE: Feedback específico para "já estava atualizado"
           this.setAlert(
-            `Concursos Sincronizados. Próximo concurso: ${this.dateNextContesCaixa}`,
+            `Concursos Sincronizados. Próximo concurso: ${this.dateNextDrawCaixa}`,
             'info',
             'check_circle_outline'
           );
@@ -350,14 +350,14 @@ export class LotofacilComponent implements OnInit {
     if (diff > 0) {
       // Existem pendentes
       this.setAlert(
-        `Existem ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastContestApiCaixa})`,
+        `Existem ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastDrawApiCaixa})`,
         'warning',
         'warning_amber'
       );
     } else {
       // Tudo sincronizado
       this.setAlert(
-        `Concursos Sincronizados. Próximo concurso: ${this.dateNextContesCaixa}`,
+        `Concursos Sincronizados. Próximo concurso: ${this.dateNextDrawCaixa}`,
         'info',
         'check_circle_outline'
       );
@@ -372,7 +372,7 @@ export class LotofacilComponent implements OnInit {
     this.showSyncAlert = true;
   }
 
-  synchronizeContests(): void {
+  synchronizeDraws(): void {
     if (this.isSyncing) return;
 
     this.isSyncing = true;
@@ -388,7 +388,7 @@ export class LotofacilComponent implements OnInit {
         // Passamos o response como contexto para o loadGeneralData
         this.loadGeneralData({ syncResponse: response });
         this.loadTablesData();
-        this.loadRecentContests()
+        this.loadRecentDraws()
       },
       error: (err) => {
         this.isSyncing = false;
@@ -398,37 +398,40 @@ export class LotofacilComponent implements OnInit {
     });
   }
 
-  adicionarJogo(): void {
-    const dialogRef = this.dialog.open(AddConcursoModalComponent, {
+  addDrawManually(): void {
+    const dialogRef = this.dialog.open(AddDrawModalComponent, {
       width: '500px',
       panelClass: 'no-padding-dialog',
-      data: { proximoConcursoSugerido: this.totalNumberLotofacilContest + 1 }
+      data: { nextSuggestedDraw: this.totalNumberLotofacilDraw + 1 }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result && result.concursoId && result.dezenas) {
-        this.salvarNovoConcursoManual(result);
+      if (result && result.drawId && result.dozens) {
+        this.saveNewManualDraw(result);
       }
     });
   }
 
-  private salvarNovoConcursoManual(data: { concursoId: number, dezenas: string[] }): void {
-    const request: AdicionarConcursoRequest = {
-      concursoId: data.concursoId,
-      dezenas: data.dezenas
+  private saveNewManualDraw(data: { drawId: number, dozens: string[], dataApuracao: string }): void { 
+    console.log('this.drawDate2' , data.dataApuracao);
+       
+    const request: AddDrawRequest = {
+      drawId: data.drawId,
+      dozens: data.dozens,
+      dataApuracao: data.dataApuracao.toString()
     };
 
-    this.subscription = this.service.addContestManually(request).subscribe({
+    this.subscription = this.service.addDrawManually(request).subscribe({
       next: (novoConcurso) => {
         this.loadTablesData();
         // Passamos o ID adicionado como contexto para o loadGeneralData
         this.loadGeneralData({ manualAddId: novoConcurso.id });
-        this.loadRecentContests();
+        this.loadRecentDraws();
       },
       error: (err) => {
         // Erro específico de adição manual (não recarrega o geral, só mostra erro)
         this.setAlert(
-          `Erro ao salvar concurso ${request.concursoId}. (Erro: ${err.error?.message || err.message})`,
+          `Erro ao salvar concurso ${request.drawId}. (Erro: ${err.error?.message || err.message})`,
           'danger',
           'error_outline'
         );
@@ -495,13 +498,13 @@ export class LotofacilComponent implements OnInit {
 
   consultContest() {
     this.showConsultAlert = false;
-    if (!this.contestIdConsulted || this.contestIdConsulted <= 0) return;
+    if (!this.drawIdConsulted || this.drawIdConsulted <= 0) return;
 
-    if (this.contestIdConsulted > this.totalNumberLotofacilContest) {
+    if (this.drawIdConsulted > this.totalNumberLotofacilDraw) {
       this.showConsultAlert = true;
     } else {
-      this.service.getContestById(this.contestIdConsulted).subscribe({
-        next: (resultadoConcurso: ConcursoDetalhado) => {
+      this.service.getContestById(this.drawIdConsulted).subscribe({
+        next: (resultadoConcurso: DetailedDraw) => {
           if (resultadoConcurso) this.openConsultaDialog(resultadoConcurso, false);
           else this.showConsultAlert = true;
         },
@@ -513,8 +516,8 @@ export class LotofacilComponent implements OnInit {
     }
   }
 
-openConsultaDialog(resultado: ConcursoDetalhado, isGerado: boolean = false): void {
-  this.dialog.open(ConcursoModalComponent, {
+openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false): void {
+  this.dialog.open(DrawModalComponent, {
     width: '450px',
     // Adicione esta linha abaixo. Ela permite customizar o container "pai"
     panelClass: 'no-padding-dialog', 
@@ -522,10 +525,10 @@ openConsultaDialog(resultado: ConcursoDetalhado, isGerado: boolean = false): voi
   });
 }
 
-  generateContest(): void {
+  generateDraw(): void {
     this.showGenerateAlert = false;
 
-    if (this.totalNumberLotofacilContest === 0) {
+    if (this.totalNumberLotofacilDraw === 0) {
       this.generateAlertMessage = 'Dados não carregados.';
       this.showGenerateAlert = true;
       return;
@@ -534,15 +537,15 @@ openConsultaDialog(resultado: ConcursoDetalhado, isGerado: boolean = false): voi
     const repetidos = this.repeticaoMap[this.repeticaoSelecionada];
     const paridade = this.paridadeMap[this.paridadeSelecionada];
 
-    const requestBody: GenerateContestRequest = {
-      concursoAnteriorId: this.totalNumberLotofacilContest.toString(),
+    const requestBody: GenerateDrawRequest = {
+      concursoAnteriorId: this.totalNumberLotofacilDraw.toString(),
       qtdRepetidos: repetidos,
       qtdImpares: paridade ? paridade.impares : null,
       qtdPares: paridade ? paridade.pares : null
     };
 
-    this.subscription = this.service.generateContest(requestBody).subscribe({
-      next: (resultadoConcurso: ConcursoDetalhado) => {
+    this.subscription = this.service.generateDraw(requestBody).subscribe({
+      next: (resultadoConcurso: DetailedDraw) => {
         if (resultadoConcurso) this.openConsultaDialog(resultadoConcurso, true);
       },
       error: (err) => {

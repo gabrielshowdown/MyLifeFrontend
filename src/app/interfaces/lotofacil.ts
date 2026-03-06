@@ -31,8 +31,8 @@ export interface NumeroSorteadoDetalhe {
   repetido: boolean;
 }
 
-// Interface para a nova resposta completa da API
-export interface ConcursoDetalhado {
+// Interface para a nova resposta completa da API, o que como vem do backend
+export interface DetailedDraw {
   id: number;
   qtdPares: number;
   qtdImpares: number;
@@ -40,8 +40,8 @@ export interface ConcursoDetalhado {
   numerosConcurso: NumeroSorteadoDetalhe[];
 }
 
-// Igual a classe DTO no backend
-export interface GenerateContestRequest {
+// Interface de de como será no Json mandado na requisição de geração, Igual a classe DTO no backend
+export interface GenerateDrawRequest {
   concursoAnteriorId: string;
   qtdPares: string | null;
   qtdImpares: string | null;
@@ -57,14 +57,15 @@ export interface SynchronizeResponse {
 }
 
 export interface ModalData {
-  concurso: ConcursoDetalhado;
+  concurso: DetailedDraw;
   isGerado: boolean;
 }
 
-// DTO para salvar manualmente
-export interface AdicionarConcursoRequest {
-  concursoId: number;
-  dezenas: string[]; // Ex: ["01", "06", "07", ...]
+// DTO para salvar manualmente um consurso.
+export interface AddDrawRequest {
+  drawId: number;
+  dozens: string[]; // Ex: ["01", "06", "07", ...]
+  dataApuracao: string;
 }
 
 export interface Page<T> {

@@ -6,13 +6,13 @@
 
       <div>
         <div class="stat-label">Total de Jogos</div>
-        <div class="stat-value highlight">{{ totalNumberLotofacilContest }}</div>
+        <div class="stat-value highlight">{{ totalNumberLotofacilDraw }}</div>
       </div>
 
       <div class="border-start ps-4">
         <div class="stat-label">Próximo Concurso</div>
         <div class="stat-value" style="font-size: 1.2rem">
-          {{ dateNextContesCaixa ? (dateNextContesCaixa) : '...' }}
+          {{ dateNextDrawCaixa ? (dateNextDrawCaixa) : '...' }}
         </div>
       </div>
 
@@ -29,17 +29,17 @@
 
     <div class="d-flex align-items-center gap-3 flex-wrap justify-content-center mt-3 mt-xl-0">
       <div class="search-box">
-        <input type="number" placeholder="Buscar Nº" [(ngModel)]="contestIdConsulted" (keyup.enter)="consultContest()">
+        <input type="number" placeholder="Buscar Nº" [(ngModel)]="drawIdConsulted" (keyup.enter)="consultContest()">
         <button mat-icon-button color="primary" (click)="consultContest()">
           <mat-icon>search</mat-icon>
         </button>
       </div>
 
-      <button mat-stroked-button color="primary" (click)="adicionarJogo()" [disabled]="isSyncing">
+      <button mat-stroked-button color="primary" (click)="addDrawManually()" [disabled]="isSyncing">
         <mat-icon class="me-2">add</mat-icon> Adicionar
       </button>
 
-      <button mat-raised-button class="btn-gradient-action text-white" (click)="synchronizeContests()" [disabled]="isSyncing">
+      <button mat-raised-button class="btn-gradient-action text-white" (click)="synchronizeDraws()" [disabled]="isSyncing">
         <span *ngIf="isSyncing" class="spinner-border spinner-border-sm me-2"></span>
         <mat-icon *ngIf="!isSyncing" class="me-2">sync</mat-icon>
         {{ isSyncing ? '' : 'Sincronizar' }} </button>
@@ -59,7 +59,7 @@
           <label class="stat-label mb-2 d-block">Repetição do Anterior</label>
           <mat-button-toggle-group class="custom-toggle-group mb-4" [(ngModel)]="repeticaoSelecionada">
             <mat-button-toggle value="N/D">Auto</mat-button-toggle>
-            <mat-button-toggle *ngFor="let v of ['6','7','9','10','11','12']" [value]="v">{{v}}</mat-button-toggle>
+            <mat-button-toggle *ngFor="let v of ['6','7', '8', '9','10','11','12']" [value]="v">{{v}}</mat-button-toggle>
           </mat-button-toggle-group>
 
           <label class="stat-label mb-2 d-block">Paridade (Ímpares/Pares)</label>
@@ -78,7 +78,7 @@
 
           </mat-button-toggle-group>
 
-          <button mat-raised-button class="btn-gradient-action w-100 py-2 fs-6" (click)="generateContest()">
+          <button mat-raised-button class="btn-gradient-action w-100 py-2 fs-6" (click)="generateDraw()">
             GERAR PALPITE
           </button>
 
@@ -99,9 +99,9 @@
         </div>
       </div>
 
-      <div class="concursos-list" [@listAnimation]="recentContests.length">
-        <app-concurso-card *ngFor="let concurso of recentContests" [concurso]="concurso">
-        </app-concurso-card>
+      <div class="concursos-list" [@listAnimation]="recentDraws.length">
+        <app-draw-card *ngFor="let concurso of recentDraws" [draw]="concurso">
+        </app-draw-card>
       </div>
 
     </div>

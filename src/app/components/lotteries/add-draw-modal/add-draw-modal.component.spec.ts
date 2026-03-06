@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConcursoCardComponent } from './concurso-card.component';
+import { AddDrawModalComponent } from './add-draw-modal.component';
 
-describe('ConcursoCardComponent', () => {
-  let component: ConcursoCardComponent;
-  let fixture: ComponentFixture<ConcursoCardComponent>;
+describe('AddDrawModalComponent', () => {
+  let component: AddDrawModalComponent;
+  let fixture: ComponentFixture<AddDrawModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConcursoCardComponent]
+      imports: [AddDrawModalComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ConcursoCardComponent);
+    fixture = TestBed.createComponent(AddDrawModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

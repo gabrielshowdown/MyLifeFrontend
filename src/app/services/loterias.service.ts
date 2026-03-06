@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../core/services/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, ConcursoDetalhado, GenerateContestRequest, SynchronizeResponse, AdicionarConcursoRequest, Page } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, DetailedDraw, GenerateDrawRequest as GenerateDrawRequest, SynchronizeResponse, AddDrawRequest, Page } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -73,7 +73,7 @@ export class LoteriasService {
   }
 
   getLastContestLotofacilRegistered(): Observable<number> {
-    return this.http.get<ConcursoDetalhado[]>(this.API_TOTALCONCURSOS).pipe(
+    return this.http.get<DetailedDraw[]>(this.API_TOTALCONCURSOS).pipe(
       map(contests => {
         if (contests.length === 0) {
           throw new Error('Nenhum concurso encontrado');
@@ -86,13 +86,13 @@ export class LoteriasService {
     );
   }
 
-  getContestById(id: number): Observable<ConcursoDetalhado> {
+  getContestById(id: number): Observable<DetailedDraw> {
     // A URL final será: http://localhost:8080/concursoLotofacil/3000
-    return this.http.get<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/${id}`);
+    return this.http.get<DetailedDraw>(`${this.API_TOTALCONCURSOS}/${id}`);
   }
 
-  generateContest(request: GenerateContestRequest): Observable<ConcursoDetalhado> {
-    return this.http.post<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/generate`, request);
+  generateDraw(request: GenerateDrawRequest): Observable<DetailedDraw> {
+    return this.http.post<DetailedDraw>(`${this.API_TOTALCONCURSOS}/generate`, request);
   }
 
   synchronizeDatabase(): Observable<SynchronizeResponse> {
@@ -101,14 +101,14 @@ export class LoteriasService {
     return this.http.post<SynchronizeResponse>(`${this.API_TOTALCONCURSOS}/synchronize`, {});
   }
 
-  addContestManually(request: AdicionarConcursoRequest): Observable<ConcursoDetalhado> {
+  addDrawManually(request: AddDrawRequest): Observable<DetailedDraw> {
     // Assumindo que o backend tenha um endpoint "manual" para isso
-    return this.http.post<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/insert`, request);
+    return this.http.post<DetailedDraw>(`${this.API_TOTALCONCURSOS}/insert`, request);
   }
 
-  getContestsPaginated(page: number, size: number): Observable<Page<ConcursoDetalhado>> {
+  getContestsPaginated(page: number, size: number): Observable<Page<DetailedDraw>> {
     // O Spring Pageable usa query params: ?page=0&size=4&sort=id,desc
     // Como definimos o default no backend, basta mandar page e size
-    return this.http.get<Page<ConcursoDetalhado>>(`${this.API_TOTALCONCURSOS}/paginated?page=${page}&size=${size}`);
+    return this.http.get<Page<DetailedDraw>>(`${this.API_TOTALCONCURSOS}/paginated?page=${page}&size=${size}`);
   }
 }
