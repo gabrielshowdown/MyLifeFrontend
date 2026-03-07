@@ -62,9 +62,9 @@ export interface ModalData {
 }
 
 // DTO para salvar manualmente
-export interface AdicionarConcursoRequest {
-  concursoId: number;
-  dezenas: string[]; // Ex: ["01", "06", "07", ...]
+export interface AddDrawRequest {
+  drawId: number;
+  dozens: string[]; // Ex: ["01", "06", "07", ...]
 }
 
 export interface Page<T> {

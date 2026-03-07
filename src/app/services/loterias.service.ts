@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../core/services/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, ConcursoDetalhado, GenerateContestRequest, SynchronizeResponse, AdicionarConcursoRequest, Page } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, ConcursoDetalhado, GenerateContestRequest, SynchronizeResponse, AddDrawRequest, Page } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -101,7 +101,7 @@ export class LoteriasService {
     return this.http.post<SynchronizeResponse>(`${this.API_TOTALCONCURSOS}/synchronize`, {});
   }
 
-  addContestManually(request: AdicionarConcursoRequest): Observable<ConcursoDetalhado> {
+  addContestManually(request: AddDrawRequest): Observable<ConcursoDetalhado> {
     // Assumindo que o backend tenha um endpoint "manual" para isso
     return this.http.post<ConcursoDetalhado>(`${this.API_TOTALCONCURSOS}/insert`, request);
   }

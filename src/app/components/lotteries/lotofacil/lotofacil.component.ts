@@ -8,7 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { AdicionarConcursoRequest, ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, ModalData, SynchronizeResponse } from '../../../interfaces/lotofacil';
+import { AddDrawRequest, ConcursoDetalhado, DadosNumero, DadosParidade, DadosRepeticao, GenerateContestRequest, ModalData, SynchronizeResponse } from '../../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
@@ -406,16 +406,18 @@ export class LotofacilComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result && result.concursoId && result.dezenas) {
+      if (result && result.drawId && result.dozens) {
         this.salvarNovoConcursoManual(result);
       }
     });
   }
 
-  private salvarNovoConcursoManual(data: { concursoId: number, dezenas: string[] }): void {
-    const request: AdicionarConcursoRequest = {
-      concursoId: data.concursoId,
-      dezenas: data.dezenas
+  private salvarNovoConcursoManual(data: { drawId: number, dozens: string[] }): void {
+    console.log("Entroy aki");
+    
+    const request: AddDrawRequest = {
+      drawId: data.drawId,
+      dozens: data.dozens
     };
 
     this.subscription = this.service.addContestManually(request).subscribe({
@@ -428,7 +430,7 @@ export class LotofacilComponent implements OnInit {
       error: (err) => {
         // Erro específico de adição manual (não recarrega o geral, só mostra erro)
         this.setAlert(
-          `Erro ao salvar concurso ${request.concursoId}. (Erro: ${err.error?.message || err.message})`,
+          `Erro ao salvar concurso ${request.drawId}. (Erro: ${err.error?.message || err.message})`,
           'danger',
           'error_outline'
         );

@@ -109,8 +109,8 @@ export class AddDrawModalComponent implements OnInit {
         // AQUI é o pulo do gato: Só fechamos o modal de adição (e enviamos os dados)
         // SE o usuário tiver clicado em "Sim" na confirmação.
         this.dialogRef.close({
-          concursoId: this.drawId,
-          dezenas: this.arrayDozens
+          drawId: this.drawId,
+          dozens: this.arrayDozens
         });
       }
 
