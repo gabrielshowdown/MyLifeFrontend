@@ -14,8 +14,16 @@
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
     <mat-label>Data de Apuração</mat-label>
-    <input matInput type="date" [(ngModel)]="drawDate">
-    <mat-icon matSuffix>calendar_today</mat-icon>
+    
+    <input matInput 
+           [matDatepicker]="picker" 
+           [(ngModel)]="drawDate" 
+           placeholder="DD/MM/AAAA"
+           maxlength="10"
+           (input)="onDateInput($event)">
+    
+    <mat-icon matSuffix (click)="picker.open()" style="cursor: pointer;">calendar_today</mat-icon>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">

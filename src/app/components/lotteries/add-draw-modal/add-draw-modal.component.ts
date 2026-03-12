@@ -32,7 +32,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 export class AddDrawModalComponent implements OnInit {
 
   public drawId!: number; // Id do concurso a ser cadastrado
-  public drawDate: string = '';
+  public drawDate: Date | null = null;
   public dozensInput: string = ''; // Onde o usuário digita
   public formattedDozens: string = ''; // O que o usuário vê
   public arrayDozens: string[] = [];
@@ -80,6 +80,36 @@ export class AddDrawModalComponent implements OnInit {
     }, 0);
   }
 
+  /**
+   * Máscara manual para o campo de Data (DD/MM/AAAA)
+   */
+  onDateInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    // 1. Remove tudo que não for número (letras, símbolos, etc)
+    let cleanValue = input.value.replace(/\D/g, ''); 
+
+    // 2. Limita a 8 dígitos reais (DDMMAAAA)
+    if (cleanValue.length > 8) {
+      cleanValue = cleanValue.substring(0, 8);
+    }
+
+    // 3. Aplica a máscara DD/MM/AAAA
+    let formattedValue = cleanValue;
+    if (cleanValue.length > 4) {
+      // Se tem mais de 4 dígitos, coloca as duas barras
+      formattedValue = cleanValue.replace(/^(\d{2})(\d{2})(\d{1,4}).*/, '$1/$2/$3');
+    } else if (cleanValue.length > 2) {
+      // Se tem mais de 2 dígitos, coloca a primeira barra
+      formattedValue = cleanValue.replace(/^(\d{2})(\d{1,2}).*/, '$1/$2');
+    }
+
+    // 4. Atualiza o input usando o truque do setTimeout
+    // Igual fizemos nas dezenas, para não atrapalhar o cursor do Angular
+    setTimeout(() => {
+      input.value = formattedValue;
+    }, 0);
+  }
+
   save(): void {
     // 1. Validar ID , necessário quando o input com o número é editável
     // if (!this.concursoId || this.concursoId <= 0) {
@@ -92,6 +122,12 @@ export class AddDrawModalComponent implements OnInit {
       this.showErros('A data de apuração é obrigatória.');
       return;
     }
+
+    // Isso evita problemas de fuso horário caso usássemos this.drawDate.toISOString()
+    const year = this.drawDate.getFullYear();
+    const month = String(this.drawDate.getMonth() + 1).padStart(2, '0');
+    const day = String(this.drawDate.getDate()).padStart(2, '0');
+    const backendFormattedDate = `${year}-${month}-${day}`;
 
     // 2. Validar Dezenas
     const cleanDozens = this.dozensInput;
@@ -122,7 +158,7 @@ export class AddDrawModalComponent implements OnInit {
         this.dialogRef.close({
           drawId: this.drawId,
           dozens: this.arrayDozens,
-          dataApuracao: this.drawDate
+          dataApuracao: backendFormattedDate
         });
       }
 
