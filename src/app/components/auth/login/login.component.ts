@@ -10,12 +10,14 @@ import { TemplateModalComponent } from '../../../shared/template-modal/template-
 import { shakeTrigger } from '../../../animations/animations';
 import { ThemeService } from '../../../core/services/theme.service';
 import { DebugService } from '../../../core/services/debug.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-login',
     imports: [
         ReactiveFormsModule,
         CommonModule,
+        MatIconModule,
         MatSlideToggle,
         MatSlideToggleModule,
     ],

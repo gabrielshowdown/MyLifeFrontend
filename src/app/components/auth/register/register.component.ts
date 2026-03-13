@@ -114,10 +114,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
         const credentials = {
           username: this.form.get('username')?.value,
-          senha: this.form.get('password')?.value,
-          genero: this.form.get('gender')?.value,
-          localizacao: this.form.get('location')?.value,
-          dataNascimento: this.form.get('birthdate')?.value,
+          password: this.form.get('password')?.value,
+          gender: this.form.get('gender')?.value,
+          location: this.form.get('location')?.value,
+          birthDate: this.form.get('birthdate')?.value,
         }
 
         const user: User = {
