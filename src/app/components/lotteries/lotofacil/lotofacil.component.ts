@@ -78,9 +78,9 @@ export class LotofacilComponent implements OnInit {
   repetitionsData: DadosRepeticao[] = [];
   numbersData: DadosNumero[] = [];
 
-  displayedColumnsParity: string[] = ['paridade', 'qtd', 'porcentagem'];
-  displayedColumnsRepetition: string[] = ['repetido', 'qtd', 'porcentagem'];
-  displayedColumnsNumber: string[] = ['id', 'qtd', 'porcentagem'];
+  displayedColumnsParity: string[] = ['parity', 'quantity', 'percentage'];
+  displayedColumnsRepetition: string[] = ['repeated', 'quantity', 'percentage'];
+  displayedColumnsNumber: string[] = ['id', 'quantity', 'percentage'];
 
   dataSourceParity: any;
   dataSourceRepetition: any;
@@ -209,7 +209,7 @@ export class LotofacilComponent implements OnInit {
 
           // Ordenar as dezenas dentro de cada concurso para visualização correta
           this.recentDraws.forEach(c => {
-            c.numerosConcurso.sort((a, b) => a.numero - b.numero);
+            c.drawNumbers.sort((a, b) => a.number - b.number);
           });
         },
         error: (err) => console.error('Erro ao carregar concursos recentes', err)
@@ -308,7 +308,7 @@ export class LotofacilComponent implements OnInit {
 
     // 4. Sincronização (Se veio de uma ação de sync)
     if (context.syncResponse) {
-      const syncedCount = context.syncResponse.totContestSyncronized;
+      const syncedCount = context.syncResponse.synchronizedDrawsCount;
 
       if (syncedCount > 0) {
         // Caso A: Houve processamento de novos dados
@@ -412,13 +412,13 @@ export class LotofacilComponent implements OnInit {
     });
   }
 
-  private saveNewManualDraw(data: { drawId: number, dozens: string[], dataApuracao: string }): void { 
-    console.log('this.drawDate2' , data.dataApuracao);
+  private saveNewManualDraw(data: { drawId: number, dozens: string[], drawDate: string }): void { 
+    console.log('this.drawDate2' , data.drawDate);
        
     const request: AddDrawRequest = {
       drawId: data.drawId,
       dozens: data.dozens,
-      dataApuracao: data.dataApuracao.toString()
+      drawDate: data.drawDate.toString()
     };
 
     this.subscription = this.service.addDrawManually(request).subscribe({
@@ -454,9 +454,9 @@ export class LotofacilComponent implements OnInit {
       next: (dadosDaApi) => {
         this.paritiesData = dadosDaApi.map(item => ({
           id: item.id,
-          paridade: item.paridade,
-          qtd: item.qtd,
-          porcentagem: item.porcentagem,
+          parity: item.parity,
+          quantity: item.quantity,
+          percentage: item.percentage,
         }));
         this.dataSourceParity = new MatTableDataSource(this.paritiesData);
         this.dataSourceParity.sort = this.sortParity;
@@ -470,9 +470,9 @@ export class LotofacilComponent implements OnInit {
       next: (dadosDaApi) => {
         this.repetitionsData = dadosDaApi.map(item => ({
           id: item.id,
-          repetido: item.repetido,
-          qtd: item.qtd,
-          porcentagem: item.porcentagem,
+          repeated: item.repeated,
+          quantity: item.quantity,
+          percentage: item.percentage,
         }));
         this.dataSourceRepetition = new MatTableDataSource(this.repetitionsData);
         this.dataSourceRepetition.sort = this.sortRepetition;
@@ -486,8 +486,8 @@ export class LotofacilComponent implements OnInit {
       next: (dadosDaApi) => {
         this.numbersData = dadosDaApi.map(item => ({
           id: item.id,
-          qtd: item.qtd,
-          porcentagem: item.porcentagem,
+          quantity: item.quantity,
+          percentage: item.percentage,
         }));
         this.dataSourceNumber = new MatTableDataSource(this.numbersData);
         this.dataSourceNumber.sort = this.sortNumber;
@@ -538,10 +538,10 @@ openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false): void {
     const paridade = this.paridadeMap[this.paridadeSelecionada];
 
     const requestBody: GenerateDrawRequest = {
-      concursoAnteriorId: this.totalNumberLotofacilDraw.toString(),
-      qtdRepetidos: repetidos,
-      qtdImpares: paridade ? paridade.impares : null,
-      qtdPares: paridade ? paridade.pares : null
+      lastDrawId: this.totalNumberLotofacilDraw.toString(),
+      repeatedCount: repetidos,
+      oddCount: paridade ? paridade.impares : null,
+      evenCount: paridade ? paridade.pares : null
     };
 
     this.subscription = this.service.generateDraw(requestBody).subscribe({

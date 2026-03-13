@@ -7,18 +7,18 @@
 
   <mat-card-content>
     <div class="dozens-grid">
-      <div *ngFor="let n of draw.numerosConcurso" 
+      <div *ngFor="let n of draw.drawNumbers" 
            class="dozen" 
-           [class.repetido]="n.repetido">
-        {{ formatNumber(n.numero) }}
+           [class.repetido]="n.isRepeated">
+        {{ formatNumber(n.number) }}
       </div>
     </div>
   </mat-card-content>
 
   <mat-card-footer>
     <div class="d-flex justify-content-between px-3 py-2 text-muted small">
-      <span>Paridade: {{draw.qtdImpares}}I / {{draw.qtdPares}}P</span>
-      <span>Rep: {{ formatNumber(draw.qtdRepetidos) }}</span>
+      <span>Paridade: {{draw.oddCount}}I / {{draw.evenCount}}P</span>
+      <span>Rep: {{ formatNumber(draw.repeatedCount) }}</span>
     </div>
   </mat-card-footer>
 </mat-card>

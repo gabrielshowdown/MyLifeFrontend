@@ -23,7 +23,7 @@ export class UsersService {
     return this.http.get<User[]>(this.API);
   }
 
-  validateLogin(credentials: { username: string; senha: string }): Observable<boolean> {
+  validateLogin(credentials: { username: string; password: string }): Observable<boolean> {
     this.debugService.log('credentials:' , credentials);
 
     return this.http.post<boolean>(`${this.API_USERS}/validate`, credentials);

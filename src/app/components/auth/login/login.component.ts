@@ -10,12 +10,14 @@ import { TemplateModalComponent } from '../../../shared/template-modal/template-
 import { shakeTrigger } from '../../../animations/animations';
 import { ThemeService } from '../../../core/services/theme.service';
 import { DebugService } from '../../../core/services/debug.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-login',
     imports: [
         ReactiveFormsModule,
         CommonModule,
+        MatIconModule,
         MatSlideToggle,
         MatSlideToggleModule,
     ],
@@ -121,7 +123,7 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     const credentials = {
       username: this.form.get('username')?.value,
-      senha: this.form.get('password')?.value
+      password: this.form.get('password')?.value
     }
 
     this.debugService.log('Credentials do logar : ' , credentials);
