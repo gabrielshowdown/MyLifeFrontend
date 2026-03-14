@@ -11,9 +11,9 @@ import { DadosNumero, DadosParidade, DadosRepeticao, DetailedDraw, GenerateDrawR
 export class LoteriasService {
 
   private readonly API_LOTOFACIL = 'https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/';
-  private readonly API_TOTALPARIDADES = 'http://localhost:8080/lotofacilTotalsParity';
-  private readonly API_TOTALREPETICOES = 'http://localhost:8080/lotofacilTotalsRepetition';
-  private readonly API_TOTALNUMEROS = 'http://localhost:8080/totaisNumerosLotofacil';
+  private readonly API_TOTALPARIDADES = 'http://localhost:8080/lotofacilTotalsParities';
+  private readonly API_TOTALREPETICOES = 'http://localhost:8080/lotofacilTotalsRepetitions';
+  private readonly API_TOTALNUMEROS = 'http://localhost:8080/lotofacilTotalsNumbers';
   private readonly API_TOTALCONCURSOS = 'http://localhost:8080/concursoLotofacil';
   private readonly API_TOTALNUMEROSCONCURSO = 'http://localhost:8080/numeroConcursoLotofacil/concurso';
 

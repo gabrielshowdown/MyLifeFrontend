@@ -17,8 +17,8 @@ export interface DadosRepeticao {
 // Interface para a tabela de Números
 export interface DadosNumero {
   id: number;
-  qtd: number;
-  porcentagem: number;
+  quantity: number;
+  percentage: number;
 }
 
 // [Arquivo: lotofacil.ts]
