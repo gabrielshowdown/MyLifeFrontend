@@ -142,17 +142,17 @@
               <div class="stat-table-wrapper">
                 <div class="text-center py-2 bg-light fw-bold text-primary border-bottom">Paridade</div>
                 <table mat-table [dataSource]="dataSourceParity" matSort #sortParity="matSort">
-                  <ng-container matColumnDef="paridade">
+                  <ng-container matColumnDef="parity">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Par</th>
-                    <td mat-cell *matCellDef="let el" class="text-center fw-bold">{{el.paridade}}</td>
+                    <td mat-cell *matCellDef="let el" class="text-center fw-bold">{{el.parity}}</td>
                   </ng-container>
-                  <ng-container matColumnDef="qtd">
+                  <ng-container matColumnDef="quantity">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Qtd</th>
-                    <td mat-cell *matCellDef="let el" class="text-center">{{el.qtd}}</td>
+                    <td mat-cell *matCellDef="let el" class="text-center">{{el.quantity}}</td>
                   </ng-container>
-                  <ng-container matColumnDef="porcentagem">
+                  <ng-container matColumnDef="percentage">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>%</th>
-                    <td mat-cell *matCellDef="let el" class="text-center text-muted small">{{ el.porcentagem |
+                    <td mat-cell *matCellDef="let el" class="text-center text-muted small">{{ el.percentage |
                       number:'1.1-1' }}%</td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsParity"></tr>

@@ -1,9 +1,9 @@
 // Interface para a tabela de paridade
 export interface DadosParidade {
   id: number;
-  paridade: string;
-  qtd: number;
-  porcentagem: number;
+  parity: string;
+  quantity: number;
+  percentage: number;
 }
 
 // Interface para a tabela de repetição

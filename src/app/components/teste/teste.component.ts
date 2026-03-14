@@ -68,9 +68,9 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
   totaisParidades: DadosParidade[] = [];
 
   estatisticasParidade: DadosParidade[] = [
-      {id: 1, paridade: 'aa', porcentagem: 0.2, qtd: 2},
-      {id: 2, paridade: 'ac', porcentagem: 0.1, qtd: 2},
-      {id: 3, paridade: 'ab', porcentagem: 0.6, qtd: 2},
+      {id: 1, parity: 'aa', percentage: 0.2, quantity: 2},
+      {id: 2, parity: 'ac', percentage: 0.1, quantity: 2},
+      {id: 3, parity: 'ab', percentage: 0.6, quantity: 2},
   ];
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
@@ -148,9 +148,9 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
         this.estatisticasParidade = dadosDaApi.map(item => {
           return {
             id: item.id,
-            paridade: item.paridade, // de 'paridade' para 'item'
-            qtd: item.qtd,
-            porcentagem: item.porcentagem, // de 'porcentagem' para 'percentual' (string)
+            parity: item.parity, // de 'paridade' para 'item'
+            quantity: item.quantity,
+            percentage: item.percentage, // de 'porcentagem' para 'percentual' (string)
           };
         });
 
