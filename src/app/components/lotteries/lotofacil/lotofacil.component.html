@@ -119,17 +119,17 @@
               <div class="stat-table-wrapper">
                 <div class="text-center py-2 bg-light fw-bold text-primary border-bottom">Repetição</div>
                 <table mat-table [dataSource]="dataSourceRepetition" matSort #sortRepetition="matSort">
-                  <ng-container matColumnDef="repetido">
+                  <ng-container matColumnDef="repeated">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Rep</th>
-                    <td mat-cell *matCellDef="let el" class="text-center fw-bold">{{el.repetido}}</td>
+                    <td mat-cell *matCellDef="let el" class="text-center fw-bold">{{el.repeated}}</td>
                   </ng-container>
-                  <ng-container matColumnDef="qtd">
+                  <ng-container matColumnDef="quantity">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Qtd</th>
-                    <td mat-cell *matCellDef="let el" class="text-center">{{el.qtd}}</td>
+                    <td mat-cell *matCellDef="let el" class="text-center">{{el.quantity}}</td>
                   </ng-container>
-                  <ng-container matColumnDef="porcentagem">
+                  <ng-container matColumnDef="percentage">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>%</th>
-                    <td mat-cell *matCellDef="let el" class="text-center text-muted small">{{ el.porcentagem |
+                    <td mat-cell *matCellDef="let el" class="text-center text-muted small">{{ el.percentage |
                       number:'1.1-1' }}%</td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsRepetition"></tr>

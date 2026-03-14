@@ -9,9 +9,9 @@ export interface DadosParidade {
 // Interface para a tabela de repetição
 export interface DadosRepeticao {
   id: number;
-  repetido: number;
-  qtd: number;
-  porcentagem: number;
+  repeated: number;
+  quantity: number;
+  percentage: number;
 }
 
 // Interface para a tabela de Números

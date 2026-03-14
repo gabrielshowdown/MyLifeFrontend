@@ -79,7 +79,7 @@ export class LotofacilComponent implements OnInit {
   numbersData: DadosNumero[] = [];
 
   displayedColumnsParity: string[] = ['parity', 'quantity', 'percentage'];
-  displayedColumnsRepetition: string[] = ['repetido', 'qtd', 'porcentagem'];
+  displayedColumnsRepetition: string[] = ['repeated', 'quantity', 'percentage'];
   displayedColumnsNumber: string[] = ['id', 'qtd', 'porcentagem'];
 
   dataSourceParity: any;
@@ -470,9 +470,9 @@ export class LotofacilComponent implements OnInit {
       next: (dadosDaApi) => {
         this.repetitionsData = dadosDaApi.map(item => ({
           id: item.id,
-          repetido: item.repetido,
-          qtd: item.qtd,
-          porcentagem: item.porcentagem,
+          repeated: item.repeated,
+          quantity: item.quantity,
+          percentage: item.percentage,
         }));
         this.dataSourceRepetition = new MatTableDataSource(this.repetitionsData);
         this.dataSourceRepetition.sort = this.sortRepetition;
