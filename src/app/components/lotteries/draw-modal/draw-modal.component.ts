@@ -55,7 +55,7 @@ export class DrawModalComponent implements OnInit {
     };
 
     // Ordena os números (o HTML espera que eles já venham ordenados)
-    this.resultadoOrdenado = concurso.drawNumbers.sort((a, b) => a.numero - b.numero);
+    this.resultadoOrdenado = concurso.drawNumbers.sort((a, b) => a.number - b.number);
   }
 
 }

@@ -6,8 +6,8 @@
   <div class="dezenas-grid-dialog">
     <div *ngFor="let dezenaInfo of resultadoOrdenado" 
          class="dezena"
-         [class.repetido]="dezenaInfo.repetido">
-         {{ dezenaInfo.numero | number:'2.0-0' }}
+         [class.repetido]="dezenaInfo.isRepeated">
+         {{ dezenaInfo.number | number:'2.0-0' }}
     </div>
   </div>
 

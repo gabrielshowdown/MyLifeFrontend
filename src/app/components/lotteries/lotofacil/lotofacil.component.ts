@@ -209,7 +209,7 @@ export class LotofacilComponent implements OnInit {
 
           // Ordenar as dezenas dentro de cada concurso para visualização correta
           this.recentDraws.forEach(c => {
-            c.drawNumbers.sort((a, b) => a.numero - b.numero);
+            c.drawNumbers.sort((a, b) => a.number - b.number);
           });
         },
         error: (err) => console.error('Erro ao carregar concursos recentes', err)

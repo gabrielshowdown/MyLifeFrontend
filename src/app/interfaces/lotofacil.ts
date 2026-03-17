@@ -27,8 +27,8 @@ export interface DadosNumero {
 // Interface para o item 'numeroSorteado' da nova API
 export interface NumeroSorteadoDetalhe {
   id: number;
-  numero: number;
-  repetido: boolean;
+  number: number;
+  isRepeated: boolean;
 }
 
 // Interface para a nova resposta completa da API, o que como vem do backend
