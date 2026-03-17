@@ -14,7 +14,7 @@ export class LoteriasService {
   private readonly API_TOTALPARIDADES = 'http://localhost:8080/lotofacilTotalsParities';
   private readonly API_TOTALREPETICOES = 'http://localhost:8080/lotofacilTotalsRepetitions';
   private readonly API_TOTALNUMEROS = 'http://localhost:8080/lotofacilTotalsNumbers';
-  private readonly API_TOTALCONCURSOS = 'http://localhost:8080/concursoLotofacil';
+  private readonly API_TOTALCONCURSOS = 'http://localhost:8080/lotofacilDraw';
   private readonly API_TOTALNUMEROSCONCURSO = 'http://localhost:8080/numeroConcursoLotofacil/concurso';
 
   constructor(private http: HttpClient, private debugService: DebugService,) { }

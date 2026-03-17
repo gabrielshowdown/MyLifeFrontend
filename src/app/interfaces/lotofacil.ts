@@ -34,10 +34,10 @@ export interface NumeroSorteadoDetalhe {
 // Interface para a nova resposta completa da API, o que como vem do backend
 export interface DetailedDraw {
   id: number;
-  qtdPares: number;
-  qtdImpares: number;
-  qtdRepetidos: number;
-  numerosConcurso: NumeroSorteadoDetalhe[];
+  evenCount: number;
+  oddCount: number;
+  repeatedCount: number;
+  drawNumbers: NumeroSorteadoDetalhe[];
 }
 
 // Interface de de como será no Json mandado na requisição de geração, Igual a classe DTO no backend

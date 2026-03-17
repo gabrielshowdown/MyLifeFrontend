@@ -50,12 +50,12 @@ export class DrawModalComponent implements OnInit {
     // Mapeia os dados gerais do concurso
     this.concursoInfo = {
       numero: concurso.id,
-      impares: concurso.qtdImpares,
-      pares: concurso.qtdPares
+      impares: concurso.oddCount,
+      pares: concurso.evenCount
     };
 
     // Ordena os números (o HTML espera que eles já venham ordenados)
-    this.resultadoOrdenado = concurso.numerosConcurso.sort((a, b) => a.numero - b.numero);
+    this.resultadoOrdenado = concurso.drawNumbers.sort((a, b) => a.numero - b.numero);
   }
 
 }
