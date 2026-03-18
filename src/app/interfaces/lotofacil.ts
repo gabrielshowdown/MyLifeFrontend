@@ -49,11 +49,11 @@ export interface GenerateDrawRequest {
 }
 
 export interface SynchronizeResponse {
-  lastConcCadastrado: number;
-  totContestSyncronized: number;
+  lastSavedDrawId: number;
+  synchronizedDrawsCount: number;
   dateNextContest: Date;
-  textReturnedSyoncronized: string;
-  nextDraw: number;
+  syncMessage: string;
+  nextDrawId: number;
 }
 
 export interface ModalData {

@@ -308,7 +308,7 @@ export class LotofacilComponent implements OnInit {
 
     // 4. Sincronização (Se veio de uma ação de sync)
     if (context.syncResponse) {
-      const syncedCount = context.syncResponse.totContestSyncronized;
+      const syncedCount = context.syncResponse.synchronizedDrawsCount;
 
       if (syncedCount > 0) {
         // Caso A: Houve processamento de novos dados
