@@ -158,7 +158,7 @@ export class AddDrawModalComponent implements OnInit {
         this.dialogRef.close({
           drawId: this.drawId,
           dozens: this.arrayDozens,
-          dataApuracao: backendFormattedDate
+          drawDate: backendFormattedDate
         });
       }
 

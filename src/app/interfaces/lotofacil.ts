@@ -53,7 +53,7 @@ export interface SynchronizeResponse {
   totContestSyncronized: number;
   dateNextContest: Date;
   textReturnedSyoncronized: string;
-  nextContest: number;
+  nextDraw: number;
 }
 
 export interface ModalData {
@@ -65,7 +65,7 @@ export interface ModalData {
 export interface AddDrawRequest {
   drawId: number;
   dozens: string[]; // Ex: ["01", "06", "07", ...]
-  dataApuracao: string;
+  drawDate: string;
 }
 
 export interface Page<T> {

@@ -412,13 +412,13 @@ export class LotofacilComponent implements OnInit {
     });
   }
 
-  private saveNewManualDraw(data: { drawId: number, dozens: string[], dataApuracao: string }): void { 
-    console.log('this.drawDate2' , data.dataApuracao);
+  private saveNewManualDraw(data: { drawId: number, dozens: string[], drawDate: string }): void { 
+    console.log('this.drawDate2' , data.drawDate);
        
     const request: AddDrawRequest = {
       drawId: data.drawId,
       dozens: data.dozens,
-      dataApuracao: data.dataApuracao.toString()
+      drawDate: data.drawDate.toString()
     };
 
     this.subscription = this.service.addDrawManually(request).subscribe({
