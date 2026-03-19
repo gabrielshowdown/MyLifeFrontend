@@ -538,10 +538,10 @@ openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false): void {
     const paridade = this.paridadeMap[this.paridadeSelecionada];
 
     const requestBody: GenerateDrawRequest = {
-      concursoAnteriorId: this.totalNumberLotofacilDraw.toString(),
-      qtdRepetidos: repetidos,
-      qtdImpares: paridade ? paridade.impares : null,
-      qtdPares: paridade ? paridade.pares : null
+      lastDrawId: this.totalNumberLotofacilDraw.toString(),
+      repeatedCount: repetidos,
+      oddCount: paridade ? paridade.impares : null,
+      evenCount: paridade ? paridade.pares : null
     };
 
     this.subscription = this.service.generateDraw(requestBody).subscribe({

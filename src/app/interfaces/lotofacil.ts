@@ -42,10 +42,10 @@ export interface DetailedDraw {
 
 // Interface de de como será no Json mandado na requisição de geração, Igual a classe DTO no backend
 export interface GenerateDrawRequest {
-  concursoAnteriorId: string;
-  qtdPares: string | null;
-  qtdImpares: string | null;
-  qtdRepetidos: string | null;
+  lastDrawId: string;
+  evenCount: string | null;
+  oddCount: string | null;
+  repeatedCount: string | null;
 }
 
 export interface SynchronizeResponse {
