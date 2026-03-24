@@ -14,6 +14,7 @@ interface ConcursoInfoVM {
   numero: number;
   impares: number;
   pares: number;
+  repetidos: number
 }
 
 @Component({
@@ -51,7 +52,8 @@ export class DrawModalComponent implements OnInit {
     this.concursoInfo = {
       numero: concurso.id,
       impares: concurso.oddCount,
-      pares: concurso.evenCount
+      pares: concurso.evenCount,
+      repetidos: concurso.repeatedCount,
     };
 
     // Ordena os números (o HTML espera que eles já venham ordenados)
