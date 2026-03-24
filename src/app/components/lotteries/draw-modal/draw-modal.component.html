@@ -24,11 +24,21 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="custom-dialog-actions">
-  <div>
+  
+  <div class="d-flex align-items-center gap-2">
     <span *ngIf="isGerado" class="obs-text">
       <mat-icon style="font-size: 16px; height: 16px; width: 16px;">warning</mat-icon>
       Simulação
     </span>
+
+    <button *ngIf="isGerado" 
+            mat-icon-button 
+            color="primary" 
+            title="Gerar outro palpite com os mesmos parâmetros" 
+            [mat-dialog-close]="'REGENERATE'" 
+            class="refresh-btn">
+      <mat-icon>loop</mat-icon>
+    </button>
   </div>
 
   <button mat-stroked-button color="primary" mat-dialog-close>

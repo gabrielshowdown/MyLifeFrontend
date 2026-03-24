@@ -517,11 +517,18 @@ export class LotofacilComponent implements OnInit {
   }
 
 openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false): void {
-  this.dialog.open(DrawModalComponent, {
+  const dialogRef = this.dialog.open(DrawModalComponent, {
     width: '450px',
-    // Adicione esta linha abaixo. Ela permite customizar o container "pai"
     panelClass: 'no-padding-dialog', 
     data: { concurso: resultado, isGerado: isGerado } as ModalData
+  });
+
+  // Escutamos o que acontece após o modal fechar
+  dialogRef.afterClosed().subscribe(result => {
+    // Se o usuário clicou no botão de refresh, geramos de novo!
+    if (result === 'REGENERATE') {
+      this.generateDraw(); 
+    }
   });
 }
 
