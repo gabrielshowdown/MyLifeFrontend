@@ -108,6 +108,26 @@ export class AddDrawModalComponent implements OnInit {
     setTimeout(() => {
       input.value = formattedValue;
     }, 0);
+
+    if (cleanValue.length === 8) {
+      const day = +cleanValue.substring(0, 2);
+      const month = +cleanValue.substring(2, 4);
+      const year = +cleanValue.substring(4, 8);
+
+      const date = new Date(year, month - 1, day);
+
+      // Validação real (evita 31/02/2026 virar data inválida)
+      if ( date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day) {
+        this.drawDate = date; // ✅ agora nunca mais será null
+      } else {
+        this.drawDate = null;
+      }
+    } 
+    else {
+      this.drawDate = null;
+    }
   }
 
   save(): void {
