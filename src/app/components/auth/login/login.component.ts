@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void{
-    this.theme = this.themeService.getTheme() == undefined ? this.themeService.getTimeOfDay() : this.themeService.getTheme();
+    this.theme = this.themeService.getTheme();
 
     this.form = this.formBuilder.group({
       username: ['', Validators.compose([
@@ -167,8 +167,8 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   onToggleChange(event: any): void {
-    // this.theme = event.checked ? 'night' : 'day';
-    this.theme = this.themeService.changeTheme(event.checked)
+    // Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo
+    this.theme = this.themeService.changeTheme(event.checked);
   }
 
     clearMessages(): void {

@@ -69,7 +69,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.theme = this.themeService.getTheme() == undefined ? this.themeService.getTimeOfDay() : this.themeService.getTheme();
+    this.theme = this.themeService.getTheme();
 
     // this.maxDate = today.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
     // Formulário reativo (as aspas vazias '' é o valor inicial do campo)
@@ -165,8 +165,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onToggleChange(event: any): void {
-    this.theme = this.themeService.changeTheme(event.checked)
-    //this.theme = event.checked ? 'night' : 'day';
+    // Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo
+    this.theme = this.themeService.changeTheme(event.checked);
   }
 
   enableButton(): string {

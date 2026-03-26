@@ -89,7 +89,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     // Mantém a mesma lógica de recuperação do tema do Login/Register
-    this.theme = this.themeService.getTheme() == undefined ? this.themeService.getTimeOfDay() : this.themeService.getTheme();
+    this.theme = this.themeService.getTheme();
   }
 
   ngAfterViewInit() {
@@ -99,6 +99,7 @@ export class MenuComponent implements OnInit {
   }
 
   onToggleChange(event: any): void {
+    // Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo
     this.theme = this.themeService.changeTheme(event.checked);
   }
 
