@@ -516,20 +516,15 @@ export class LotofacilComponent implements OnInit {
     }
   }
 
-openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false): void {
+openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false, requestParams?: GenerateDrawRequest): void {
   const dialogRef = this.dialog.open(DrawModalComponent, {
     width: '450px',
     panelClass: 'no-padding-dialog', 
-    data: { concurso: resultado, isGerado: isGerado } as ModalData
+    data: { concurso: resultado, isGerado: isGerado, requestParams: requestParams } as ModalData
   });
 
-  // Escutamos o que acontece após o modal fechar
-  dialogRef.afterClosed().subscribe(result => {
-    // Se o usuário clicou no botão de refresh, geramos de novo!
-    if (result === 'REGENERATE') {
-      this.generateDraw(); 
-    }
-  });
+  // REMOVA todo o dialogRef.afterClosed().subscribe(...) daqui.
+  // O componente pai não precisa mais saber que o modal se atualizou!
 }
 
   generateDraw(): void {
@@ -553,7 +548,7 @@ openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false): void {
 
     this.subscription = this.service.generateDraw(requestBody).subscribe({
       next: (resultadoConcurso: DetailedDraw) => {
-        if (resultadoConcurso) this.openConsultaDialog(resultadoConcurso, true);
+        if (resultadoConcurso) this.openConsultaDialog(resultadoConcurso, true, requestBody);
       },
       error: (err) => {
         if (err.status === 422 && err.error && err.error.message) {

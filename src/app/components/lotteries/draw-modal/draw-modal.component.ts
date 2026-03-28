@@ -1,15 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common'; // Necessário para *ngFor, pipe 'number'
+import { CommonModule } from '@angular/common'; 
 import { MatButtonModule } from '@angular/material/button';
-import { NumeroSorteadoDetalhe, ModalData } from '../../../interfaces/lotofacil';
+import { NumeroSorteadoDetalhe, ModalData, DetailedDraw } from '../../../interfaces/lotofacil';
 import { MatIconModule } from '@angular/material/icon';
+import { LoteriasService } from '../../../services/loterias.service'; // <-- Importe o Service
 
-// 1. Importar as interfaces da API
-
-// (Ajuste o caminho '.../../interfaces/lotofacil' se necessário)
-
-// 2. Definir a interface que o HTML espera (para tipagem interna)
 interface ConcursoInfoVM {
   numero: number;
   impares: number;
@@ -18,46 +14,56 @@ interface ConcursoInfoVM {
 }
 
 @Component({
-  selector: 'app-draw-modal', // Certifique-se que o seletor está correto
-  standalone: true, // Assumindo standalone, como o lotofacil.component
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule
-  ],
+  selector: 'app-draw-modal',
+  standalone: true,
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule],
   templateUrl: './draw-modal.component.html',
   styleUrls: ['./draw-modal.component.scss']
 })
 export class DrawModalComponent implements OnInit {
 
-  // 3. Declarar as propriedades que o HTML (template) vai usar
   public concursoInfo!: ConcursoInfoVM;
   public resultadoOrdenado!: NumeroSorteadoDetalhe[];
   public isGerado: boolean = false;
+  public isLoading: boolean = false; // <-- NOVO: Controla estado de loading do botão
 
-  // 4. Injetar os dados da API usando MAT_DIALOG_DATA
-  // O 'data' aqui será o objeto 'ConcursoDetalhado' completo
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ModalData
+    @Inject(MAT_DIALOG_DATA) public data: ModalData,
+    private loteriasService: LoteriasService // <-- NOVO: Injeta o service
   ) { }
 
   ngOnInit(): void {
-    // 5. Fazer a "tradução" dos dados da API para as propriedades do template
     this.isGerado = this.data.isGerado;
-    // MODIFICAÇÃO: Obter o concurso de dentro do data
-    const concurso = this.data.concurso;
+    this.atualizarDadosTela(this.data.concurso);
+  }
 
-    // Mapeia os dados gerais do concurso
+  // Extraímos a lógica para reaproveitar ao gerar um novo
+  private atualizarDadosTela(concurso: DetailedDraw): void {
     this.concursoInfo = {
       numero: concurso.id,
       impares: concurso.oddCount,
       pares: concurso.evenCount,
       repetidos: concurso.repeatedCount,
     };
-
-    // Ordena os números (o HTML espera que eles já venham ordenados)
     this.resultadoOrdenado = concurso.drawNumbers.sort((a, b) => a.number - b.number);
   }
 
+  // NOVO: Função para recriar o concurso diretamente do modal
+  public recriarConcurso(): void {
+    if (!this.data.requestParams || this.isLoading) return;
+
+    this.isLoading = true;
+    
+    this.loteriasService.generateDraw(this.data.requestParams).subscribe({
+      next: (novoConcurso) => {
+        // Atualiza a tela instantaneamente sem fechar o modal
+        this.atualizarDadosTela(novoConcurso);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erro ao recriar palpite:', err);
+        this.isLoading = false;
+      }
+    });
+  }
 }

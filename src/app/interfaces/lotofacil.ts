@@ -59,6 +59,7 @@ export interface SynchronizeResponse {
 export interface ModalData {
   concurso: DetailedDraw;
   isGerado: boolean;
+  requestParams?: GenerateDrawRequest;
 }
 
 // DTO para salvar manualmente um consurso.

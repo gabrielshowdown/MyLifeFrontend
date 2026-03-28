@@ -52,7 +52,7 @@ export class ThemeService {
     return this.moon;
   }
 
-// Refatorado: Agora ele altera e JÁ SALVA no localStorage e no serviço
+  // Refatorado: Agora ele altera e JÁ SALVA no localStorage e no serviço
   changeTheme(isChecked: boolean): string {
     const newTheme = isChecked ? 'night' : 'day';
     this.setTheme(newTheme);

@@ -32,12 +32,13 @@
     </span>
 
     <button *ngIf="isGerado" 
-            mat-icon-button 
-            color="primary" 
-            title="Gerar outro palpite com os mesmos parâmetros" 
-            [mat-dialog-close]="'REGENERATE'" 
-            class="refresh-btn">
-      <mat-icon>loop</mat-icon>
+        mat-icon-button 
+        color="primary" 
+        title="Gerar outro palpite com os mesmos parâmetros" 
+        (click)="recriarConcurso()"
+        [disabled]="isLoading"
+        class="refresh-btn">
+      <mat-icon [class.icon-spin]="isLoading">loop</mat-icon>
     </button>
   </div>
 

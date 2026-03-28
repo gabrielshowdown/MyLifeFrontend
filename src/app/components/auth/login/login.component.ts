@@ -11,6 +11,7 @@ import { shakeTrigger } from '../../../animations/animations';
 import { ThemeService } from '../../../core/services/theme.service';
 import { DebugService } from '../../../core/services/debug.service';
 import { MatIconModule } from '@angular/material/icon';
+import { loginThemeFixed } from '../../../config/parameters';
 
 @Component({
     selector: 'app-login',
@@ -62,6 +63,9 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void{
+    if (loginThemeFixed){
+      // Fazer tratativa futura de sempre abrir o Login pelo getTimeOfDay
+    }
     this.theme = this.themeService.getTheme();
 
     this.form = this.formBuilder.group({
