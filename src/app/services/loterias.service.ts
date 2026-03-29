@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../core/services/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, DetailedDraw, GenerateDrawRequest as GenerateDrawRequest, SynchronizeResponse, AddDrawRequest, Page } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, DetailedDraw, GenerateDrawRequest as GenerateDrawRequest, SynchronizeResponse, AddDrawRequest, Page, SaveBetRequest } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -110,5 +110,11 @@ export class LoteriasService {
     // O Spring Pageable usa query params: ?page=0&size=4&sort=id,desc
     // Como definimos o default no backend, basta mandar page e size
     return this.http.get<Page<DetailedDraw>>(`${this.API_TOTALCONCURSOS}/paginated?page=${page}&size=${size}`);
+  }
+
+  saveGeneratedBet(request: SaveBetRequest): Observable<any> {
+    // Usamos POST pois estamos criando um registro de aposta no banco
+    // A URL simulada aqui aponta para um endpoint fictício '/bet'
+    return this.http.post<any>(`${this.API_TOTALCONCURSOS}/bet`, request);
   }
 }

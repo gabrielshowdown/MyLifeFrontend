@@ -42,7 +42,12 @@
     </button>
   </div>
 
-  <button mat-stroked-button color="primary" mat-dialog-close>
-    Fechar
-  </button>
+  <div class="d-flex gap-2">
+    <button *ngIf="isGerado" mat-raised-button color="accent" (click)="apostarConcurso()" [disabled]="isLoading">
+      <mat-icon class="me-1">check_circle</mat-icon> Apostar
+    </button>
+    <button mat-stroked-button color="primary" mat-dialog-close>
+      Fechar
+    </button>
+  </div>
 </mat-dialog-actions>

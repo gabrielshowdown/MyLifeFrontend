@@ -76,3 +76,13 @@ export interface Page<T> {
   size: number;
   number: number;
 }
+
+// Interface para o envio de uma aposta realizada
+export interface SaveBetRequest {
+  betDate: string; // Formato YYYY-MM-DD
+  targetDrawId: number;
+  oddCount: number;
+  evenCount: number;
+  repeatedCount: number;
+  betNumbers: number[]; // Apenas um array de inteiros
+}
