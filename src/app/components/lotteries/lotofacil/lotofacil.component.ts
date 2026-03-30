@@ -8,7 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { AddDrawRequest, DetailedDraw, DadosNumero, DadosParidade, DadosRepeticao, GenerateDrawRequest, ModalData, SynchronizeResponse } from '../../../interfaces/lotofacil';
+import { AddDrawRequest, DetailedDraw, DadosNumero, DadosParidade, DadosRepeticao, GenerateDrawRequest, ModalData, SynchronizeResponse, SaveBetRequest } from '../../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
@@ -406,8 +406,25 @@ export class LotofacilComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result && result.drawId && result.dozens) {
-        this.saveNewManualDraw(result);
+      if (result) {
+        // Direciona para o método correto dependendo do que o usuário escolheu
+        if (result.action === 'DRAW') {
+          this.saveNewManualDraw(result.payload);
+        } else if (result.action === 'BET') {
+          this.saveNewManualBet(result.payload);
+        }
+      }
+    });
+  }
+
+  private saveNewManualBet(payload: SaveBetRequest): void {
+    this.subscription = this.service.saveGeneratedBet(payload).subscribe({
+      next: (resposta) => {
+        // Pode usar seu setAlert ou outro feedback
+        this.setAlert(`Aposta para o concurso ${payload.targetDrawId} cadastrada com sucesso!`, 'success', 'check_circle_outline');
+      },
+      error: (err) => {
+        this.setAlert(`Erro ao cadastrar aposta. (Erro: ${err.error?.message || err.message})`, 'danger', 'error_outline');
       }
     });
   }

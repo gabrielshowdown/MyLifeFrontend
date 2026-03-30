@@ -10,6 +10,8 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { SaveBetRequest } from '../../../interfaces/lotofacil';
 
 @Component({
   selector: 'app-add-draw-modal',
@@ -24,12 +26,15 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSnackBarModule,
     MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule 
+    MatNativeDateModule,
+    MatButtonToggleModule
   ],
   templateUrl: './add-draw-modal.component.html',
   styleUrls: ['./add-draw-modal.component.scss']
 })
 export class AddDrawModalComponent implements OnInit {
+
+  public mode: 'DRAW' | 'BET' = 'DRAW';
 
   public drawId!: number; // Id do concurso a ser cadastrado
   public drawDate: Date | null = null;
@@ -131,57 +136,75 @@ export class AddDrawModalComponent implements OnInit {
   }
 
   save(): void {
-    // 1. Validar ID , necessário quando o input com o número é editável
-    // if (!this.concursoId || this.concursoId <= 0) {
-    //   this.mostrarErro('Número do concurso é inválido.');
-    //   return;
-    // }
-    console.log('this.drawDate', this.drawDate);
-    
-    if (!this.drawDate) {
-      this.showErros('A data de apuração é obrigatória.');
+    if (!this.drawId || this.drawId <= 0) {
+      this.showErros('Número do concurso/alvo é inválido.');
       return;
     }
 
-    // Isso evita problemas de fuso horário caso usássemos this.drawDate.toISOString()
+    if (!this.drawDate) {
+      this.showErros(this.mode === 'DRAW' ? 'A data de apuração é obrigatória.' : 'A data da aposta é obrigatória.');
+      return;
+    }
+
     const year = this.drawDate.getFullYear();
     const month = String(this.drawDate.getMonth() + 1).padStart(2, '0');
     const day = String(this.drawDate.getDate()).padStart(2, '0');
     const backendFormattedDate = `${year}-${month}-${day}`;
 
-    // 2. Validar Dezenas
     const cleanDozens = this.dozensInput;
     if (cleanDozens.length !== 30) {
       this.showErros(`As dezenas estão incompletas. (Esperado: 15, Fornecido: ${cleanDozens.length / 2})`);
       return;
     }
 
-    // 3. Transformar '010607...' em ['01', '06', '07', ...]
     this.arrayDozens = cleanDozens.match(/.{1,2}/g) || [];
+
+    const tituloDialog = this.mode === 'DRAW' ? 'Confirmar inclusão?' : 'Confirmar Aposta?';
+    const msgDialog = this.mode === 'DRAW' 
+      ? `Deseja realmente salvar o resultado do concurso ${this.drawId}?` 
+      : `Deseja registrar sua aposta para o concurso ${this.drawId}?`;
 
     const dialogRefConfirm = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
-        title: 'Confirmar inclusão?',
-        message: `Deseja realmente salvar o concurso ${this.drawId}?`,
+        title: tituloDialog,
+        message: msgDialog,
         confirmText: 'Sim, Salvar',
-        confirmButtonColor: 'primary'
+        confirmButtonColor: this.mode === 'DRAW' ? 'primary' : 'accent'
       }
     });
 
-    // 3. Aguarda a resposta
     dialogRefConfirm.afterClosed().subscribe((confirmed: boolean) => {
-      
       if (confirmed) {
-        // AQUI é o pulo do gato: Só fechamos o modal de adição (e enviamos os dados)
-        // SE o usuário tiver clicado em "Sim" na confirmação.
-        this.dialogRef.close({
-          drawId: this.drawId,
-          dozens: this.arrayDozens,
-          drawDate: backendFormattedDate
-        });
-      }
+        // Se for aposta, calculamos pares e ímpares aqui no front
+        if (this.mode === 'BET') {
+          const numerosInteiros = this.arrayDozens.map(n => parseInt(n, 10));
+          const pares = numerosInteiros.filter(n => n % 2 === 0).length;
+          const impares = numerosInteiros.filter(n => n % 2 !== 0).length;
 
+          const betPayload: SaveBetRequest = {
+            betDate: backendFormattedDate,
+            targetDrawId: this.drawId,
+            oddCount: impares,
+            evenCount: pares,
+            repeatedCount: 0, // Backend irá recalcular isso
+            betNumbers: numerosInteiros
+          };
+
+          this.dialogRef.close({ action: 'BET', payload: betPayload });
+        } 
+        // Se for concurso oficial
+        else {
+          this.dialogRef.close({
+            action: 'DRAW',
+            payload: {
+              drawId: this.drawId,
+              dozens: this.arrayDozens,
+              drawDate: backendFormattedDate
+            }
+          });
+        }
+      }
     });
   }
 

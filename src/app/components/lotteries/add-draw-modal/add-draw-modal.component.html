@@ -1,41 +1,48 @@
-<div class="modal-header-custom">
-  <h2>Adicionar Concurso</h2>
+<div class="modal-header-custom" [ngClass]="{'bg-bet': mode === 'BET'}">
+  <h2>{{ mode === 'DRAW' ? 'Adicionar Concurso' : 'Cadastrar Aposta' }}</h2>
 </div>
 
-<mat-dialog-content class="d-flex flex-column gap-2">
+<mat-dialog-content class="d-flex flex-column gap-3 pt-3">
   
-  <p>Cadastre um concurso manualmente em caso de falha na sincronização.</p>
+  <div class="d-flex justify-content-center mb-2">
+    <mat-button-toggle-group [(ngModel)]="mode" name="entryMode" aria-label="Tipo de Cadastro" class="custom-toggle-group">
+      <mat-button-toggle value="DRAW">Resultado Oficial</mat-button-toggle>
+      <mat-button-toggle value="BET">Minha Aposta</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <p class="text-center text-muted m-0" style="font-size: 0.9rem;">
+    {{ mode === 'DRAW' 
+      ? 'Cadastre um resultado oficial manualmente em caso de falha na sincronização.' 
+      : 'Cadastre um palpite/aposta que você realizou por fora.' }}
+  </p>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
-    <mat-label>Número do Concurso</mat-label>
-    <input matInput type="number" [(ngModel)]="drawId" placeholder="Ex: 3001" [readonly]="true">
+    <mat-label>{{ mode === 'DRAW' ? 'Número do Concurso' : 'Concurso Alvo da Aposta' }}</mat-label>
+    <input matInput type="number" [(ngModel)]="drawId" placeholder="Ex: 3001" [readonly]="mode === 'DRAW'">
     <mat-icon matSuffix>tag</mat-icon>
   </mat-form-field>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
-    <mat-label>Data de Apuração</mat-label>
-    
+    <mat-label>{{ mode === 'DRAW' ? 'Data de Apuração' : 'Data da Aposta' }}</mat-label>
     <input matInput 
            [matDatepicker]="picker" 
            [(ngModel)]="drawDate" 
            placeholder="DD/MM/AAAA"
            maxlength="10"
            (input)="onDateInput($event)">
-    
     <mat-icon matSuffix (click)="picker.open()" style="cursor: pointer;">calendar_today</mat-icon>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
-    <mat-label>Dezenas Sorteadas (15)</mat-label>
-    
+    <mat-label>{{ mode === 'DRAW' ? 'Dezenas Sorteadas (15)' : 'Dezenas Apostadas (15)' }}</mat-label>
     <input 
       matInput 
       [value]="formattedDozens"
       (input)="onDozensInput($event)"
       placeholder="01-02-03..."
       maxlength="44">
-      
       <mat-hint align="end">
         <strong [class.text-primary]="dozensInput.length === 30" 
                 [class.text-danger]="dozensInput.length !== 30">
@@ -56,6 +63,6 @@
           class="btn-save-custom" 
           (click)="save()">
     <mat-icon class="me-2">save</mat-icon> 
-    Salvar Concurso
+    {{ mode === 'DRAW' ? 'Salvar Concurso' : 'Salvar Aposta' }}
   </button>
 </mat-dialog-actions>
