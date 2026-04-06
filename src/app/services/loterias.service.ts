@@ -16,6 +16,7 @@ export class LoteriasService {
   private readonly API_TOTALNUMEROS = 'http://localhost:8080/lotofacilTotalsNumbers';
   private readonly API_TOTALCONCURSOS = 'http://localhost:8080/lotofacilDraw';
   private readonly API_TOTALNUMEROSCONCURSO = 'http://localhost:8080/lotofacilDrawNumber/concurso';
+  private readonly API_APOSTALOTOFACIL = 'http://localhost:8080/lotofacilBet';
 
   constructor(private http: HttpClient, private debugService: DebugService,) { }
 
@@ -115,6 +116,6 @@ export class LoteriasService {
   saveGeneratedBet(request: SaveBetRequest): Observable<any> {
     // Usamos POST pois estamos criando um registro de aposta no banco
     // A URL simulada aqui aponta para um endpoint fictício '/bet'
-    return this.http.post<any>(`${this.API_TOTALCONCURSOS}/bet`, request);
+    return this.http.post<any>(`${this.API_APOSTALOTOFACIL}/insert`, request);
   }
 }

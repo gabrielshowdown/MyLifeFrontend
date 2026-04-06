@@ -5,11 +5,17 @@
 <mat-dialog-content class="d-flex flex-column gap-3 pt-3">
   
   <div class="d-flex justify-content-center mb-2">
-    <mat-button-toggle-group [(ngModel)]="mode" name="entryMode" aria-label="Tipo de Cadastro" class="custom-toggle-group">
-      <mat-button-toggle value="DRAW">Resultado Oficial</mat-button-toggle>
-      <mat-button-toggle value="BET">Minha Aposta</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
+  <mat-button-toggle-group 
+    [ngModel]="mode" 
+    (ngModelChange)="onModeChange($event)" 
+    name="entryMode" 
+    aria-label="Tipo de Cadastro" 
+    class="custom-toggle-group">
+    
+    <mat-button-toggle value="DRAW">Resultado Oficial</mat-button-toggle>
+    <mat-button-toggle value="BET">Minha Aposta</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
 
   <p class="text-center text-muted m-0" style="font-size: 0.9rem;">
     {{ mode === 'DRAW' 
@@ -35,22 +41,33 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" subscriptSizing="dynamic">
-    <mat-label>{{ mode === 'DRAW' ? 'Dezenas Sorteadas (15)' : 'Dezenas Apostadas (15)' }}</mat-label>
-    <input 
-      matInput 
-      [value]="formattedDozens"
-      (input)="onDozensInput($event)"
-      placeholder="01-02-03..."
-      maxlength="44">
-      <mat-hint align="end">
-        <strong [class.text-primary]="dozensInput.length === 30" 
-                [class.text-danger]="dozensInput.length !== 30">
-          {{ dozensInput.length / 2 | number:'1.0-0' }}
-        </strong> / 15
-      </mat-hint>
-      <mat-icon matSuffix>casino</mat-icon>
-  </mat-form-field>
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" [color]="(hasDuplicates || hasInvalidRange) ? 'warn' : 'primary'">
+  <mat-label>{{ mode === 'DRAW' ? 'Dezenas Sorteadas (15)' : 'Dezenas Apostadas (15)' }}</mat-label>
+  <input 
+    matInput 
+    [value]="formattedDozens"
+    (input)="onDozensInput($event)"
+    placeholder="01-02-03..."
+    maxlength="44"
+    [ngClass]="{'text-danger': hasDuplicates || hasInvalidRange}">
+    
+    <mat-hint align="start" *ngIf="hasDuplicates && !hasInvalidRange">
+      <span class="text-danger fw-bold"><mat-icon inline="true">error</mat-icon> Números repetidos!</span>
+    </mat-hint>
+
+    <mat-hint align="start" *ngIf="hasInvalidRange">
+      <span class="text-danger fw-bold"><mat-icon inline="true">error</mat-icon> Apenas de 01 a 25 permitidos!</span>
+    </mat-hint>
+
+    <mat-hint align="end">
+      <strong [class.text-primary]="dozensInput.length === 30 && !hasDuplicates && !hasInvalidRange" 
+              [class.text-danger]="dozensInput.length !== 30 || hasDuplicates || hasInvalidRange">
+        {{ dozensInput.length / 2 | number:'1.0-0' }}
+      </strong> / 15
+    </mat-hint>
+    
+    <mat-icon matSuffix [class.text-danger]="hasDuplicates || hasInvalidRange">casino</mat-icon>
+</mat-form-field>
 
 </mat-dialog-content>
 

@@ -41,6 +41,8 @@ export class AddDrawModalComponent implements OnInit {
   public dozensInput: string = ''; // Onde o usuário digita
   public formattedDozens: string = ''; // O que o usuário vê
   public arrayDozens: string[] = [];
+  public hasDuplicates: boolean = false;
+  public hasInvalidRange: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddDrawModalComponent>,
@@ -56,27 +58,46 @@ export class AddDrawModalComponent implements OnInit {
     }
   }
 
+  onModeChange(newMode: 'DRAW' | 'BET'): void {
+    this.mode = newMode;
+    
+    // Se o usuário voltou para a aba de Resultado Oficial, reseta o ID
+    if (this.mode === 'DRAW' && this.data.nextSuggestedDraw) {
+      this.drawId = this.data.nextSuggestedDraw;
+    }
+  }
+
   /**
    * Esta é a mágica! Chamado a cada tecla digitada no input.
    */
   onDozensInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let cleanValue = input.value.replace(/[^0-9]/g, ''); // 1. Remove tudo que não for número
+    let cleanValue = input.value.replace(/[^0-9]/g, '');  // 1. Remove tudo que não for número
 
     // Limita a 30 caracteres (15 dezenas * 2 dígitos)
     if (cleanValue.length > 30) {
       cleanValue = cleanValue.substring(0, 30);
     }
 
-    // 2. Adiciona o '-' a cada 2 dígitos
     // Usamos regex para encontrar grupos de 2 dígitos e colocar um '-' depois
     // O '.replace(/-$/, '')' remove o '-' extra no final, se houver
     this.formattedDozens = cleanValue.replace(/(.{2})/g, '$1-').replace(/-$/, '');
+    this.dozensInput = cleanValue;
 
-    // 3. Atualiza o valor real do input
-    // Isso garante que o cursor se mova corretamente
-    this.dozensInput = cleanValue; 
-    
+    // Separa o que foi digitado em blocos de 2 dígitos (ignorando ímpares no meio da digitação)
+    const dezenasDigitadas = cleanValue.match(/.{1,2}/g) || [];
+    const dezenasCompletas = dezenasDigitadas.filter(d => d.length === 2);
+  
+    // O Set naturalmente remove elementos duplicados. Se o tamanho for diferente, há repetição.
+    const unicas = new Set(dezenasCompletas);
+    this.hasDuplicates = unicas.size !== dezenasCompletas.length;
+
+    // O .some() retorna true se pelo menos UM elemento atender à condição
+    this.hasInvalidRange = dezenasCompletas.some(d => {
+      const num = parseInt(d, 10);
+      return num < 1 || num > 25; // Impede 00 e números acima de 25
+    });
+
     // Atualiza o valor formatado no input visual (com um truque de timeout)
     // Usamos um timeout minúsculo para permitir que o Angular atualize o 'value'
     // antes de nós o reformatarmos, evitando problemas de cursor.
@@ -157,7 +178,28 @@ export class AddDrawModalComponent implements OnInit {
       return;
     }
 
+    if (this.hasDuplicates) {
+      this.showErros('Existem dezenas repetidas. Corrija antes de salvar.');
+      return;
+    }
+
+    if (this.hasInvalidRange) {
+      this.showErros('Apenas números de 01 a 25 são permitidos. Corrija antes de salvar.');
+      return;
+    }
+
     this.arrayDozens = cleanDozens.match(/.{1,2}/g) || [];
+
+    // --- TRAVA EXTRA RECOMENDADA (Range de 01 a 25) ---
+    const dezenasForaDoRange = this.arrayDozens.filter(d => {
+      const num = parseInt(d, 10);
+      return num < 1 || num > 25;
+    });
+
+    if (dezenasForaDoRange.length > 0) {
+      this.showErros(`Apenas números de 01 a 25 são permitidos. Inválidos: ${dezenasForaDoRange.join(', ')}`);
+      return;
+    }
 
     const tituloDialog = this.mode === 'DRAW' ? 'Confirmar inclusão?' : 'Confirmar Aposta?';
     const msgDialog = this.mode === 'DRAW' 
