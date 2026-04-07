@@ -8,7 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { AddDrawRequest, DetailedDraw, DadosNumero, DadosParidade, DadosRepeticao, GenerateDrawRequest, ModalData, SynchronizeResponse, SaveBetRequest } from '../../../interfaces/lotofacil';
+import { AddDrawRequest, DetailedDraw, DadosNumero, DadosParidade, DadosRepeticao, GenerateDrawRequest, ModalData, SynchronizeResponse, SaveBetRequest, LotofacilBet } from '../../../interfaces/lotofacil';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
@@ -93,6 +93,12 @@ export class LotofacilComponent implements OnInit {
   showGenerateAlert: boolean = false;
   generateAlertMessage: string = '';
 
+  totalInvestido: number = 0;
+  totalRetorno: number = 0;
+  saldoFinanceiro: number = 0;
+  totalApostasRealizadas: number = 0;
+  recentBets: LotofacilBet[] = [];
+
   @ViewChild('sortParity') sortParity!: MatSort;
   @ViewChild('sortRepetition') sortRepetition!: MatSort;
   @ViewChild('sortNumber') sortNumber!: MatSort;
@@ -127,12 +133,30 @@ export class LotofacilComponent implements OnInit {
     this.loadTablesData();
     this.loadGeneralData();
     this.loadRecentDraws();
+    this.loadBetsReport();
   }
 
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  loadBetsReport(): void {
+    this.subscription = this.service.getAllBets().subscribe({
+      next: (bets) => {
+        this.totalApostasRealizadas = bets.length;
+        
+        // Calcula os totais
+        this.totalInvestido = bets.reduce((sum, bet) => sum + (bet.cost || 0), 0);
+        this.totalRetorno = bets.reduce((sum, bet) => sum + (bet.prize || 0), 0);
+        this.saldoFinanceiro = this.totalRetorno - this.totalInvestido;
+
+        // Pega as últimas 5 apostas (assumindo que o ID maior é mais recente)
+        this.recentBets = bets.sort((a, b) => b.id - a.id).slice(0, 5);
+      },
+      error: (err) => console.error('Erro ao carregar relatório de apostas', err)
+    });
   }
 
   loadTablesData() {

@@ -86,3 +86,25 @@ export interface SaveBetRequest {
   repeatedCount: number;
   betNumbers: number[]; // Apenas um array de inteiros
 }
+
+export interface LotofacilBetNumber {
+  id: number;
+  number: number;
+  isRepeated: boolean;
+  wasCorrectly: boolean;
+}
+
+export interface LotofacilBet {
+  id: number;
+  targetDrawId: number;
+  evenCount: number;
+  oddCount: number;
+  repeatedCount: number;
+  cost: number;
+  hits: number;
+  prize: number | null;
+  betDate: string;
+  checked: boolean;
+  betNumbers: LotofacilBetNumber[];
+  realDraw?: any; // Pode tipar com DetailedDraw depois
+}
