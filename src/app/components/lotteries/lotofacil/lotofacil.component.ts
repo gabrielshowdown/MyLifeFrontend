@@ -21,6 +21,7 @@ import { listAnimation, shownStateTrigger } from '../../../animations/animations
 import { LoteriasService } from '../../../services/loterias.service';
 import { DebugService } from '../../../core/services/debug.service';
 import { AddDrawModalComponent } from '../add-draw-modal/add-draw-modal.component';
+import { BetModalComponent } from '../bet-modal/bet-modal.component';
 
 
 // Interface auxiliar para passar contexto para a atualização de status
@@ -153,7 +154,7 @@ export class LotofacilComponent implements OnInit {
         this.saldoFinanceiro = this.totalRetorno - this.totalInvestido;
 
         // Pega as últimas 5 apostas (assumindo que o ID maior é mais recente)
-        this.recentBets = bets.sort((a, b) => b.id - a.id).slice(0, 5);
+        this.recentBets = bets.sort((a, b) => b.id - a.id).slice(0, 3);
       },
       error: (err) => console.error('Erro ao carregar relatório de apostas', err)
     });
@@ -599,6 +600,14 @@ openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false, requestPa
         }
         this.showGenerateAlert = true;
       }
+    });
+  }
+
+  openBetDetailModal(bet: LotofacilBet): void {
+    this.dialog.open(BetModalComponent, {
+      width: '450px', // Ajuste a largura conforme necessário
+      data: bet, // Passa os dados da aposta selecionada para o modal
+      panelClass: 'no-padding-dialog' // Classe CSS opcional para remover padding do material se preferir
     });
   }
 }

@@ -1,0 +1,59 @@
+// ... você pode copiar o design básico dos círculos de .dozens-grid e .dozen do SCSS do dashboard ...
+
+.dezenas-grid-dialog {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); // Grade 5x3 para as 15 dezenas apostadas
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.dezena {
+  width: 40px; // Um pouco maior que no card para caber no modal
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  color: #333;
+  transition: all 0.2s ease;
+  
+  // Classe condicional para repetição
+  &.repetido {
+    background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+    color: #1976d2;
+    box-shadow: 2px 2px 5px rgba(25, 118, 210, 0.2);
+    border: 2px solid #90caf9;
+  }
+
+  // NOVO: Classe condicional para acertos
+  // Vamos destacar em verde conforme sua ideia para o futuro
+  &.acerto {
+    background: linear-gradient(145deg, #d1e7dd, #badbcc); // Verde suave
+    color: #0f5132;
+    box-shadow: 2px 2px 5px rgba(15, 81, 50, 0.2);
+    border: 2px solid #badbcc;
+  }
+}
+
+// Estilização para as dezenas do concurso real
+.real-draw-dozen {
+   border: 2px solid transparent; // Para manter o tamanho consistente
+   // Pode adicionar um hover sutil se quiser
+   &:hover { transform: scale(1.05); }
+}
+
+// Estilização auxiliar
+.stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #6c757d;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.highlight {
+    color: #444;
+}

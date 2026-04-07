@@ -1,0 +1,52 @@
+<div class="modal-header-custom p-3 border-bottom d-flex justify-content-between align-items-center">
+  <h2 class="m-0 fs-5 fw-bold text-primary">Detalhes da Aposta: Concurso {{ bet.targetDrawId }}</h2>
+  <button mat-icon-button mat-dialog-close color="warn">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="p-4">
+  <div class="stat-label mb-2 d-block">Dezenas Apostadas</div>
+  
+  <div class="dezenas-grid-dialog mb-4">
+    <div *ngFor="let dezenaInfo of apostadosOrdenados" 
+         class="dezena"
+         [class.repetido]="dezenaInfo.isRepeated"
+         [class.acerto]="dezenaInfo.wasCorrectly">
+         {{ formatNumber(dezenaInfo.number) }}
+    </div>
+  </div>
+
+  <div class="stat-label mb-2 d-block">Dezenas do Concurso Real</div>
+  <div class="dezenas-grid-dialog mb-4">
+    <div *ngFor="let n of bet.realDraw?.drawNumbers" 
+         class="dezena real-draw-dozen">
+         {{ formatNumber(n.number) }}
+    </div>
+    <div *ngIf="!bet.checked" colspan="5" class="text-center text-muted py-3">Concurso ainda não conferido.</div>
+  </div>
+
+  <div class="stats-info d-flex justify-content-between align-items-center p-3 bg-light rounded">
+    <div>
+      <div class="stat-label mb-1">Paridade</div>
+      <span class="highlight fs-6 fw-bold">{{ paridadeVM }}</span>
+    </div>
+    <div>
+      <div class="stat-label mb-1">Repetidos</div>
+      <span class="highlight fs-6 fw-bold">{{ repetidosVM }}</span>
+    </div>
+    <div>
+      <div class="stat-label mb-1">Acertos</div>
+      <span class="badge rounded-pill" [ngClass]="bet.hits >= 11 ? 'bg-success' : 'bg-secondary'">
+        {{ bet.hits }}
+      </span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="p-3 border-top d-flex justify-content-end gap-2">
+  <button mat-stroked-button color="primary" mat-dialog-close>
+    Fechar
+    <mat-icon>visibility_off</mat-icon>
+  </button>
+</mat-dialog-actions>
