@@ -37,6 +37,7 @@ export interface DetailedDraw {
   evenCount: number;
   oddCount: number;
   repeatedCount: number;
+  drawDate: Date;
   drawNumbers: NumeroSorteadoDetalhe[];
 }
 
