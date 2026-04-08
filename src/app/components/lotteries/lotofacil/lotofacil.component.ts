@@ -447,6 +447,8 @@ export class LotofacilComponent implements OnInit {
       next: (resposta) => {
         // Pode usar seu setAlert ou outro feedback
         this.setAlert(`Aposta para o concurso ${payload.targetDrawId} cadastrada com sucesso!`, 'success', 'check_circle_outline');
+
+        this.loadBetsReport();
       },
       error: (err) => {
         this.setAlert(`Erro ao cadastrar aposta. (Erro: ${err.error?.message || err.message})`, 'danger', 'error_outline');
@@ -559,15 +561,25 @@ export class LotofacilComponent implements OnInit {
   }
 
 openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false, requestParams?: GenerateDrawRequest): void {
-  const dialogRef = this.dialog.open(DrawModalComponent, {
-    width: '450px',
-    panelClass: 'no-padding-dialog', 
-    data: { concurso: resultado, isGerado: isGerado, requestParams: requestParams } as ModalData
-  });
+    const dialogRef = this.dialog.open(DrawModalComponent, {
+      width: '450px',
+      panelClass: 'no-padding-dialog', 
+      data: { concurso: resultado, isGerado: isGerado, requestParams: requestParams } as ModalData
+    });
 
-  // REMOVA todo o dialogRef.afterClosed().subscribe(...) daqui.
-  // O componente pai não precisa mais saber que o modal se atualizou!
-}
+    // Voltamos com o afterClosed para capturar o evento emitido quando a aposta é salva!
+    dialogRef.afterClosed().subscribe(result => {
+      // Verifica se o modal retornou a nossa ação de sucesso
+      if (result && result.action === 'BET_SAVED') {
+        
+        // 1. Aciona o Alerta Visual (Dashboard) no topo da tela
+        this.setAlert('Aposta gerada registrada com sucesso!', 'success', 'check_circle_outline');
+        
+        // 2. Atualiza a tabela "Desempenho das Apostas" no background
+        this.loadBetsReport();
+      }
+    });
+  }
 
   generateDraw(): void {
     this.showGenerateAlert = false;

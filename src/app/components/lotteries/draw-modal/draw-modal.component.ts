@@ -112,8 +112,8 @@ export class DrawModalComponent implements OnInit {
       next: (resposta) => {
         this.isLoading = false;
         // Idealmente, trocar por um MatSnackBar no futuro
-        alert('Aposta registrada com sucesso no sistema!'); 
-        this.dialogRef.close(); // Fecha o modal do concurso
+        
+        this.dialogRef.close({ action: 'BET_SAVED' }); // Fecha o modal do concurso
       },
       error: (erro) => {
         console.error('Erro ao registrar aposta:', erro);
