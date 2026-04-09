@@ -24,7 +24,7 @@ export class BetModalComponent {
 
   ngOnInit(): void {
     // Ordena as dezenas apostadas para exibição
-    this.apostadosOrdenados = this.bet.betNumbers.sort((a, b) => a.number - b.number);
+    this.apostadosOrdenados = [...this.bet.betNumbers].sort((a, b) => a.number - b.number);
     
     // Formata informações auxiliares
     this.paridadeVM = `${this.bet.oddCount}Í / ${this.bet.evenCount}P`;

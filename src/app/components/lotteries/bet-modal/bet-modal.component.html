@@ -1,52 +1,96 @@
-<div class="modal-header-custom p-3 border-bottom d-flex justify-content-between align-items-center">
-  <h2 class="m-0 fs-5 fw-bold text-primary">Detalhes da Aposta: Concurso {{ bet.targetDrawId }}</h2>
-  <button mat-icon-button mat-dialog-close color="warn">
-    <mat-icon>close</mat-icon>
-  </button>
+<div class="modal-header-custom position-relative d-flex justify-content-center align-items-center py-4 px-3">
+  
+  <h2 class="m-0 fs-5 fw-bold d-flex align-items-center gap-2 text-white">
+    <mat-icon>receipt_long</mat-icon>
+    Detalhes da Aposta #{{ bet.targetDrawId }}
+  </h2>
+  
 </div>
 
-<mat-dialog-content class="p-4">
-  <div class="stat-label mb-2 d-block">Dezenas Apostadas</div>
-  
-  <div class="dezenas-grid-dialog mb-4">
-    <div *ngFor="let dezenaInfo of apostadosOrdenados" 
-         class="dezena"
-         [class.repetido]="dezenaInfo.isRepeated"
-         [class.acerto]="dezenaInfo.wasCorrectly">
-         {{ formatNumber(dezenaInfo.number) }}
+<mat-dialog-content class="px-4 pb-4 pt-2 custom-scrollbar">
+  <div class="row g-4">
+    
+    <div class="col-12">
+      <div class="stats-container d-flex justify-content-around align-items-center text-center p-3 rounded-3 shadow-sm bg-white border">
+        <div>
+          <div class="stat-label">Acertos</div>
+          <div class="stat-value" [ngClass]="bet.hits >= 11 ? 'text-success' : 'text-secondary'">
+            {{ bet.hits }}
+          </div>
+        </div>
+        <div class="border-start border-end px-3 px-sm-5">
+          <div class="stat-label">Prêmio</div>
+          <div class="stat-value" [ngClass]="(bet.prize || 0) > 0 ? 'text-success' : 'text-muted'">
+            {{ bet.prize ? (bet.prize | currency:'BRL') : 'R$ 0,00' }}
+          </div>
+        </div>
+        <div>
+          <div class="stat-label">Data</div>
+          <div class="stat-value text-dark fs-6 mt-1">{{ bet.betDate }}</div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="stat-label mb-2 d-block">Dezenas do Concurso Real</div>
-  <div class="dezenas-grid-dialog mb-4">
-    <div *ngFor="let n of bet.realDraw?.drawNumbers" 
-         class="dezena real-draw-dozen">
-         {{ formatNumber(n.number) }}
+    <div class="col-12">
+      <div class="section-title d-flex align-items-center gap-2 mb-3">
+        <mat-icon class="text-primary">ads_click</mat-icon>
+        <h6 class="m-0 fw-bold">Suas Dezenas</h6>
+      </div>
+      
+      <div class="dezenas-grid-dialog">
+        <div *ngFor="let dezenaInfo of apostadosOrdenados" 
+             class="dezena"
+             [class.acerto]="dezenaInfo.wasCorrectly"
+             [class.erro]="!dezenaInfo.wasCorrectly && bet.checked"
+             [class.pendente]="!bet.checked">
+             {{ formatNumber(dezenaInfo.number) }}
+             
+             <div *ngIf="dezenaInfo.isRepeated" 
+                  class="repetido-indicator" 
+                  title="Dezena repetida do concurso anterior">
+             </div>
+        </div>
+      </div>
     </div>
-    <div *ngIf="!bet.checked" colspan="5" class="text-center text-muted py-3">Concurso ainda não conferido.</div>
-  </div>
 
-  <div class="stats-info d-flex justify-content-between align-items-center p-3 bg-light rounded">
-    <div>
-      <div class="stat-label mb-1">Paridade</div>
-      <span class="highlight fs-6 fw-bold">{{ paridadeVM }}</span>
+    <div class="col-12" *ngIf="bet.checked">
+      <div class="section-title d-flex align-items-center gap-2 mb-3">
+        <mat-icon class="text-success">emoji_events</mat-icon>
+        <h6 class="m-0 fw-bold">Sorteio Oficial</h6>
+      </div>
+      <div class="dezenas-grid-dialog">
+        <div *ngFor="let n of bet.realDraw?.drawNumbers" 
+             class="dezena real-draw-dozen">
+             {{ formatNumber(n.number) }}
+        </div>
+      </div>
     </div>
-    <div>
-      <div class="stat-label mb-1">Repetidos</div>
-      <span class="highlight fs-6 fw-bold">{{ repetidosVM }}</span>
+
+    <div class="col-12" *ngIf="!bet.checked">
+      <div class="alert alert-warning d-flex align-items-center gap-2 m-0 border-0 shadow-sm rounded-3">
+        <mat-icon>hourglass_empty</mat-icon>
+        <span class="fw-semibold">O concurso {{ bet.targetDrawId }} ainda não foi sorteado ou conferido.</span>
+      </div>
     </div>
-    <div>
-      <div class="stat-label mb-1">Acertos</div>
-      <span class="badge rounded-pill" [ngClass]="bet.hits >= 11 ? 'bg-success' : 'bg-secondary'">
-        {{ bet.hits }}
-      </span>
+
+    <div class="col-12">
+      <div class="d-flex flex-wrap gap-2 mt-2">
+        <span class="badge bg-light text-dark border px-3 py-2 d-flex align-items-center gap-1">
+          <mat-icon class="icon-sm text-secondary">balance</mat-icon> 
+          Paridade: {{ paridadeVM }}
+        </span>
+        <span class="badge bg-light text-dark border px-3 py-2 d-flex align-items-center gap-1">
+          <mat-icon class="icon-sm text-secondary">history</mat-icon> 
+          Repetidas: {{ repetidosVM }}
+        </span>
+      </div>
     </div>
+
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions class="p-3 border-top d-flex justify-content-end gap-2">
+<mat-dialog-actions class="p-3 bg-light d-flex justify-content-end m-0 border-top">
   <button mat-stroked-button color="primary" mat-dialog-close>
     Fechar
-    <mat-icon>visibility_off</mat-icon>
   </button>
 </mat-dialog-actions>
