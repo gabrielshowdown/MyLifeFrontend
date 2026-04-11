@@ -54,3 +54,24 @@ mat-dialog-content {
   font-weight: 600;
   box-shadow: 0 4px 10px rgba(118, 75, 162, 0.3);
 }
+
+.dozens-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -8px; // aproxima do input (efeito igual ao mat-hint)
+  padding: 0 4px;
+}
+
+.generated-checkbox {
+  font-size: 0.85rem;
+
+  ::ng-deep .mdc-form-field {
+    align-items: center;
+  }
+}
+
+.dozens-counter {
+  font-size: 0.85rem;
+  font-weight: 500;
+}

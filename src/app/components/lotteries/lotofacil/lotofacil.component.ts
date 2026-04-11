@@ -617,7 +617,7 @@ openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false, requestPa
 
   openBetDetailModal(bet: LotofacilBet): void {
     this.dialog.open(BetModalComponent, {
-      width: '450px', // Ajuste a largura conforme necessário
+      width: '500px', // Ajuste a largura conforme necessário
       data: bet, // Passa os dados da aposta selecionada para o modal
       panelClass: 'no-padding-dialog' // Classe CSS opcional para remover padding do material se preferir
     });

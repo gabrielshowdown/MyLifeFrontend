@@ -41,8 +41,11 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" subscriptSizing="dynamic" [color]="(hasDuplicates || hasInvalidRange) ? 'warn' : 'primary'">
+<mat-form-field appearance="outline" subscriptSizing="dynamic"
+  [color]="(hasDuplicates || hasInvalidRange) ? 'warn' : 'primary'">
+
   <mat-label>{{ mode === 'DRAW' ? 'Dezenas Sorteadas (15)' : 'Dezenas Apostadas (15)' }}</mat-label>
+
   <input 
     matInput 
     [value]="formattedDozens"
@@ -50,24 +53,45 @@
     placeholder="01-02-03..."
     maxlength="44"
     [ngClass]="{'text-danger': hasDuplicates || hasInvalidRange}">
-    
-    <mat-hint align="start" *ngIf="hasDuplicates && !hasInvalidRange">
-      <span class="text-danger fw-bold"><mat-icon inline="true">error</mat-icon> Números repetidos!</span>
-    </mat-hint>
 
-    <mat-hint align="start" *ngIf="hasInvalidRange">
-      <span class="text-danger fw-bold"><mat-icon inline="true">error</mat-icon> Apenas de 01 a 25 permitidos!</span>
-    </mat-hint>
+  <mat-hint align="start" *ngIf="hasDuplicates && !hasInvalidRange">
+    <span class="text-danger fw-bold">
+      <mat-icon inline="true">error</mat-icon> Números repetidos!
+    </span>
+  </mat-hint>
 
-    <mat-hint align="end">
-      <strong [class.text-primary]="dozensInput.length === 30 && !hasDuplicates && !hasInvalidRange" 
-              [class.text-danger]="dozensInput.length !== 30 || hasDuplicates || hasInvalidRange">
-        {{ dozensInput.length / 2 | number:'1.0-0' }}
-      </strong> / 15
-    </mat-hint>
-    
-    <mat-icon matSuffix [class.text-danger]="hasDuplicates || hasInvalidRange">casino</mat-icon>
+  <mat-hint align="start" *ngIf="hasInvalidRange">
+    <span class="text-danger fw-bold">
+      <mat-icon inline="true">error</mat-icon> Apenas de 01 a 25 permitidos!
+    </span>
+  </mat-hint>
+
+  <mat-icon matSuffix [class.text-danger]="hasDuplicates || hasInvalidRange">
+    casino
+  </mat-icon>
+
 </mat-form-field>
+
+<!-- 🔥 Linha customizada (checkbox + contador) -->
+<div class="dozens-footer" *ngIf="mode === 'BET' || true">
+  
+  <!-- Esquerda -->
+  <mat-checkbox 
+    *ngIf="mode === 'BET'"
+    [(ngModel)]="isGeneratedBet"
+    class="generated-checkbox">
+    Gerado via algoritmo
+  </mat-checkbox>
+
+  <!-- Direita -->
+  <div class="dozens-counter"
+       [class.text-primary]="dozensInput.length === 30 && !hasDuplicates && !hasInvalidRange"
+       [class.text-danger]="dozensInput.length !== 30 || hasDuplicates || hasInvalidRange">
+
+    <strong>{{ dozensInput.length / 2 | number:'1.0-0' }}</strong> / 15
+  </div>
+
+</div>
 
 </mat-dialog-content>
 
