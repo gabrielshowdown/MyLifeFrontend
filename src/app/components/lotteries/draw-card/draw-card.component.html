@@ -1,8 +1,11 @@
 <mat-card class="draw-card h-100">
-  <mat-card-header class="justify-content-center mb-2">
-    <mat-card-title class="fs-5 fw-bold">
+  <mat-card-header class="d-flex flex-column align-items-center mb-2">
+    <mat-card-title class="fs-5 fw-bold mb-0">
       Concurso {{ draw.id }}
     </mat-card-title>
+    <mat-card-subtitle class="text-white-50 small">
+      {{ draw.drawDate }}
+    </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>

@@ -11,7 +11,8 @@ interface ConcursoInfoVM {
   numero: number;
   impares: number;
   pares: number;
-  repetidos: number
+  repetidos: number;
+  dataApuracao?: Date | string;
 }
 
 @Component({
@@ -47,6 +48,7 @@ export class DrawModalComponent implements OnInit {
       impares: concurso.oddCount,
       pares: concurso.evenCount,
       repetidos: concurso.repeatedCount,
+      dataApuracao: concurso.drawDate
     };
     this.resultadoOrdenado = concurso.drawNumbers.sort((a, b) => a.number - b.number);
   }

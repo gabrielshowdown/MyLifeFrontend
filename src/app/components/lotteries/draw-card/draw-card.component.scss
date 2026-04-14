@@ -13,12 +13,28 @@
   
   mat-card-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 1rem;
+    padding: 1rem 1rem 0.5rem; // Se remover a data, 
+    
+    // 1. Centraliza o conteúdo principal
+    justify-content: center;
+    text-align: center;
+
+    // 2. Hack para domar o container invisível do Angular Material
+    ::ng-deep .mat-mdc-card-header-text {
+      margin: 0 !important; // Remove a margem invisível do "avatar"
+      width: 100%;          // Garante que ocupe o espaço todo para centralizar
+    }
     
     mat-card-title {
       color: white;
       font-size: 1.1rem;
       font-weight: 600;
+    }
+
+    mat-card-subtitle {
+      color: rgba(255, 255, 255, 0.8) !important;
+      margin-top: 0px;
+      font-size: 0.75rem;
     }
   }
   
