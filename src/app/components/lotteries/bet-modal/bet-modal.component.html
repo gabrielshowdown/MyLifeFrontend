@@ -1,10 +1,8 @@
 <div class="modal-header-custom position-relative d-flex justify-content-center align-items-center py-4 px-3">
-  
   <h2 class="m-0 fs-5 fw-bold d-flex align-items-center gap-2 text-white">
     <mat-icon>receipt_long</mat-icon>
     Detalhes da Aposta #{{ bet.targetDrawId }}
   </h2>
-  
 </div>
 
 <mat-dialog-content class="px-4 pb-4 pt-2 custom-scrollbar">
@@ -15,7 +13,7 @@
         <div>
           <div class="stat-label">Acertos</div>
           <div class="stat-value" [ngClass]="bet.hits >= 11 ? 'text-success' : 'text-secondary'">
-            {{ bet.hits }}
+            {{ bet.hits }} / 15
           </div>
         </div>
         <div class="border-start border-end px-3 px-sm-5">
@@ -26,43 +24,66 @@
         </div>
         <div>
           <div class="stat-label">Data</div>
-          <div class="stat-value text-dark fs-6 mt-1">{{ bet.betDate }}</div>
+          <div class="stat-value text-dark fs-6 mt-1">{{ bet.betDate | date:'dd/MM/yyyy' }}</div>
         </div>
       </div>
     </div>
 
     <div class="col-12">
-      <div class="section-title d-flex align-items-center gap-2 mb-3">
-        <mat-icon class="text-primary">ads_click</mat-icon>
-        <h6 class="m-0 fw-bold">Suas Dezenas</h6>
+      <div class="section-title d-flex justify-content-between align-items-end mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <mat-icon class="text-primary">ads_click</mat-icon>
+          <h6 class="m-0 fw-bold">Suas Dezenas</h6>
+        </div>
       </div>
       
-      <div class="dezenas-grid-dialog">
+      <div class="dezenas-grid-dialog mb-2">
         <div *ngFor="let dezenaInfo of apostadosOrdenados" 
              class="dezena"
              [class.acerto]="dezenaInfo.wasCorrectly"
              [class.erro]="!dezenaInfo.wasCorrectly && bet.checked"
              [class.pendente]="!bet.checked">
              {{ formatNumber(dezenaInfo.number) }}
-             
-             <div *ngIf="dezenaInfo.isRepeated" 
-                  class="repetido-indicator" 
-                  title="Dezena repetida do concurso anterior">
-             </div>
+             <div *ngIf="dezenaInfo.isRepeated" class="repetido-indicator" title="Repetida do concurso anterior"></div>
         </div>
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+        <span class="badge bg-light text-dark border px-2 py-1 d-flex align-items-center gap-1">
+          <mat-icon class="icon-sm text-secondary">balance</mat-icon> Paridade: {{ paridadeVM }}
+        </span>
+        <span class="badge bg-light text-dark border px-2 py-1 d-flex align-items-center gap-1">
+          <mat-icon class="icon-sm text-secondary">history</mat-icon> Repetidas: {{ repetidosVM }}
+        </span>
       </div>
     </div>
 
     <div class="col-12" *ngIf="bet.checked">
-      <div class="section-title d-flex align-items-center gap-2 mb-3">
-        <mat-icon class="text-success">emoji_events</mat-icon>
-        <h6 class="m-0 fw-bold">Sorteio Oficial</h6>
-      </div>
-      <div class="dezenas-grid-dialog">
-        <div *ngFor="let n of bet.realDraw?.drawNumbers" 
-             class="dezena real-draw-dozen">
-             {{ formatNumber(n.number) }}
+      <div class="section-title d-flex justify-content-between align-items-end mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <mat-icon class="text-success">emoji_events</mat-icon>
+          <h6 class="m-0 fw-bold">Sorteio Oficial</h6>
         </div>
+      </div>
+
+      <div class="dezenas-grid-dialog mb-2">
+        <div *ngFor="let n of sorteadosOrdenados" class="dezena real-draw-dozen">
+             {{ formatNumber(n.number) }}
+             <div *ngIf="n.isRepeated" class="repetido-indicator" title="Repetida do concurso anterior"></div>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+        <span class="badge bg-light text-dark border px-2 py-1 d-flex align-items-center gap-1"
+              [ngClass]="{'border-success text-success bg-success-subtle': paridadeVM === paridadeRealVM}">
+          <mat-icon class="icon-sm text-secondary" [ngClass]="{'text-success': paridadeVM === paridadeRealVM}">balance</mat-icon> 
+          Paridade: {{ paridadeRealVM }}
+        </span>
+        <span class="badge bg-light text-dark border px-2 py-1 d-flex align-items-center gap-1"
+              [ngClass]="{'border-success text-success bg-success-subtle': repetidosVM === repetidosRealVM}">
+          <mat-icon class="icon-sm text-secondary" [ngClass]="{'text-success': repetidosVM === repetidosRealVM}">history</mat-icon> 
+          Repetidas: {{ repetidosRealVM }}
+        </span>
       </div>
     </div>
 
@@ -73,24 +94,9 @@
       </div>
     </div>
 
-    <div class="col-12">
-      <div class="d-flex flex-wrap gap-2 mt-2">
-        <span class="badge bg-light text-dark border px-3 py-2 d-flex align-items-center gap-1">
-          <mat-icon class="icon-sm text-secondary">balance</mat-icon> 
-          Paridade: {{ paridadeVM }}
-        </span>
-        <span class="badge bg-light text-dark border px-3 py-2 d-flex align-items-center gap-1">
-          <mat-icon class="icon-sm text-secondary">history</mat-icon> 
-          Repetidas: {{ repetidosVM }}
-        </span>
-      </div>
-    </div>
-
   </div>
 </mat-dialog-content>
 
 <mat-dialog-actions class="p-3 bg-light d-flex justify-content-end m-0 border-top">
-  <button mat-stroked-button color="primary" mat-dialog-close>
-    Fechar
-  </button>
+  <button mat-stroked-button color="primary" mat-dialog-close>Fechar</button>
 </mat-dialog-actions>
