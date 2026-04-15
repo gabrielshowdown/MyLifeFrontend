@@ -1,5 +1,9 @@
 <div class="modal-header-custom">
   <h2>Concurso {{ concursoInfo.numero }}</h2>
+  <div class="subtitle text-white-50" *ngIf="!isGerado" >
+    {{ concursoInfo.dataApuracao }}
+  </div>
+  
 </div>
 
 <mat-dialog-content>

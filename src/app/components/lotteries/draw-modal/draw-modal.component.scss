@@ -11,19 +11,27 @@ $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 // Cabeçalho
 .modal-header-custom {
   background: $primary-gradient;
-  // Aumentei o padding vertical para o título não ficar colado
-  padding: 1.5rem 1rem; 
-  text-align: center;
+  padding: 1.5rem 1rem; // Retornamos ao padding original, que deixa o cabeçalho "gordinho" e bonito
+  text-align: center;   // O bom e velho text-align resolve a centralização perfeitamente
   color: white;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  position: relative; // Para garantir que fique sobre o conteúdo se necessário
+  position: relative;
 
   h2 {
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
     letter-spacing: 0.5px;
-    line-height: 1.2; // Melhora o espaçamento da fonte
+    line-height: 1.2; 
+  }
+
+  // Estilo do subtítulo (só aparece quando tem data)
+  .subtitle {
+    margin-top: 6px; // Dá um respiro entre o título e a data
+    margin-bottom: -12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8) !important;
   }
 }
 
