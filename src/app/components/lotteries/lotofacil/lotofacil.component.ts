@@ -22,6 +22,7 @@ import { LoteriasService } from '../../../services/loterias.service';
 import { DebugService } from '../../../core/services/debug.service';
 import { AddDrawModalComponent } from '../add-draw-modal/add-draw-modal.component';
 import { BetModalComponent } from '../bet-modal/bet-modal.component';
+import { RouterModule } from '@angular/router';
 
 
 // Interface auxiliar para passar contexto para a atualização de status
@@ -34,6 +35,7 @@ interface StatusContext {
   selector: 'app-lotofacil',
   imports: [
     CommonModule,
+    RouterModule,
     FormsModule,
     MatCardModule,
     MatButtonModule,
@@ -144,21 +146,28 @@ export class LotofacilComponent implements OnInit {
   }
 
   loadBetsReport(): void {
-    this.subscription = this.service.getAllBets().subscribe({
-      next: (bets) => {
-        this.totalApostasRealizadas = bets.length;
-        
-        // Calcula os totais
-        this.totalInvestido = bets.reduce((sum, bet) => sum + (bet.cost || 0), 0);
-        this.totalRetorno = bets.reduce((sum, bet) => sum + (bet.prize || 0), 0);
-        this.saldoFinanceiro = this.totalRetorno - this.totalInvestido;
+  // 1. Busca os totais gerais (rápido e leve)
+      this.service.getBetSummary().subscribe({
+        next: (summary) => {
+          this.totalApostasRealizadas = summary.totalBets;
+          this.totalInvestido = summary.totalInvested;
+          this.totalRetorno = summary.totalReturn;
+          this.saldoFinanceiro = summary.balance;
+        },
+        error: (err) => console.error('Erro ao carregar resumo', err)
+      })
+    ;
 
-        // Pega as últimas 5 apostas (assumindo que o ID maior é mais recente)
-        this.recentBets = bets.sort((a, b) => b.id - a.id).slice(0, 3);
-      },
-      error: (err) => console.error('Erro ao carregar relatório de apostas', err)
-    });
-  }
+    // 2. Busca apenas as 3 últimas apostas paginadas para a tabelinha inicial
+      this.service.getBetsPaginated(0, 3).subscribe({
+        next: (page) => {
+          this.recentBets = page.content;
+        },
+        error: (err) => console.error('Erro ao carregar apostas recentes', err)      
+      })
+    ;
+    console.log('this.recentBets' + this.recentBets);
+}
 
   loadTablesData() {
     this.loadDataRepetitions();

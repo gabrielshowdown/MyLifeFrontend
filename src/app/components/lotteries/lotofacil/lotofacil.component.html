@@ -199,19 +199,26 @@
       <div class="content-card mt-4">
         <div class="card-header-custom">
           <h5><mat-icon class="text-success">account_balance_wallet</mat-icon> Desempenho das Apostas</h5>
+          <button mat-button color="primary" routerLink="/betsReport">
+            Relatório Completo <mat-icon>arrow_forward</mat-icon>
+          </button>
         </div>
 
         <div class="card-body-custom">
           <div class="row text-center mb-4">
-            <div class="col-4">
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+              <div class="stat-label">Apostas</div>
+              <div class="fw-bold text-primary fs-5">{{ totalApostasRealizadas }}</div>
+            </div>
+            <div class="col-6 col-md-3 border-md-start mb-3 mb-md-0">
               <div class="stat-label">Investido</div>
               <div class="fw-bold text-danger fs-5">{{ totalInvestido | currency:'BRL' }}</div>
             </div>
-            <div class="col-4 border-start border-end">
+            <div class="col-6 col-md-3 border-md-start">
               <div class="stat-label">Retorno</div>
               <div class="fw-bold text-success fs-5">{{ totalRetorno | currency:'BRL' }}</div>
             </div>
-            <div class="col-4">
+            <div class="col-6 col-md-3 border-md-start">
               <div class="stat-label">Saldo</div>
               <div class="fw-bold fs-5" [ngClass]="saldoFinanceiro >= 0 ? 'text-success' : 'text-danger'">
                 {{ saldoFinanceiro | currency:'BRL' }}

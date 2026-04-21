@@ -28,6 +28,10 @@ export const routes: Routes = [
     path: 'lotofacil', 
     loadComponent: () => import('./components/lotteries/lotofacil/lotofacil.component').then(m => m.LotofacilComponent)
   },
+  { 
+    path: 'betsReport', 
+    loadComponent: () => import('./components/lotteries/bet-report/bet-report.component').then(m => m.BetReportComponent)
+  },
   {
     path: 'teste2',
     component: Teste2Component
