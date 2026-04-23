@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,6 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(),
-    provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
+    provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    provideCharts(withDefaultRegisterables())
   ]
 };

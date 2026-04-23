@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../core/services/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, DetailedDraw, GenerateDrawRequest as GenerateDrawRequest, SynchronizeResponse, AddDrawRequest, Page, SaveBetRequest, LotofacilBet, BetSummaryResponse } from '../interfaces/lotofacil';
+import { DadosNumero, DadosParidade, DadosRepeticao, DetailedDraw, GenerateDrawRequest as GenerateDrawRequest, SynchronizeResponse, AddDrawRequest, Page, SaveBetRequest, LotofacilBet, BetSummaryResponse, BetGraphicsResponse } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -129,5 +129,9 @@ export class LoteriasService {
 
   getBetsPaginated(page: number, size: number): Observable<Page<LotofacilBet>> {
     return this.http.get<Page<LotofacilBet>>(`${this.API_APOSTALOTOFACIL}/paginated?page=${page}&size=${size}`);
+  }
+
+  getGraphicsData(): Observable<BetGraphicsResponse> {
+    return this.http.get<BetGraphicsResponse>(`${this.API_APOSTALOTOFACIL}/graphics`);
   }
 }
