@@ -8,7 +8,7 @@
     </h3>
   </div>
 
-  <div class="row g-3 mb-4">
+  <div class="row g-3 mb-4" [@listAnimation]="true">
     
     <div class="col-md-3">
       <mat-card class="summary-card h-100 p-2">
@@ -80,7 +80,7 @@
 
   </div>
 
-  <div class="row g-4">
+  <div class="row g-4" @shownState *ngIf="graphicsData">
     <div class="col-lg-7">
       <mat-card class="table-card">
         <table mat-table [dataSource]="bets" class="w-100">
@@ -110,13 +110,24 @@
           <ng-container matColumnDef="hits">
             <th mat-header-cell *matHeaderCellDef> Acertos </th>
             <td mat-cell *matCellDef="let bet">
-              <span class="badge rounded-pill" [ngClass]="bet.hits >= 11 ? 'bg-success' : 'bg-secondary'">{{ bet.hits }} / 15</span>
+              <span *ngIf="bet.checked" class="badge rounded-pill" [ngClass]="bet.hits >= 11 ? 'bg-success' : 'bg-secondary'">
+                {{ bet.hits }} / 15
+              </span>
+              
+              <span *ngIf="!bet.checked" class="badge rounded-pill bg-warning text-dark border border-warning d-inline-flex align-items-center gap-1" title="Aguardando Sorteio Oficial">
+                <mat-icon style="font-size: 14px; width: 14px; height: 14px;">hourglass_empty</mat-icon> Pendente
+              </span>
             </td>
           </ng-container>
           <ng-container matColumnDef="prize">
             <th mat-header-cell *matHeaderCellDef> Prêmio </th>
             <td mat-cell *matCellDef="let bet" class="fw-bold" [ngClass]="(bet.prize || 0) > 0 ? 'text-success' : 'text-muted'">
-              {{ bet.prize ? (bet.prize | currency:'BRL') : '-' }}
+              <ng-container *ngIf="bet.checked">
+                {{ bet.prize ? (bet.prize | currency:'BRL') : '-' }}
+              </ng-container>
+              <ng-container *ngIf="!bet.checked">
+                <mat-icon class="text-warning mt-1" style="font-size: 18px; width: 18px; height: 18px;" title="Aguardando Sorteio Oficial">schedule</mat-icon>
+              </ng-container>
             </td>
           </ng-container>
           <ng-container matColumnDef="actions">

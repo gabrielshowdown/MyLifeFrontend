@@ -13,13 +13,15 @@ import { LoteriasService } from '../../../services/loterias.service';
 import { BetSummaryResponse, LotofacilBet, BetGraphicsResponse } from '../../../interfaces/lotofacil';
 import { BetModalComponent } from '../bet-modal/bet-modal.component';
 import { forkJoin } from 'rxjs';
+import { listAnimation, shownStateTrigger } from '../../../animations/animations';
 
 @Component({
   selector: 'app-bet-report',
   standalone: true,
   imports: [CommonModule, MatCardModule, MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule, RouterModule, BaseChartDirective],
   templateUrl: './bet-report.component.html',
-  styleUrls: ['./bet-report.component.scss']
+  styleUrls: ['./bet-report.component.scss'],
+  animations: [listAnimation, shownStateTrigger]
 })
 export class BetReportComponent implements OnInit {
 

@@ -242,12 +242,20 @@
                   <td class="text-center fw-bold">{{ bet.targetDrawId }}</td>
                   <td class="text-center text-muted">{{ bet.betDate }}</td>
                   <td class="text-center">
-                    <span class="badge rounded-pill" [ngClass]="bet.hits >= 11 ? 'bg-success' : 'bg-secondary'">
-                      {{ bet.hits }}
+                    <span *ngIf="bet.checked" class="badge rounded-pill" [ngClass]="bet.hits >= 11 ? 'bg-success' : 'bg-secondary'">
+                      {{ bet.hits }} / 15
+                    </span>
+                    <span *ngIf="!bet.checked" class="badge rounded-pill bg-warning text-dark border border-warning d-inline-flex align-items-center justify-content-center" title="Aguardando Sorteio" style="width: 24px; height: 24px; padding: 0;">
+                      <mat-icon style="font-size: 14px; height: 14px; width: 14px;">hourglass_empty</mat-icon>
                     </span>
                   </td>
                   <td class="text-end fw-bold" [ngClass]="(bet.prize || 0) > 0 ? 'text-success' : 'text-muted'">
-                    {{ bet.prize ? (bet.prize | currency:'BRL') : '-' }}
+                     <ng-container *ngIf="bet.checked">
+                      {{ bet.prize ? (bet.prize | currency:'BRL') : '-' }}
+                    </ng-container>
+                    <ng-container *ngIf="!bet.checked">
+                      <span class="text-warning small" title="Pendente">...</span>
+                    </ng-container>
                   </td>
                   <td class="text-center">
                     <button mat-icon-button color="primary" style="transform: scale(0.8);" title="Detalhes da Aposta" (click)="openBetDetailModal(bet)">
