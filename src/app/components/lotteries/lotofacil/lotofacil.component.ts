@@ -423,6 +423,7 @@ export class LotofacilComponent implements OnInit {
         this.loadGeneralData({ syncResponse: response });
         this.loadTablesData();
         this.loadRecentDraws()
+        this.loadBetsReport();
       },
       error: (err) => {
         this.isSyncing = false;
