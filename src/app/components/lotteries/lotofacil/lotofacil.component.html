@@ -233,7 +233,7 @@
                   <th class="text-center">Conc.</th>
                   <th class="text-center">Data</th>
                   <th class="text-center">Acertos</th>
-                  <th class="text-end">Prêmio</th>
+                  <th class="text-center">Prêmio</th>
                   <th class="text-center">Ação</th>
                 </tr>
               </thead>
@@ -249,7 +249,7 @@
                       <mat-icon style="font-size: 14px; height: 14px; width: 14px;">hourglass_empty</mat-icon>
                     </span>
                   </td>
-                  <td class="text-end fw-bold" [ngClass]="(bet.prize || 0) > 0 ? 'text-success' : 'text-muted'">
+                  <td class="text-end fw-bold text-center" [ngClass]="(bet.prize || 0) > 0 ? 'text-success' : 'text-muted'">
                      <ng-container *ngIf="bet.checked">
                       {{ bet.prize ? (bet.prize | currency:'BRL') : '-' }}
                     </ng-container>
