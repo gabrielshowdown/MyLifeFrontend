@@ -38,9 +38,19 @@ export class BetReportComponent implements OnInit {
 
   // ==== CONFIGURAÇÕES DOS GRÁFICOS ====
   public pieChartType: ChartType = 'pie';
+
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    plugins: { legend: { position: 'bottom' } }
+    maintainAspectRatio: false, // Importante para respeitar o tamanho do container
+    plugins: { 
+      legend: { 
+        position: 'right', // Mudamos de 'bottom' para 'right'
+        labels: {
+          boxWidth: 12,
+          font: { size: 11 }
+        }
+      } 
+    }
   };
 
   public paritiesChartData: ChartData<'pie', number[], string | string[]> = { labels: [], datasets: [{ data: [] }] };
@@ -84,7 +94,7 @@ export class BetReportComponent implements OnInit {
     };
 
     // Gráfico de Repetições
-    const rLabels = this.graphicsData.repetitionsPieData.map(r => `${r.repeatedCount} Repetidas`);
+    const rLabels = this.graphicsData.repetitionsPieData.map(r => `${r.repeatedCount} Rep`);
     const rData = this.graphicsData.repetitionsPieData.map(r => r.total);
     this.repetitionsChartData = {
       labels: rLabels,
