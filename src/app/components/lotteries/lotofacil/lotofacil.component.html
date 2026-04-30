@@ -40,7 +40,7 @@
       </button>
 
       <button mat-raised-button class="btn-gradient-action text-white" (click)="synchronizeDraws()" [disabled]="isSyncing">
-        <span *ngIf="isSyncing" class="spinner-border spinner-border-sm me-2"></span>
+        <span *ngIf="isSyncing" class="spinner-border spinner-border-sm d-flex align-items-center gap-2"></span>
         <mat-icon *ngIf="!isSyncing" class="me-2">sync</mat-icon>
         {{ isSyncing ? '' : 'Sincronizar' }} </button>
     </div>
