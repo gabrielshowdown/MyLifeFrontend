@@ -1,11 +1,18 @@
 <div class="container-fluid p-4">
-  <div class="d-flex align-items-center mb-4 gap-3">
-    <button mat-icon-button routerLink="/lotofacil" color="primary" class="bg-white shadow-sm d-flex justify-content-center align-items-center">
-      <mat-icon>arrow_back</mat-icon>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <button mat-icon-button routerLink="/lotofacil" color="primary" class="bg-white shadow-sm d-flex justify-content-center align-items-center">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-2">
+        <mat-icon class="text-primary">receipt_long</mat-icon> Relatório de Apostas
+      </h3>
+    </div>
+
+    <button mat-raised-button color="accent" (click)="exportarExcel()" [disabled]="isExporting">
+      <mat-icon class="me-1">download</mat-icon> 
+      {{ isExporting ? 'Gerando...' : 'Exportar Excel' }}
     </button>
-    <h3 class="m-0 fw-bold text-dark d-flex align-items-center gap-2">
-      <mat-icon class="text-primary">receipt_long</mat-icon> Relatório de Apostas
-    </h3>
   </div>
 
   <div class="row g-3 mb-4" [@listAnimation]="true">

@@ -134,4 +134,10 @@ export class LoteriasService {
   getGraphicsData(): Observable<BetGraphicsResponse> {
     return this.http.get<BetGraphicsResponse>(`${this.API_APOSTALOTOFACIL}/graphics`);
   }
+
+  exportBetsToExcel(): Observable<Blob> {
+    return this.http.get(`${this.API_APOSTALOTOFACIL}/export`, {
+      responseType: 'blob' // Fundamental para não corromper o arquivo
+    });
+  }
 }

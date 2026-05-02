@@ -36,6 +36,8 @@ export class BetReportComponent implements OnInit {
   pageSize = 10;
   currentPage = 0;
 
+  isExporting: boolean = false;
+
   // ==== CONFIGURAÇÕES DOS GRÁFICOS ====
   public pieChartType: ChartType = 'pie';
 
@@ -110,5 +112,30 @@ export class BetReportComponent implements OnInit {
 
   openBetDetail(bet: LotofacilBet): void {
     this.dialog.open(BetModalComponent, { width: '500px', data: bet, panelClass: 'no-padding-dialog' });
+  }
+
+  exportarExcel(): void {
+    this.isExporting = true;
+    this.service.exportBetsToExcel().subscribe({
+      next: (blob: Blob) => {
+        // Cria uma URL temporária para o blob retornado
+        const url = window.URL.createObjectURL(blob);
+        // Cria um elemento <a> invisível e simula o clique para forçar o download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Relatorio_Apostas_${new Date().getTime()}.xlsx`; // Nome do arquivo
+        document.body.appendChild(a);
+        a.click();
+        
+        // Limpa o elemento
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.isExporting = false;
+      },
+      error: (err) => {
+        console.error('Erro ao exportar Excel', err);
+        this.isExporting = false;
+      }
+    });
   }
 }
