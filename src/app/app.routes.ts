@@ -24,6 +24,10 @@ export const routes: Routes = [
     path: 'menu', 
     loadComponent: () => import('./components/menu/menu.component').then(m => m.MenuComponent)
   },
+   { 
+    path: 'celebracao', 
+    loadComponent: () => import('./components/celebracao-palavra/celebracao-palavra.component').then(m => m.CelebracaoPalavraComponent)
+  },
   { 
     path: 'lotofacil', 
     loadComponent: () => import('./components/lotteries/lotofacil/lotofacil.component').then(m => m.LotofacilComponent)
