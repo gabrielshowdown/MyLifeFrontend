@@ -1,0 +1,56 @@
+.category-box {
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #faf8f8;
+    border-left: 4px solid #ccc;
+    height: 100%;
+}
+
+.cat-primeira {
+    border-left-color: #1976d2;
+}
+
+.cat-segunda {
+    border-left-color: #7b1fa2;
+}
+
+.cat-terceira {
+    border-left-color: #00796b;
+}
+
+.cat-evangelho {
+    border-left-color: #f57c00;
+}
+
+.cat-descartados {
+    border-left-color: #d32f2f;
+    background-color: #fff5f5;
+}
+
+h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+li::before {
+    content: "•";
+    color: inherit;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    opacity: 0.6;
+}

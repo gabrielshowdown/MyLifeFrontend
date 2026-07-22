@@ -10,6 +10,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { Book, BooksService } from '../../services/books.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ResultadoModalComponent } from './resultado-modal/resultado-modal.component';
 
 @Component({
   selector: 'app-celebracao-palavra',
@@ -24,7 +26,8 @@ import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from 
     MatListModule,
     MatDividerModule,
     MatIconModule,
-    DragDropModule
+    DragDropModule,
+    MatDialogModule
   ],
   templateUrl: './celebracao-palavra.component.html',
   styleUrls: ['./celebracao-palavra.component.scss']
@@ -52,7 +55,10 @@ export class CelebracaoPalavraComponent implements OnInit {
     'DESCARTADO': []
   };
 
-  constructor(private booksService: BooksService) {}
+  constructor(
+    private booksService: BooksService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadBooks();
@@ -86,10 +92,15 @@ export class CelebracaoPalavraComponent implements OnInit {
       rawText: this.rawText
     };
 
-    // Chamada real via POST para separar as leituras
     this.booksService.processText(payload).subscribe({
       next: (result) => {
-        this.processedResult = result;
+        // EM VEZ de salvar na variável processedResult da tela, abrimos o Modal!
+        this.dialog.open(ResultadoModalComponent, {
+          data: result, // Passa o JSON retornado pelo backend para o Modal
+          width: '85vw', // Largura do modal na tela
+          maxWidth: '1000px', // Limite máximo para monitores grandes
+          maxHeight: '90vh' // Altura máxima para gerar barra de rolagem se for muito grande
+        });
       },
       error: (err) => {
         console.error('Erro ao processar o texto:', err);
@@ -126,4 +137,5 @@ export class CelebracaoPalavraComponent implements OnInit {
       });
     }
   }
+
 }

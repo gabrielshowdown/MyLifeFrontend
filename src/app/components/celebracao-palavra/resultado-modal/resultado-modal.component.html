@@ -1,0 +1,61 @@
+<h2 mat-dialog-title class="bg-light border-bottom d-flex align-items-center gap-2">
+    <mat-icon color="primary">task_alt</mat-icon>
+    Resultado: {{ data.themeName }}
+</h2>
+
+<mat-dialog-content class="pt-4">
+    <div class="row g-4">
+        <!-- Reutilizando o seu layout do Bootstrap dentro do Modal -->
+        <div class="col-md-4" *ngIf="data.primeiraLeitura.length > 0">
+            <div class="category-box cat-primeira">
+                <h4><mat-icon>looks_one</mat-icon> 1ª Leitura</h4>
+                <ul>
+                    <li *ngFor="let item of data.primeiraLeitura">{{ item }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4" *ngIf="data.segundaLeitura.length > 0">
+            <div class="category-box cat-segunda">
+                <h4><mat-icon>looks_two</mat-icon> 2ª Leitura</h4>
+                <ul>
+                    <li *ngFor="let item of data.segundaLeitura">{{ item }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4" *ngIf="data.terceiraLeitura.length > 0">
+            <div class="category-box cat-terceira">
+                <h4><mat-icon>looks_3</mat-icon> 3ª Leitura</h4>
+                <ul>
+                    <li *ngFor="let item of data.terceiraLeitura">{{ item }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="data.evangelhos.length > 0">
+            <div class="category-box cat-evangelho">
+                <h4><mat-icon>auto_stories</mat-icon> Evangelho</h4>
+                <ul>
+                    <li *ngFor="let item of data.evangelhos">{{ item }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="data.descartados.length > 0">
+            <div class="category-box cat-descartados">
+                <h4 class="text-danger"><mat-icon>delete_sweep</mat-icon> Descartados</h4>
+                <ul>
+                    <li *ngFor="let item of data.descartados">{{ item }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="border-top pb-2 pt-2 pe-3">
+    <button mat-button mat-dialog-close>Fechar</button>
+    <button mat-flat-button color="primary" (click)="exportarTexto()">
+        <mat-icon>download</mat-icon> Exportar (Copiar)
+    </button>
+</mat-dialog-actions>
