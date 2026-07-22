@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 // Definimos uma interface baseada no retorno do seu JSON
@@ -27,5 +27,11 @@ export class BooksService {
   // Já aproveitamos para fazer o POST do processamento
   processText(payload: { themeName: string, rawText: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/process-text`, payload);
+  }
+  
+  updateCategory(id: number, newCategory: string): Observable<Book> {
+    // O Spring Boot com @RequestBody Enum espera que a string venha entre aspas duplas no JSON
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.put<Book>(`${this.apiUrl}/${id}/category`, `"${newCategory}"`, { headers });
   }
 }

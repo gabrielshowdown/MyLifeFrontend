@@ -9,6 +9,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { Book, BooksService } from '../../services/books.service';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-celebracao-palavra',
@@ -22,7 +23,8 @@ import { Book, BooksService } from '../../services/books.service';
     MatButtonModule,
     MatListModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
+    DragDropModule
   ],
   templateUrl: './celebracao-palavra.component.html',
   styleUrls: ['./celebracao-palavra.component.scss']
@@ -42,7 +44,13 @@ export class CelebracaoPalavraComponent implements OnInit {
     { id: 2, name: 'Quaresma - Ano B', date: '2026-02-22' }
   ];
 
-  // Mock dos livros baseados no GET /books/
+  booksByCategory: { [key: string]: Book[] } = {
+    'PRIMEIRA_LEITURA': [],
+    'SEGUNDA_LEITURA': [],
+    'TERCEIRA_LEITURA': [],
+    'EVANGELHO': [],
+    'DESCARTADO': []
+  };
 
   constructor(private booksService: BooksService) {}
 
@@ -50,16 +58,21 @@ export class CelebracaoPalavraComponent implements OnInit {
     this.loadBooks();
   }
 
-  // Simula o GET http://localhost:8080/books/
   loadBooks() {
-    // Mock simplificado do retorno
     this.booksService.getBooks().subscribe({
       next: (data: Book[]) => {
         this.allBooks = data;
-        console.log('Livros carregados:', this.allBooks);
-      },
-      error: (err) => {
-        console.error('Erro ao buscar os livros:', err);
+        this.distributeBooksToCategories(); // Chama a função para separar
+      }
+    });
+  }
+
+  // Função para limpar e preencher os arrays de cada categoria
+  distributeBooksToCategories() {
+    this.categories.forEach(cat => this.booksByCategory[cat] = []); // Limpa arrays
+    this.allBooks.forEach(book => {
+      if (this.booksByCategory[book.category]) {
+        this.booksByCategory[book.category].push(book);
       }
     });
   }
@@ -84,7 +97,33 @@ export class CelebracaoPalavraComponent implements OnInit {
     });
   }
 
-  getBooksByCategory(category: string) {
-    return this.allBooks.filter(book => book.category === category);
+  drop(event: CdkDragDrop<Book[]>, newCategoryName: string) {
+    if (event.previousContainer === event.container) {
+      // Se apenas mudou a ordem dentro da mesma coluna
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      // Se moveu para uma coluna diferente
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+
+      // Pega o livro que acabou de ser movido
+      const movedBook = event.container.data[event.currentIndex];
+      
+      // Salva no backend chamando o endpoint PUT
+      this.booksService.updateCategory(movedBook.id, newCategoryName).subscribe({
+        next: (updatedBook) => {
+          console.log(`Livro ${updatedBook.name} atualizado para ${updatedBook.category}`);
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar categoria', err);
+          // Opcional: Se der erro, você pode recarregar a lista chamando this.loadBooks() 
+          // para reverter a alteração visual.
+        }
+      });
+    }
   }
 }
