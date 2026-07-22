@@ -1,40 +1,55 @@
-<div class="container py-4">
-  <div class="row mb-4">
-    <div class="col-12">
-      <h2 class="mat-h2">Celebração da Palavra</h2>
-      <p class="text-muted">Organize e separe as leituras bíblicas por categoria.</p>
+<div class="container py-4 fade-in">
+  <!-- Cabeçalho -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-12 d-flex align-items-center gap-3">
+      <mat-icon color="primary" style="font-size: 40px; width: 40px; height: 40px;">menu_book</mat-icon>
+      <div>
+        <h2 class="mat-h2 mb-0" style="font-weight: 500;">Celebração da Palavra</h2>
+        <p class="text-muted mb-0">Organize e separe as leituras bíblicas por categoria com facilidade.</p>
+      </div>
     </div>
   </div>
 
   <div class="row g-4">
     <!-- Coluna Esquerda: Espaço Futuro para Temas Salvos -->
     <div class="col-md-4">
-      <mat-card class="h-100">
-        <mat-card-header>
+      <mat-card class="h-100 interactive-card">
+        <mat-card-header class="border-bottom pb-2 mb-2">
+          <div mat-card-avatar>
+            <mat-icon color="accent" style="font-size: 32px; width: 32px; height: 32px;">history</mat-icon>
+          </div>
           <mat-card-title>Temas Salvos</mat-card-title>
           <mat-card-subtitle>Histórico de separações</mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content>
+        <mat-card-content class="pt-2">
           <mat-list>
-            <mat-list-item *ngFor="let theme of savedThemes">
-              <mat-icon matListItemIcon>folder</mat-icon>
+            <mat-list-item *ngFor="let theme of savedThemes" class="saved-theme-item rounded">
+              <mat-icon matListItemIcon color="primary">folder</mat-icon>
               <div matListItemTitle>{{ theme.name }}</div>
-              <div matListItemLine>{{ theme.date }}</div>
+              <div matListItemLine class="text-muted-small">{{ theme.date }}</div>
             </mat-list-item>
-            <mat-divider></mat-divider>
-            <p class="text-center mt-3 text-muted small">
-              *Integração futura com o banco de dados*
-            </p>
           </mat-list>
+          
+          <div class="mt-4 text-center">
+            <mat-divider></mat-divider>
+            <p class="mt-3 text-muted-small d-flex align-items-center justify-content-center gap-1">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px;">cloud_upload</mat-icon>
+              Integração futura com banco de dados
+            </p>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>
 
     <!-- Coluna Direita: Formulário de Processamento -->
     <div class="col-md-8">
-      <mat-card>
+      <mat-card class="h-100 interactive-card">
         <mat-card-header>
+          <div mat-card-avatar>
+            <mat-icon color="primary" style="font-size: 32px; width: 32px; height: 32px;">add_circle</mat-icon>
+          </div>
           <mat-card-title>Nova Separação</mat-card-title>
+          <mat-card-subtitle>Insira o texto bruto para filtrar</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="pt-3">
           <form (ngSubmit)="processReadings()">
@@ -42,20 +57,22 @@
               <div class="col-12">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Nome do Tema</mat-label>
-                  <input matInput [(ngModel)]="themeName" name="themeName" placeholder="Ex: Tema Teste" required>
+                  <input matInput [(ngModel)]="themeName" name="themeName" placeholder="Ex: Advento - Ano A" required>
+                  <mat-icon matPrefix class="me-2 text-muted">label</mat-icon>
                 </mat-form-field>
               </div>
               <div class="col-12">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Leituras Brutas</mat-label>
-                  <textarea matInput [(ngModel)]="rawText" name="rawText" rows="6" placeholder="Cole as leituras aqui..." required></textarea>
+                  <textarea matInput [(ngModel)]="rawText" name="rawText" rows="7" placeholder="Cole a lista de leituras aqui..." required></textarea>
                 </mat-form-field>
               </div>
             </div>
           </form>
         </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-raised-button color="primary" (click)="processReadings()" [disabled]="!themeName || !rawText">
+        <mat-card-actions align="end" class="pb-3 pe-3">
+          <button mat-flat-button color="primary" (click)="processReadings()" [disabled]="!themeName || !rawText" class="px-4 py-1">
+            <mat-icon class="me-1">filter_list</mat-icon>
             Filtrar Leituras
           </button>
         </mat-card-actions>
@@ -63,50 +80,69 @@
     </div>
   </div>
 
-  <!-- Resultado do Processamento (Renderizado apenas após a filtragem) -->
-  <div class="row mt-4" *ngIf="processedResult">
+  <!-- Resultado do Processamento -->
+  <div class="row mt-4 slide-up" *ngIf="processedResult">
     <div class="col-12">
-      <mat-card class="result-card">
-        <mat-card-header>
-          <mat-card-title>Resultado: {{ processedResult.themeName }}</mat-card-title>
+      <mat-card class="result-card mat-elevation-z4">
+        <mat-card-header class="bg-light border-bottom py-3">
+          <div mat-card-avatar>
+            <mat-icon color="primary">task_alt</mat-icon>
+          </div>
+          <mat-card-title class="mb-0 mt-1">Resultado: {{ processedResult.themeName }}</mat-card-title>
         </mat-card-header>
-        <mat-card-content class="pt-3">
-          <div class="row g-3">
+        <mat-card-content class="pt-4 px-4 pb-4">
+          <div class="row g-4">
+            
             <!-- Primeira Leitura -->
             <div class="col-md-4">
-              <strong>1ª Leitura</strong>
-              <ul>
-                <li *ngFor="let item of processedResult.primeiraLeitura">{{ item }}</li>
-              </ul>
+              <div class="category-box cat-primeira">
+                <h4><mat-icon>looks_one</mat-icon> 1ª Leitura</h4>
+                <ul>
+                  <li *ngFor="let item of processedResult.primeiraLeitura">{{ item }}</li>
+                </ul>
+              </div>
             </div>
+            
             <!-- Segunda Leitura -->
             <div class="col-md-4">
-              <strong>2ª Leitura</strong>
-              <ul>
-                <li *ngFor="let item of processedResult.segundaLeitura">{{ item }}</li>
-              </ul>
+              <div class="category-box cat-segunda">
+                <h4><mat-icon>looks_two</mat-icon> 2ª Leitura</h4>
+                <ul>
+                  <li *ngFor="let item of processedResult.segundaLeitura">{{ item }}</li>
+                </ul>
+              </div>
             </div>
+            
             <!-- Terceira Leitura -->
             <div class="col-md-4">
-              <strong>3ª Leitura</strong>
-              <ul>
-                <li *ngFor="let item of processedResult.terceiraLeitura">{{ item }}</li>
-              </ul>
+              <div class="category-box cat-terceira">
+                <h4><mat-icon>looks_3</mat-icon> 3ª Leitura</h4>
+                <ul>
+                  <li *ngFor="let item of processedResult.terceiraLeitura">{{ item }}</li>
+                </ul>
+              </div>
             </div>
+            
             <!-- Evangelhos -->
-            <div class="col-md-6 mt-3">
-              <strong>Evangelho</strong>
-              <ul>
-                <li *ngFor="let item of processedResult.evangelhos">{{ item }}</li>
-              </ul>
+            <div class="col-md-6">
+              <div class="category-box cat-evangelho">
+                <h4><mat-icon>auto_stories</mat-icon> Evangelho</h4>
+                <ul>
+                  <li *ngFor="let item of processedResult.evangelhos">{{ item }}</li>
+                </ul>
+              </div>
             </div>
+            
             <!-- Descartados -->
-            <div class="col-md-6 mt-3">
-              <strong class="text-danger">Descartados</strong>
-              <ul>
-                <li *ngFor="let item of processedResult.descartados">{{ item }}</li>
-              </ul>
+            <div class="col-md-6">
+              <div class="category-box cat-descartados">
+                <h4 class="text-danger"><mat-icon>delete_sweep</mat-icon> Descartados</h4>
+                <ul>
+                  <li *ngFor="let item of processedResult.descartados">{{ item }}</li>
+                </ul>
+              </div>
             </div>
+
           </div>
         </mat-card-content>
       </mat-card>
@@ -114,24 +150,32 @@
   </div>
 
   <!-- Dicionário de Categorias (Listagem Geral) -->
-  <div class="row mt-4">
+  <div class="row mt-4 mb-5 slide-up" style="animation-delay: 0.1s;">
     <div class="col-12">
-      <mat-card>
-        <mat-card-header>
+      <mat-card class="interactive-card">
+        <mat-card-header class="border-bottom pb-2 mb-3">
+          <div mat-card-avatar>
+            <mat-icon style="color: #607d8b;">library_books</mat-icon>
+          </div>
           <mat-card-title>Dicionário de Categorias</mat-card-title>
           <mat-card-subtitle>Livros agrupados por tipo na base de dados</mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content class="pt-3">
-          <div class="row">
-            <div class="col-md-4 col-sm-6 mb-3" *ngFor="let cat of categories">
-              <strong>{{ cat | titlecase }}</strong>
-              <ul class="mb-0">
-                <li *ngFor="let book of getBooksByCategory(cat)">
-                  {{ book.name }} ({{ book.abbreviation }})
-                </li>
-              </ul>
+        <mat-card-content class="pt-2 px-4 pb-4">
+          <!-- Adicionamos row-cols para controlar a quantidade de colunas responsivamente -->
+        <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-xl-5">
+          <!-- Utilizamos apenas 'col' para que o elemento respeite a regra da linha pai -->
+          <div class="col" *ngFor="let cat of categories">
+            <div class="d-flex align-items-center mb-2">
+              <mat-icon class="me-2 text-muted" style="font-size: 20px; width: 20px; height: 20px;">bookmark</mat-icon>
+              <strong class="text-dark">{{ cat | titlecase }}</strong>
             </div>
+            <ul class="dict-list">
+              <li *ngFor="let book of getBooksByCategory(cat)">
+                {{ book.name }} <span class="text-muted">({{ book.abbreviation }})</span>
+              </li>
+            </ul>
           </div>
+        </div>
         </mat-card-content>
       </mat-card>
     </div>

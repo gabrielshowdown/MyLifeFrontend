@@ -1,17 +1,145 @@
-.mat-card {
-  margin-bottom: 1rem;
+/* =========================================
+   Animações
+   ========================================= */
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
+.slide-up {
+  opacity: 0; /* Começa invisível para a animação */
+  animation: slideUp 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   Cartões e Interações
+   ========================================= */
+.interactive-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border-radius: 12px;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+  }
+}
+
+.saved-theme-item {
+  transition: background-color 0.2s;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* =========================================
+   Cartão de Resultados e Categorias
+   ========================================= */
 .result-card {
-  border-left: 5px solid #3f51b5; /* Cor primary padrão do Material */
+  border-radius: 12px;
+  overflow: hidden;
+  border-top: 5px solid #3f51b5; /* Cor primary do Material */
+}
+
+.category-box {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #faf8f8; /* Fundo cinza bem claro */
+  height: 100%;
+  border-left: 4px solid #ccc;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f1f3f5;
+  }
+  
+  /* Cores temáticas para cada tipo de leitura */
+  &.cat-primeira { border-left-color: #1976d2; } /* Azul */
+  &.cat-segunda  { border-left-color: #7b1fa2; } /* Roxo */
+  &.cat-terceira { border-left-color: #00796b; } /* Verde Água */
+  &.cat-evangelho{ border-left-color: #f57c00; } /* Laranja */
+  &.cat-descartados { 
+    border-left-color: #d32f2f; 
+    background-color: #fff5f5; /* Fundo avermelhado suave */
+    
+    &:hover { background-color: #ffebee; }
+  }
+
+  h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: #333;
+    
+    mat-icon {
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+    }
+  }
   
   ul {
-    padding-left: 1.2rem;
+    list-style-type: none;
+    padding-left: 0;
     margin-bottom: 0;
     
     li {
+      padding: 6px 0;
+      border-bottom: 1px dashed rgba(0,0,0,0.08);
       font-size: 0.95rem;
-      margin-bottom: 0.2rem;
+      color: #444;
+      
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      &::before {
+        content: "•";
+        color: inherit;
+        font-weight: bold;
+        display: inline-block; 
+        width: 1em;
+        opacity: 0.6;
+      }
     }
   }
+}
+
+/* =========================================
+   Dicionário
+   ========================================= */
+.dict-list {
+  padding-left: 1rem;
+  list-style-type: square;
+  
+  li {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 4px;
+  }
+}
+
+.text-muted-small {
+  font-size: 0.85rem;
+  color: #888;
 }
