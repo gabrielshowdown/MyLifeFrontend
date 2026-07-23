@@ -58,4 +58,7 @@
     <button mat-flat-button color="primary" (click)="exportarTexto()">
         <mat-icon>download</mat-icon> Exportar (Copiar)
     </button>
+    <button mat-flat-button color="accent" (click)="salvarNoBanco()" [disabled]="salvando">
+        <mat-icon>save</mat-icon> {{ salvando ? 'Salvando...' : 'Salvar Tema' }}
+    </button>
 </mat-dialog-actions>

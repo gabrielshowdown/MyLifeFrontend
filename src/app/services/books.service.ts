@@ -34,4 +34,15 @@ export class BooksService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.put<Book>(`${this.apiUrl}/${id}/category`, `"${newCategory}"`, { headers });
   }
+
+  // Novo método para Salvar o Tema
+  saveTheme(themeData: any): Observable<any> {
+    return this.http.post<any>('http://localhost:8080/themes', themeData);
+  }
+
+  // Novo método para buscar o histórico
+  getSavedThemes(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:8080/themes');
+  }
+  
 }
