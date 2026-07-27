@@ -23,13 +23,20 @@
         </mat-card-header>
         <mat-card-content class="pt-2">
           <mat-list>
+            <!-- O hover e os cliques continuam funcionando com a classe saved-theme-item -->
             <mat-list-item *ngFor="let theme of savedThemes" class="saved-theme-item rounded">
               <mat-icon matListItemIcon color="primary">folder</mat-icon>
-              <div matListItemTitle>{{ theme.name }}</div>
-              <div matListItemLine class="text-muted-small">{{ theme.date }}</div>
+              <!-- Usamos as propriedades reais da entidade do Backend -->
+              <div matListItemTitle>{{ theme.themeName }}</div>
+              <div matListItemLine class="text-muted-small">{{ theme.creationDate }}</div>
+              
+              <!-- Botão de Visualizar (Olho) -->
+              <button mat-icon-button matListItemMeta (click)="viewSavedTheme(theme)" matTooltip="Ver leituras">
+                <mat-icon>visibility</mat-icon>
+              </button>
             </mat-list-item>
           </mat-list>
-          
+                    
           <div class="mt-4 text-center">
             <mat-divider></mat-divider>
             <p class="mt-3 text-muted-small d-flex align-items-center justify-content-center gap-1">

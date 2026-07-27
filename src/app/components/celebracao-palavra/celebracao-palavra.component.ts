@@ -42,11 +42,14 @@ export class CelebracaoPalavraComponent implements OnInit {
   categories: string[] = ['PRIMEIRA_LEITURA', 'SEGUNDA_LEITURA', 'TERCEIRA_LEITURA', 'EVANGELHO', 'DESCARTADO'];
 
   // Mock futuro para os temas salvos
+  /*
   savedThemes: any[] = [
     { id: 1, name: 'Advento - Ano A', date: '2026-11-29' },
     { id: 2, name: 'Quaresma - Ano B', date: '2026-02-22' }
   ];
-
+  */
+  savedThemes: any[] = [];
+  
   booksByCategory: { [key: string]: Book[] } = {
     'PRIMEIRA_LEITURA': [],
     'SEGUNDA_LEITURA': [],
@@ -62,6 +65,7 @@ export class CelebracaoPalavraComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBooks();
+    this.loadSavedThemes();
   }
 
   loadBooks() {
@@ -70,6 +74,27 @@ export class CelebracaoPalavraComponent implements OnInit {
         this.allBooks = data;
         this.distributeBooksToCategories(); // Chama a função para separar
       }
+    });
+  }
+
+  loadSavedThemes() {
+    this.booksService.getSavedThemes().subscribe({
+      next: (themes) => {
+        this.savedThemes = themes;
+      },
+      error: (err) => {
+        console.error('Erro ao buscar temas salvos:', err);
+      }
+    });
+  }
+
+  viewSavedTheme(theme: any) {
+    this.dialog.open(ResultadoModalComponent, {
+      // Passamos o objeto do banco E adicionamos a flag 'isSavedTheme: true'
+      data: { ...theme, isSavedTheme: true },
+      width: '85vw',
+      maxWidth: '1000px',
+      maxHeight: '90vh'
     });
   }
 
@@ -87,23 +112,25 @@ export class CelebracaoPalavraComponent implements OnInit {
   processReadings() {
     if (!this.themeName || !this.rawText) return;
 
-    const payload = {
-      themeName: this.themeName,
-      rawText: this.rawText
-    };
+    const payload = { themeName: this.themeName, rawText: this.rawText };
 
     this.booksService.processText(payload).subscribe({
       next: (result) => {
-        // EM VEZ de salvar na variável processedResult da tela, abrimos o Modal!
-        this.dialog.open(ResultadoModalComponent, {
-          data: result, // Passa o JSON retornado pelo backend para o Modal
-          width: '85vw', // Largura do modal na tela
-          maxWidth: '1000px', // Limite máximo para monitores grandes
-          maxHeight: '90vh' // Altura máxima para gerar barra de rolagem se for muito grande
+        const dialogRef = this.dialog.open(ResultadoModalComponent, {
+          data: result, 
+          width: '85vw', 
+          maxWidth: '1000px', 
+          maxHeight: '90vh'
         });
-      },
-      error: (err) => {
-        console.error('Erro ao processar o texto:', err);
+
+        // Quando o modal fechar, verifica se retornou 'true' (significa que salvou)
+        dialogRef.afterClosed().subscribe(salvou => {
+          if (salvou) {
+            this.loadSavedThemes(); // Recarrega a lista lateral automaticamente!
+            this.themeName = ''; // Limpa o formulário
+            this.rawText = '';
+          }
+        });
       }
     });
   }
