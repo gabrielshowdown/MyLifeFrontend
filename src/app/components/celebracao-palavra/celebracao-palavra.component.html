@@ -22,30 +22,34 @@
           <mat-card-subtitle>Histórico de separações</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="pt-2">
-          <mat-list>
-            <mat-list-item *ngFor="let theme of savedThemes" class="saved-theme-item rounded">
-              <mat-icon matListItemIcon color="primary">folder</mat-icon>
-              
-              <div matListItemTitle>{{ theme.themeName }}</div>
-              
-              <!-- Pipe date:'dd/MM/yyyy' converte o padrão ISO do Spring Boot para o visual correto -->
-              <div matListItemLine class="text-muted-small">
-                Celebração: {{ theme.celebrationDate | date:'dd/MM/yyyy' }}
-              </div>
-              
-              <button mat-icon-button matListItemMeta (click)="viewSavedTheme(theme)" matTooltip="Ver leituras">
-                <mat-icon>visibility</mat-icon>
-              </button>
-            </mat-list-item>
-          </mat-list>
-                    
-          <div class="mt-4 text-center">
+  
+          <!-- Lista com Scroll: Só aparece se houver temas salvos (length > 0) -->
+          <div class="saved-themes-scroll" *ngIf="savedThemes.length > 0">
+            <mat-list>
+              <mat-list-item *ngFor="let theme of savedThemes" class="saved-theme-item rounded">
+                <mat-icon matListItemIcon color="primary">folder</mat-icon>
+                <div matListItemTitle>{{ theme.themeName }}</div>
+                <div matListItemLine class="text-muted-small">
+                  Celebração: {{ theme.celebrationDate | date:'dd/MM/yyyy' }}
+                </div>
+                
+                <button mat-icon-button matListItemMeta (click)="viewSavedTheme(theme)" matTooltip="Ver leituras">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </mat-list-item>
+            </mat-list>
+          </div>
+          
+          <!-- Estado Vazio: Só aparece se NÃO houver temas salvos (length === 0) -->
+          <div class="mt-4 text-center" *ngIf="savedThemes.length === 0">
             <mat-divider></mat-divider>
-            <p class="mt-3 text-muted-small d-flex align-items-center justify-content-center gap-1">
-              <mat-icon style="font-size: 16px; width: 16px; height: 16px;">cloud_upload</mat-icon>
-              Integração futura com banco de dados
+            <p class="mt-4 text-muted-small d-flex flex-column align-items-center justify-content-center gap-2">
+              <!-- Mudei o ícone e o texto para fazer mais sentido com o sistema já integrado -->
+              <mat-icon style="font-size: 32px; width: 32px; height: 32px; opacity: 0.5;">history_toggle_off</mat-icon>
+              Nenhum tema salvo ainda.
             </p>
           </div>
+
         </mat-card-content>
       </mat-card>
     </div>
