@@ -1,10 +1,27 @@
-<h2 mat-dialog-title class="bg-light border-bottom d-flex align-items-center gap-2">
+<h2 mat-dialog-title class="bg-light border-bottom d-flex align-items-center gap-2 m-0 py-3 px-4">
     <mat-icon color="primary">task_alt</mat-icon>
-    Resultado: {{ data.themeName }}
+    <!-- Adicionamos o ternário do Angular direto na interpolação -->
+    {{ data.isSavedTheme ? 'Tema' : 'Resultado' }}: {{ data.themeName }}
 </h2>
 
-<mat-dialog-content class="pt-4">
-    <div class="row g-4">
+<mat-dialog-content class="pt-2 px-4">
+
+    <div class="row mt-2 mb-2">
+        <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+                <mat-label>Data da Celebração</mat-label>
+                <input matInput 
+                       [matDatepicker]="picker" 
+                       [(ngModel)]="celebrationDate" 
+                       placeholder="DD/MM/AAAA"
+                       [disabled]="data.isSavedTheme"> <!-- Fica cinza se for visualização -->
+                <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="data.isSavedTheme"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
         <!-- Reutilizando o seu layout do Bootstrap dentro do Modal -->
         <div class="col-md-4" *ngIf="data.primeiraLeitura.length > 0">
             <div class="category-box cat-primeira">
@@ -58,7 +75,6 @@
     <button mat-flat-button color="primary" (click)="exportarTexto()">
         <mat-icon>download</mat-icon> Exportar (Copiar)
     </button>
-    <!-- Adicionamos o *ngIf aqui para só mostrar se não for um tema já salvo -->
     <button *ngIf="!data.isSavedTheme" mat-flat-button color="accent" (click)="salvarNoBanco()" [disabled]="salvando">
         <mat-icon>save</mat-icon> {{ salvando ? 'Salvando...' : 'Salvar Tema' }}
     </button>

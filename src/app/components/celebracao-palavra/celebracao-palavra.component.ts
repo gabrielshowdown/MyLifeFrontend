@@ -112,25 +112,32 @@ export class CelebracaoPalavraComponent implements OnInit {
   processReadings() {
     if (!this.themeName || !this.rawText) return;
 
-    const payload = { themeName: this.themeName, rawText: this.rawText };
+    const payload = {
+      themeName: this.themeName,
+      rawText: this.rawText
+    };
 
     this.booksService.processText(payload).subscribe({
       next: (result) => {
+        // Guarda a referência do modal aberto
         const dialogRef = this.dialog.open(ResultadoModalComponent, {
-          data: result, 
-          width: '85vw', 
-          maxWidth: '1000px', 
+          data: result,
+          width: '85vw',
+          maxWidth: '1000px',
           maxHeight: '90vh'
         });
 
-        // Quando o modal fechar, verifica se retornou 'true' (significa que salvou)
-        dialogRef.afterClosed().subscribe(salvou => {
+        // Fica "escutando" o momento em que o modal é fechado
+        dialogRef.afterClosed().subscribe((salvou: boolean) => {
           if (salvou) {
-            this.loadSavedThemes(); // Recarrega a lista lateral automaticamente!
-            this.themeName = ''; // Limpa o formulário
-            this.rawText = '';
+            this.loadSavedThemes(); // Recarrega a lista lateral de temas
+            this.themeName = '';    // Limpa o input do nome
+            this.rawText = '';      // Limpa o textarea das leituras
           }
         });
+      },
+      error: (err) => {
+        console.error('Erro ao processar o texto:', err);
       }
     });
   }

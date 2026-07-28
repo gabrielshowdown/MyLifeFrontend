@@ -5,23 +5,53 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { BooksService } from '../../../services/books.service';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-resultado-modal',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
   templateUrl: './resultado-modal.component.html',
   styleUrl: './resultado-modal.component.scss',
 })
 export class ResultadoModalComponent {
 
   salvando = false;
+  foiSalvo = false; // Controle para liberar a exportação
+  celebrationDate: Date | null = null; // A data que o usuário vai escolher
+
   // Recebe os dados injetados via MAT_DIALOG_DATA
   constructor(
     public dialogRef: MatDialogRef<ResultadoModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private booksService: BooksService
-  ) {}
+  ) {
+    // Se for um tema salvo, já bloqueamos a edição e preenchemos a data
+    if (this.data.isSavedTheme) {
+      this.foiSalvo = true; // Se já está no banco, a exportação é livre
+      
+      // Converte a string do backend (YYYY-MM-DD) para um objeto Date pro Angular entender
+      if (this.data.celebrationDate) {
+        // Truque para evitar problemas de fuso horário ao instanciar datas do tipo string
+        const [year, month, day] = this.data.celebrationDate.split('-');
+        this.celebrationDate = new Date(+year, +month - 1, +day);
+      }
+    }
+  }
 
   // Lógica inicial para exportar (Copia o resultado para a área de transferência do usuário)
   exportarTexto() {
@@ -39,14 +69,26 @@ export class ResultadoModalComponent {
   }
 
   salvarNoBanco() {
+    if (!this.celebrationDate) {
+      alert('Por favor, informe a data da celebração.');
+      return;
+    }
+
     this.salvando = true;
     
-    // O 'this.data' já contém exatamente o JSON que o backend precisa!
-    this.booksService.saveTheme(this.data).subscribe({
+    const year = this.celebrationDate.getFullYear();
+    const month = String(this.celebrationDate.getMonth() + 1).padStart(2, '0');
+    const day = String(this.celebrationDate.getDate()).padStart(2, '0');
+    
+    const payload = {
+      ...this.data,
+      celebrationDate: `${year}-${month}-${day}`
+    };
+    
+    this.booksService.saveTheme(payload).subscribe({
       next: (resultadoSalvo) => {
-        alert('Tema salvo com sucesso no banco de dados!');
         this.salvando = false;
-        // Opcional: Fechar o modal passando o resultado para a tela principal recarregar a lista lateral
+        // FECHA O MODAL e envia "true" informando à tela de trás que salvou com sucesso
         this.dialogRef.close(true); 
       },
       error: (err) => {
