@@ -12,6 +12,7 @@ import { Book, BooksService } from '../../services/books.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ResultadoModalComponent } from './resultado-modal/resultado-modal.component';
+import { ImageModalComponent } from '../../shared/image-modal/image-modal.component';
 
 @Component({
   selector: 'app-celebracao-palavra',
@@ -170,6 +171,13 @@ export class CelebracaoPalavraComponent implements OnInit {
         }
       });
     }
+  }
+
+  abrirTutorial() {
+    this.dialog.open(ImageModalComponent, {
+      width: '600px', // Um pouco mais largo para acomodar bem o GIF
+      maxWidth: '90vw'
+    });
   }
 
 }

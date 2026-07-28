@@ -57,12 +57,31 @@
     <!-- Coluna Direita: Formulário de Processamento -->
     <div class="col-md-8">
       <mat-card class="h-100 interactive-card">
-        <mat-card-header>
+        <mat-card-header class="d-flex w-100 align-items-center">
           <div mat-card-avatar>
             <mat-icon color="primary" style="font-size: 32px; width: 32px; height: 32px;">add_circle</mat-icon>
           </div>
-          <mat-card-title>Nova Separação</mat-card-title>
-          <mat-card-subtitle>Insira o texto bruto para filtrar</mat-card-subtitle>
+          
+          <div>
+            <mat-card-title>Nova Separação</mat-card-title>
+            <!-- Adicionei mb-0 para remover a margem inferior extra do subtítulo -->
+            <mat-card-subtitle class="mb-0">Insira o texto bruto para filtrar</mat-card-subtitle>
+          </div>
+          
+          <!-- Container para os botões alinhados à direita -->
+          <div class="ms-auto d-flex align-items-center gap-1">
+            
+            <!-- NOVO: Atalho direto para o site -->
+            <a mat-button color="accent" href="https://leondufour.com/" target="_blank" matTooltip="Abrir site de leituras">
+              <mat-icon>open_in_new</mat-icon> Léon Dufour
+            </a>
+            
+            <!-- Botão de Ajuda que abre o Modal com o GIF -->
+            <button mat-icon-button color="primary" (click)="abrirTutorial()" matTooltip="Como usar?">
+              <mat-icon>help_outline</mat-icon>
+            </button>
+            
+          </div>
         </mat-card-header>
         <mat-card-content class="pt-3">
           <form (ngSubmit)="processReadings()">

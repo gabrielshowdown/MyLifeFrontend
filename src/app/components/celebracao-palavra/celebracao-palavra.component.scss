@@ -210,3 +210,39 @@
     background: #a8a8a8;
   }
 }
+
+/* =========================================
+   Ajuste de Centralização (Botões de Ícone)
+   ========================================= */
+[mat-icon-button] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* Garante que o ícone interno não tenha margens indesejadas do Bootstrap */
+  mat-icon {
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* =========================================
+   Alinhamento do botão na Lista de Temas
+   ========================================= */
+.saved-theme-item {
+  /* Alinha o container do botão de olho (meta) exatamente no centro vertical */
+  [matListItemMeta] {
+    align-self: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Caso o Angular Material esteja isolando a classe interna (MDC), aplicamos via ng-deep por segurança */
+  ::ng-deep .mdc-list-item__meta {
+    align-self: center !important;
+    display: flex;
+    align-items: center;
+  }
+}
