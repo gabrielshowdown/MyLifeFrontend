@@ -73,7 +73,10 @@
 <mat-dialog-actions align="end" class="border-top pb-2 pt-2 pe-3">
     <button mat-button mat-dialog-close>Fechar</button>
     <button mat-flat-button color="primary" (click)="exportarTexto()">
-        <mat-icon>download</mat-icon> Exportar (Copiar)
+        <mat-icon>download</mat-icon> (Copiar)
+    </button>
+    <button mat-flat-button color="warn" (click)="exportarPdf()" [disabled]="!data.id">
+        <mat-icon>picture_as_pdf</mat-icon> Exportar PDF
     </button>
     <button *ngIf="!data.isSavedTheme" mat-flat-button color="accent" (click)="salvarNoBanco()" [disabled]="salvando">
         <mat-icon>save</mat-icon> {{ salvando ? 'Salvando...' : 'Salvar Tema' }}

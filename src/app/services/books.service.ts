@@ -44,5 +44,10 @@ export class BooksService {
   getSavedThemes(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:8080/themes');
   }
+
+  exportPdf(themeId: number): Observable<Blob> {
+    // Usamos responseType: 'blob' para arquivos
+    return this.http.get(`http://localhost:8080/themes/${themeId}/export-pdf`, { responseType: 'blob' });
+  }
   
 }

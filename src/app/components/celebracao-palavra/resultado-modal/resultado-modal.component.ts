@@ -55,16 +55,67 @@ export class ResultadoModalComponent {
 
   // Lógica inicial para exportar (Copia o resultado para a área de transferência do usuário)
   exportarTexto() {
-    let textoExportacao = `Tema: ${this.data.themeName}\n\n`;
+    // 1. Adiciona o Tema
+    let textoExportacao = `Tema: ${this.data.themeName}\n`;
     
-    if (this.data.primeiraLeitura.length > 0) textoExportacao += `Primeira Leitura:\n- ${this.data.primeiraLeitura.join('\n- ')}\n\n`;
-    if (this.data.segundaLeitura.length > 0) textoExportacao += `Segunda Leitura:\n- ${this.data.segundaLeitura.join('\n- ')}\n\n`;
-    if (this.data.terceiraLeitura.length > 0) textoExportacao += `Terceira Leitura:\n- ${this.data.terceiraLeitura.join('\n- ')}\n\n`;
-    if (this.data.evangelhos.length > 0) textoExportacao += `Evangelho:\n- ${this.data.evangelhos.join('\n- ')}\n\n`;
+    // 2. Verifica se existe uma data e formata para DD/MM/AAAA
+    if (this.celebrationDate) {
+      const dia = String(this.celebrationDate.getDate()).padStart(2, '0');
+      const mes = String(this.celebrationDate.getMonth() + 1).padStart(2, '0');
+      const ano = this.celebrationDate.getFullYear();
+      textoExportacao += `Data da Celebração: ${dia}/${mes}/${ano}\n`;
+    }
+
+    // Pula uma linha extra antes de começar as leituras
+    textoExportacao += `\n`; 
+    
+    // 3. Adiciona as categorias dinamicamente
+    if (this.data.primeiraLeitura && this.data.primeiraLeitura.length > 0) {
+      textoExportacao += `Primeira Leitura:\n- ${this.data.primeiraLeitura.join('\n- ')}\n\n`;
+    }
+    
+    if (this.data.segundaLeitura && this.data.segundaLeitura.length > 0) {
+      textoExportacao += `Segunda Leitura:\n- ${this.data.segundaLeitura.join('\n- ')}\n\n`;
+    }
+    
+    if (this.data.terceiraLeitura && this.data.terceiraLeitura.length > 0) {
+      textoExportacao += `Terceira Leitura:\n- ${this.data.terceiraLeitura.join('\n- ')}\n\n`;
+    }
+    
+    if (this.data.evangelhos && this.data.evangelhos.length > 0) {
+      textoExportacao += `Evangelho:\n- ${this.data.evangelhos.join('\n- ')}\n\n`;
+    }
     
     // Função nativa do navegador para copiar texto
     navigator.clipboard.writeText(textoExportacao).then(() => {
       alert('Resultado copiado para a área de transferência!');
+    });
+  }
+
+  exportarPdf() {
+    // Pega o ID que veio na abertura (se for tema salvo) ou o que acabou de ser gerado no salvarNoBanco()
+    const themeId = this.data.id; 
+    
+    if (!themeId) {
+      alert('Erro: O ID do tema não foi encontrado. Salve o tema primeiro.');
+      return;
+    }
+
+    this.booksService.exportPdf(themeId).subscribe({
+      next: (blob: Blob) => {
+        // Magia do Angular/Navegador para iniciar o download
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        // Nome sugerido para o arquivo
+        link.download = `Leituras_${this.data.themeName}.pdf`; 
+        link.click(); // Força o clique
+        window.URL.revokeObjectURL(url); // Limpa a memória
+      },
+      error: (err) => {
+        console.error('Erro ao baixar o PDF:', err);
+        alert('Não foi possível gerar o PDF.');
+      }
     });
   }
 
@@ -87,9 +138,11 @@ export class ResultadoModalComponent {
     
     this.booksService.saveTheme(payload).subscribe({
       next: (resultadoSalvo) => {
+        // GUARDE O ID RETORNADO PARA O PDF FUNCIONAR!
+        this.data.id = resultadoSalvo.id; 
+        this.foiSalvo = true;
         this.salvando = false;
-        // FECHA O MODAL e envia "true" informando à tela de trás que salvou com sucesso
-        this.dialogRef.close(true); 
+        // Não chame o this.dialogRef.close() direto aqui se quiser que ele possa clicar no botão de PDF após salvar!
       },
       error: (err) => {
         console.error('Erro ao salvar tema:', err);
