@@ -49,5 +49,10 @@ export class BooksService {
     // Usamos responseType: 'blob' para arquivos
     return this.http.get(`http://localhost:8080/themes/${themeId}/export-pdf`, { responseType: 'blob' });
   }
+
+  exportPdfPreview(themeData: any): Observable<Blob> {
+    // Usamos POST e enviamos os dados no corpo da requisição
+    return this.http.post(`http://localhost:8080/themes/export-pdf-preview`, themeData, { responseType: 'blob' });
+  }
   
 }

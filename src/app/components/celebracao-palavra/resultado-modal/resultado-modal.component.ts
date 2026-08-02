@@ -93,27 +93,45 @@ export class ResultadoModalComponent {
   }
 
   exportarPdf() {
-    // Pega o ID que veio na abertura (se for tema salvo) ou o que acabou de ser gerado no salvarNoBanco()
-    const themeId = this.data.id; 
-    
-    if (!themeId) {
-      alert('Erro: O ID do tema não foi encontrado. Salve o tema primeiro.');
+    // 1. Verifica se a data foi informada (pois queremos ela no PDF)
+    if (!this.celebrationDate && !this.data.isSavedTheme) {
+      alert('Por favor, informe a data da celebração para gerar o PDF.');
       return;
     }
 
-    this.booksService.exportPdf(themeId).subscribe({
+    // 2. Prepara a data (DD/MM/YYYY) para enviar ao backend
+    let payload = { ...this.data };
+    
+    if (this.celebrationDate) {
+      const year = this.celebrationDate.getFullYear();
+      const month = String(this.celebrationDate.getMonth() + 1).padStart(2, '0');
+      const day = String(this.celebrationDate.getDate()).padStart(2, '0');
+      payload.celebrationDate = `${year}-${month}-${day}`;
+    }
+
+    // 3. Define qual requisição fazer com base na existência do ID
+    let requestObservable;
+    
+    if (this.data.id) {
+      // Já está salvo no banco, usamos o GET pelo ID
+      requestObservable = this.booksService.exportPdf(this.data.id);
+    } else {
+      // NÃO está salvo, usamos o POST enviando o payload inteiro
+      requestObservable = this.booksService.exportPdfPreview(payload);
+    }
+
+    // 4. Executa a requisição e faz o download
+    requestObservable.subscribe({
       next: (blob: Blob) => {
-        // Magia do Angular/Navegador para iniciar o download
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        // Nome sugerido para o arquivo
         link.download = `Leituras_${this.data.themeName}.pdf`; 
-        link.click(); // Força o clique
-        window.URL.revokeObjectURL(url); // Limpa a memória
+        link.click(); 
+        window.URL.revokeObjectURL(url); 
       },
       error: (err) => {
-        console.error('Erro ao baixar o PDF:', err);
+        console.error('Erro ao gerar o PDF:', err);
         alert('Não foi possível gerar o PDF.');
       }
     });
@@ -142,6 +160,7 @@ export class ResultadoModalComponent {
         this.data.id = resultadoSalvo.id; 
         this.foiSalvo = true;
         this.salvando = false;
+        alert('Tema salvo com sucesso! Agora você pode gerar o PDF.');
         // Não chame o this.dialogRef.close() direto aqui se quiser que ele possa clicar no botão de PDF após salvar!
       },
       error: (err) => {

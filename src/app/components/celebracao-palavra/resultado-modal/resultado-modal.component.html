@@ -75,10 +75,10 @@
     <button mat-flat-button color="primary" (click)="exportarTexto()">
         <mat-icon>download</mat-icon> (Copiar)
     </button>
-    <button mat-flat-button color="warn" (click)="exportarPdf()" [disabled]="!data.id">
+    <button mat-flat-button color="warn" (click)="exportarPdf()">
         <mat-icon>picture_as_pdf</mat-icon> Exportar PDF
     </button>
-    <button *ngIf="!data.isSavedTheme" mat-flat-button color="accent" (click)="salvarNoBanco()" [disabled]="salvando">
+    <button *ngIf="!data.isSavedTheme && !foiSalvo" mat-flat-button color="accent" (click)="salvarNoBanco()" [disabled]="salvando">
         <mat-icon>save</mat-icon> {{ salvando ? 'Salvando...' : 'Salvar Tema' }}
     </button>
 </mat-dialog-actions>
