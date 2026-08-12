@@ -1,84 +1,85 @@
-<h2 mat-dialog-title class="bg-light border-bottom d-flex align-items-center gap-2 m-0 py-3 px-4">
-    <mat-icon color="primary">task_alt</mat-icon>
-    <!-- Adicionamos o ternário do Angular direto na interpolação -->
-    {{ data.isSavedTheme ? 'Tema' : 'Resultado' }}: {{ data.themeName }}
-</h2>
+<!-- Cabeçalho Limpo e Moderno -->
+<div class="d-flex justify-content-between align-items-center pt-4 px-4 pb-2">
+    <h2 mat-dialog-title class="m-0 d-flex align-items-center gap-2 fw-bold" style="color: #333; font-size: 1.6rem; border: none;">
+        <div class="card-icon-wrapper gradient-purple d-flex align-items-center justify-content-center text-white rounded-circle shadow">
+            <mat-icon style="font-size: 28px; width: 28px; height: 28px;">collections_bookmark</mat-icon>
+        </div>
+        {{ data.isSavedTheme ? 'Tema' : 'Resultado' }}: {{ data.themeName }}
+    </h2>
+    <!-- Botão opcional de fechar no topo, muito usado em modais modernos -->
+    <button mat-icon-button mat-dialog-close class="text-muted"><mat-icon>close</mat-icon></button>
+</div>
 
-<mat-dialog-content class="pt-2 px-4">
-
-    <div class="row mt-2 mb-2">
+<mat-dialog-content class="px-4 pb-2">
+    <!-- Formulário de Data com design mais limpo -->
+    <div class="row mt-2 mb-4">
         <div class="col-md-4">
-            <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+            <mat-form-field appearance="outline" class="w-100 bg-white" subscriptSizing="dynamic">
                 <mat-label>Data da Celebração</mat-label>
                 <input matInput 
                        [matDatepicker]="picker" 
                        [(ngModel)]="celebrationDate" 
                        placeholder="DD/MM/AAAA"
-                       [disabled]="data.isSavedTheme"> <!-- Fica cinza se for visualização -->
+                       [disabled]="data.isSavedTheme">
                 <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="data.isSavedTheme"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
         </div>
     </div>
 
-    <div class="row g-4 mt-1">
-        <!-- Reutilizando o seu layout do Bootstrap dentro do Modal -->
-        <div class="col-md-4" *ngIf="data.primeiraLeitura.length > 0">
+    <!-- Container das Categorias -->
+    <div class="row g-4">
+        <div class="col-md-4" *ngIf="data.primeiraLeitura?.length > 0">
             <div class="category-box cat-primeira">
-                <h4><mat-icon>looks_one</mat-icon> 1ª Leitura</h4>
-                <ul>
-                    <li *ngFor="let item of data.primeiraLeitura">{{ item }}</li>
-                </ul>
+                <h4><mat-icon class="category-icon">looks_one</mat-icon> 1ª Leitura</h4>
+                <ul><li *ngFor="let item of data.primeiraLeitura">{{ item }}</li></ul>
             </div>
         </div>
 
-        <div class="col-md-4" *ngIf="data.segundaLeitura.length > 0">
+        <div class="col-md-4" *ngIf="data.segundaLeitura?.length > 0">
             <div class="category-box cat-segunda">
-                <h4><mat-icon>looks_two</mat-icon> 2ª Leitura</h4>
-                <ul>
-                    <li *ngFor="let item of data.segundaLeitura">{{ item }}</li>
-                </ul>
+                <h4><mat-icon class="category-icon">looks_two</mat-icon> 2ª Leitura</h4>
+                <ul><li *ngFor="let item of data.segundaLeitura">{{ item }}</li></ul>
             </div>
         </div>
 
-        <div class="col-md-4" *ngIf="data.terceiraLeitura.length > 0">
+        <div class="col-md-4" *ngIf="data.terceiraLeitura?.length > 0">
             <div class="category-box cat-terceira">
-                <h4><mat-icon>looks_3</mat-icon> 3ª Leitura</h4>
-                <ul>
-                    <li *ngFor="let item of data.terceiraLeitura">{{ item }}</li>
-                </ul>
+                <h4><mat-icon class="category-icon">looks_3</mat-icon> 3ª Leitura</h4>
+                <ul><li *ngFor="let item of data.terceiraLeitura">{{ item }}</li></ul>
             </div>
         </div>
 
-        <div class="col-md-6" *ngIf="data.evangelhos.length > 0">
+        <div class="col-md-6" *ngIf="data.evangelhos?.length > 0">
             <div class="category-box cat-evangelho">
-                <h4><mat-icon>auto_stories</mat-icon> Evangelho</h4>
-                <ul>
-                    <li *ngFor="let item of data.evangelhos">{{ item }}</li>
-                </ul>
+                <h4><mat-icon class="category-icon">auto_stories</mat-icon> Evangelho</h4>
+                <ul><li *ngFor="let item of data.evangelhos">{{ item }}</li></ul>
             </div>
         </div>
 
-        <div class="col-md-6" *ngIf="data.descartados.length > 0">
+        <div class="col-md-6" *ngIf="data.descartados?.length > 0">
             <div class="category-box cat-descartados">
-                <h4 class="text-danger"><mat-icon>delete_sweep</mat-icon> Descartados</h4>
-                <ul>
-                    <li *ngFor="let item of data.descartados">{{ item }}</li>
-                </ul>
+                <h4 class="text-danger"><mat-icon class="category-icon text-danger">delete_sweep</mat-icon> Descartados</h4>
+                <ul><li *ngFor="let item of data.descartados">{{ item }}</li></ul>
             </div>
         </div>
     </div>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="border-top pb-2 pt-2 pe-3">
-    <button mat-button mat-dialog-close>Fechar</button>
-    <button mat-flat-button color="primary" (click)="exportarTexto()">
-        <mat-icon>download</mat-icon> (Copiar)
+<!-- Rodapé com botões padronizados -->
+<mat-dialog-actions align="end" class="border-top p-3 mt-2 bg-white">
+    <button mat-button mat-dialog-close class="me-2 rounded-pill px-4">Fechar</button>
+    
+    <button mat-flat-button color="primary" class="me-2 rounded-pill px-4" (click)="exportarTexto()">
+        <mat-icon>content_copy</mat-icon> Copiar
     </button>
-    <button mat-flat-button color="warn" (click)="exportarPdf()">
+    
+    <button mat-flat-button color="primary" class="me-2 rounded-pill px-4" (click)="exportarPdf()">
         <mat-icon>picture_as_pdf</mat-icon> Exportar PDF
     </button>
-    <button *ngIf="!data.isSavedTheme && !foiSalvo" mat-flat-button color="accent" (click)="salvarNoBanco()" [disabled]="salvando">
+    
+    <!-- Botão de Salvar com gradiente (se houver a classe no styles.scss global, senão ele usa a cor accent normal) -->
+    <button *ngIf="!data.isSavedTheme && !foiSalvo" mat-flat-button color="accent" class="rounded-pill px-4" (click)="salvarNoBanco()" [disabled]="salvando">
         <mat-icon>save</mat-icon> {{ salvando ? 'Salvando...' : 'Salvar Tema' }}
     </button>
 </mat-dialog-actions>

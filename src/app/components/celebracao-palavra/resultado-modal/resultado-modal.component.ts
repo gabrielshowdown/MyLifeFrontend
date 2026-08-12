@@ -160,7 +160,12 @@ export class ResultadoModalComponent {
         this.data.id = resultadoSalvo.id; 
         this.foiSalvo = true;
         this.salvando = false;
-        alert('Tema salvo com sucesso! Agora você pode gerar o PDF.');
+
+        if (this.data.onThemeSaved) {
+          this.data.onThemeSaved();
+        }
+
+        alert('Tema salvo com sucesso!');
         // Não chame o this.dialogRef.close() direto aqui se quiser que ele possa clicar no botão de PDF após salvar!
       },
       error: (err) => {

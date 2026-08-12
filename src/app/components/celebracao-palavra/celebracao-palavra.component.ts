@@ -91,8 +91,11 @@ export class CelebracaoPalavraComponent implements OnInit {
 
   viewSavedTheme(theme: any) {
     this.dialog.open(ResultadoModalComponent, {
-      // Passamos o objeto do banco E adicionamos a flag 'isSavedTheme: true'
-      data: { ...theme, isSavedTheme: true },
+      data: { 
+        ...theme, 
+        isSavedTheme: true,
+        onThemeSaved: () => this.loadSavedThemes() 
+      },
       width: '85vw',
       maxWidth: '1000px',
       maxHeight: '90vh'
@@ -122,7 +125,11 @@ export class CelebracaoPalavraComponent implements OnInit {
       next: (result) => {
         // Guarda a referência do modal aberto
         const dialogRef = this.dialog.open(ResultadoModalComponent, {
-          data: result,
+          data: {
+            ...result,
+            // Passamos a instrução para recarregar a lista lateral
+            onThemeSaved: () => this.loadSavedThemes() 
+          },
           width: '85vw',
           maxWidth: '1000px',
           maxHeight: '90vh'
@@ -171,6 +178,12 @@ export class CelebracaoPalavraComponent implements OnInit {
         }
       });
     }
+  }
+
+  formatCategoryName(category: string): string {
+    if (!category) return '';
+    // Substitui o underline por espaço
+    return category.replace('_', ' ');
   }
 
   abrirTutorial() {
