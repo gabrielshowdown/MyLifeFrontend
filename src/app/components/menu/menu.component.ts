@@ -74,7 +74,7 @@ export class MenuComponent implements OnInit {
     },
     {
       title: 'Celebração da Palavra',
-      description: 'Preparações e leituras (Caminho Neocatecumenal).',
+      description: 'Preparações e leituras.',
       icon: 'menu_book',
       route: '/celebracao',
       category: 'Fé',

@@ -188,8 +188,18 @@ export class CelebracaoPalavraComponent implements OnInit {
 
   abrirTutorial() {
     this.dialog.open(ImageModalComponent, {
-      width: '600px', // Um pouco mais largo para acomodar bem o GIF
-      maxWidth: '90vw'
+      width: '600px',
+      maxWidth: '90vw',
+      // Passamos o objeto de configuração aqui!
+      data: {
+        title: 'Como extrair as leituras',
+        icon: 'screen_share',
+        imageSrc: 'img/search-theme.gif',
+        imageAlt: 'Demonstração de como copiar as leituras',
+        description: 'Acesse o site abaixo para encontrar o tema e copiar as leituras:',
+        actionUrl: 'https://leondufour.com/',
+        actionText: 'Acessar leondufour.com'
+      }
     });
   }
 
