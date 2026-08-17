@@ -55,38 +55,54 @@ export class ResultadoModalComponent {
 
   // Lógica inicial para exportar (Copia o resultado para a área de transferência do usuário)
   exportarTexto() {
-    // 1. Adiciona o Tema
     let textoExportacao = `Tema: ${this.data.themeName}\n`;
     
-    // 2. Verifica se existe uma data e formata para DD/MM/AAAA
+    // Adiciona a Data
     if (this.celebrationDate) {
       const dia = String(this.celebrationDate.getDate()).padStart(2, '0');
       const mes = String(this.celebrationDate.getMonth() + 1).padStart(2, '0');
       const ano = this.celebrationDate.getFullYear();
       textoExportacao += `Data da Celebração: ${dia}/${mes}/${ano}\n`;
     }
-
-    // Pula uma linha extra antes de começar as leituras
     textoExportacao += `\n`; 
+
+    // 1. Gera a "Lista completa" juntando todas as categorias
+    const todasLeituras = [
+      ...(this.data.primeiraLeitura || []),
+      ...(this.data.segundaLeitura || []),
+      ...(this.data.terceiraLeitura || []),
+      ...(this.data.evangelhos || []),
+      ...(this.data.descartados || [])
+    ];
+
+    if (todasLeituras.length > 0) {
+      textoExportacao += `Lista completa (sem repetidos):\n${todasLeituras.join('\n')}\n\n`;
+    }
+
+    textoExportacao += `Classificações por leitura:\n\n`;
     
-    // 3. Adiciona as categorias dinamicamente
+    // 2. Adiciona as categorias sem o " - " na frente, igual ao terminal
     if (this.data.primeiraLeitura && this.data.primeiraLeitura.length > 0) {
-      textoExportacao += `Primeira Leitura:\n- ${this.data.primeiraLeitura.join('\n- ')}\n\n`;
+      textoExportacao += `1 Leitura:\n${this.data.primeiraLeitura.join('\n')}\n\n`;
     }
     
     if (this.data.segundaLeitura && this.data.segundaLeitura.length > 0) {
-      textoExportacao += `Segunda Leitura:\n- ${this.data.segundaLeitura.join('\n- ')}\n\n`;
+      textoExportacao += `2 Leitura:\n${this.data.segundaLeitura.join('\n')}\n\n`;
     }
     
     if (this.data.terceiraLeitura && this.data.terceiraLeitura.length > 0) {
-      textoExportacao += `Terceira Leitura:\n- ${this.data.terceiraLeitura.join('\n- ')}\n\n`;
+      textoExportacao += `3 Leitura:\n${this.data.terceiraLeitura.join('\n')}\n\n`;
     }
     
     if (this.data.evangelhos && this.data.evangelhos.length > 0) {
-      textoExportacao += `Evangelho:\n- ${this.data.evangelhos.join('\n- ')}\n\n`;
+      textoExportacao += `Evangelhos:\n${this.data.evangelhos.join('\n')}\n\n`;
     }
     
-    // Função nativa do navegador para copiar texto
+    // 3. Adiciona a lista de Descartados!
+    if (this.data.descartados && this.data.descartados.length > 0) {
+      textoExportacao += `Descartados:\n${this.data.descartados.join('\n')}\n\n`;
+    }
+    
     navigator.clipboard.writeText(textoExportacao).then(() => {
       alert('Resultado copiado para a área de transferência!');
     });
