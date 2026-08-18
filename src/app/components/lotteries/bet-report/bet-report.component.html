@@ -9,7 +9,7 @@
       </h3>
     </div>
 
-    <button mat-raised-button color="accent" (click)="exportarExcel()" [disabled]="isExporting">
+    <button mat-raised-button color="accent" (click)="exportExcel()" [disabled]="isExporting">
       <mat-icon class="me-1">download</mat-icon> 
       {{ isExporting ? 'Gerando...' : 'Exportar Excel' }}
     </button>

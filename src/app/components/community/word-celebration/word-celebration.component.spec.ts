@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResultadoModalComponent } from './resultado-modal.component';
+import { WordCelebrationComponent } from './word-celebration.component';
 
-describe('ResultadoModalComponent', () => {
-  let component: ResultadoModalComponent;
-  let fixture: ComponentFixture<ResultadoModalComponent>;
+describe('WordCelebrationComponent', () => {
+  let component: WordCelebrationComponent;
+  let fixture: ComponentFixture<WordCelebrationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ResultadoModalComponent]
+      imports: [WordCelebrationComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ResultadoModalComponent);
+    fixture = TestBed.createComponent(WordCelebrationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

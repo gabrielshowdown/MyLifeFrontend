@@ -12,7 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
-  selector: 'app-resultado-modal',
+  selector: 'app-result-modal',
   standalone: true,
   imports: [
     CommonModule,
@@ -25,28 +25,26 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  templateUrl: './resultado-modal.component.html',
-  styleUrl: './resultado-modal.component.scss',
+  templateUrl: './result-modal.component.html',
+  styleUrl: './result-modal.component.scss',
 })
-export class ResultadoModalComponent {
+export class ResultModalComponent {
 
-  salvando = false;
-  foiSalvo = false; // Controle para liberar a exportação
+  saving = false;
+  wasSaved = false; // Controle para liberar a exportação
   celebrationDate: Date | null = null; // A data que o usuário vai escolher
 
   // Recebe os dados injetados via MAT_DIALOG_DATA
   constructor(
-    public dialogRef: MatDialogRef<ResultadoModalComponent>,
+    public dialogRef: MatDialogRef<ResultModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private booksService: BooksService
   ) {
-    // Se for um tema salvo, já bloqueamos a edição e preenchemos a data
+    // Se for um tema salvo, já bloqueiaa edição e preenchee a data
     if (this.data.isSavedTheme) {
-      this.foiSalvo = true; // Se já está no banco, a exportação é livre
-      
       // Converte a string do backend (YYYY-MM-DD) para um objeto Date pro Angular entender
       if (this.data.celebrationDate) {
-        // Truque para evitar problemas de fuso horário ao instanciar datas do tipo string
+        // Evitar problemas de fuso horário ao instanciar datas do tipo string
         const [year, month, day] = this.data.celebrationDate.split('-');
         this.celebrationDate = new Date(+year, +month - 1, +day);
       }
@@ -54,19 +52,19 @@ export class ResultadoModalComponent {
   }
 
   // Lógica inicial para exportar (Copia o resultado para a área de transferência do usuário)
-  exportarTexto() {
-    let textoExportacao = `Tema: ${this.data.themeName}\n`;
+  exportText() {
+    let textExportation = `Tema: ${this.data.themeName}\n`;
     
     // Adiciona a Data
     if (this.celebrationDate) {
-      const dia = String(this.celebrationDate.getDate()).padStart(2, '0');
-      const mes = String(this.celebrationDate.getMonth() + 1).padStart(2, '0');
-      const ano = this.celebrationDate.getFullYear();
-      textoExportacao += `Data da Celebração: ${dia}/${mes}/${ano}\n`;
+      const day = String(this.celebrationDate.getDate()).padStart(2, '0');
+      const month = String(this.celebrationDate.getMonth() + 1).padStart(2, '0');
+      const year = this.celebrationDate.getFullYear();
+      textExportation += `Data da Celebração: ${day}/${month}/${year}\n`;
     }
-    textoExportacao += `\n`; 
+    textExportation += `\n`; 
 
-    // 1. Gera a "Lista completa" juntando todas as categorias
+    // Gera a "Lista completa" juntando todas as categorias
     const todasLeituras = [
       ...(this.data.primeiraLeitura || []),
       ...(this.data.segundaLeitura || []),
@@ -76,39 +74,39 @@ export class ResultadoModalComponent {
     ];
 
     if (todasLeituras.length > 0) {
-      textoExportacao += `Lista completa (sem repetidos):\n${todasLeituras.join('\n')}\n\n`;
+      textExportation += `Lista completa (sem repetidos):\n${todasLeituras.join('\n')}\n\n`;
     }
 
-    textoExportacao += `Classificações por leitura:\n\n`;
+    textExportation += `Classificações por leitura:\n\n`;
     
     // 2. Adiciona as categorias sem o " - " na frente, igual ao terminal
     if (this.data.primeiraLeitura && this.data.primeiraLeitura.length > 0) {
-      textoExportacao += `1 Leitura:\n${this.data.primeiraLeitura.join('\n')}\n\n`;
+      textExportation += `1 Leitura:\n${this.data.primeiraLeitura.join('\n')}\n\n`;
     }
     
     if (this.data.segundaLeitura && this.data.segundaLeitura.length > 0) {
-      textoExportacao += `2 Leitura:\n${this.data.segundaLeitura.join('\n')}\n\n`;
+      textExportation += `2 Leitura:\n${this.data.segundaLeitura.join('\n')}\n\n`;
     }
     
     if (this.data.terceiraLeitura && this.data.terceiraLeitura.length > 0) {
-      textoExportacao += `3 Leitura:\n${this.data.terceiraLeitura.join('\n')}\n\n`;
+      textExportation += `3 Leitura:\n${this.data.terceiraLeitura.join('\n')}\n\n`;
     }
     
     if (this.data.evangelhos && this.data.evangelhos.length > 0) {
-      textoExportacao += `Evangelhos:\n${this.data.evangelhos.join('\n')}\n\n`;
+      textExportation += `Evangelhos:\n${this.data.evangelhos.join('\n')}\n\n`;
     }
     
     // 3. Adiciona a lista de Descartados!
     if (this.data.descartados && this.data.descartados.length > 0) {
-      textoExportacao += `Descartados:\n${this.data.descartados.join('\n')}\n\n`;
+      textExportation += `Descartados:\n${this.data.descartados.join('\n')}\n\n`;
     }
     
-    navigator.clipboard.writeText(textoExportacao).then(() => {
+    navigator.clipboard.writeText(textExportation).then(() => {
       alert('Resultado copiado para a área de transferência!');
     });
   }
 
-  exportarPdf() {
+  exportPdf() {
     // 1. Verifica se a data foi informada (pois queremos ela no PDF)
     if (!this.celebrationDate && !this.data.isSavedTheme) {
       alert('Por favor, informe a data da celebração para gerar o PDF.');
@@ -153,13 +151,13 @@ export class ResultadoModalComponent {
     });
   }
 
-  salvarNoBanco() {
+  databaseSave() {
     if (!this.celebrationDate) {
       alert('Por favor, informe a data da celebração.');
       return;
     }
 
-    this.salvando = true;
+    this.saving = true;
     
     const year = this.celebrationDate.getFullYear();
     const month = String(this.celebrationDate.getMonth() + 1).padStart(2, '0');
@@ -174,8 +172,8 @@ export class ResultadoModalComponent {
       next: (resultadoSalvo) => {
         // GUARDE O ID RETORNADO PARA O PDF FUNCIONAR!
         this.data.id = resultadoSalvo.id; 
-        this.foiSalvo = true;
-        this.salvando = false;
+        this.wasSaved = true;
+        this.saving = false;
 
         if (this.data.onThemeSaved) {
           this.data.onThemeSaved();
@@ -187,7 +185,7 @@ export class ResultadoModalComponent {
       error: (err) => {
         console.error('Erro ao salvar tema:', err);
         alert('Ocorreu um erro ao salvar o tema.');
-        this.salvando = false;
+        this.saving = false;
       }
     });
   }

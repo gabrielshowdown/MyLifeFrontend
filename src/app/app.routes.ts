@@ -1,10 +1,6 @@
 import { Routes } from '@angular/router';
 import { TesteComponent } from './components/teste/teste.component';
 import { Teste2Component } from './components/teste2/teste2.component';
-import { LoginComponent } from './components/auth/login/login.component';
-import { RegisterComponent } from './components/auth/register/register.component';
-import { LotofacilComponent } from './components/lotteries/lotofacil/lotofacil.component';
-import { MenuComponent } from './components/menu/menu.component';
 
 export const routes: Routes = [
   {
@@ -25,8 +21,8 @@ export const routes: Routes = [
     loadComponent: () => import('./components/menu/menu.component').then(m => m.MenuComponent)
   },
    { 
-    path: 'celebracao', 
-    loadComponent: () => import('./components/celebracao-palavra/celebracao-palavra.component').then(m => m.CelebracaoPalavraComponent)
+    path: 'celebration', 
+    loadComponent: () => import('./components/community/word-celebration/word-celebration.component').then(m => m.WordCelebrationComponent)
   },
   { 
     path: 'lotofacil', 

@@ -114,7 +114,7 @@ export class BetReportComponent implements OnInit {
     this.dialog.open(BetModalComponent, { width: '500px', data: bet, panelClass: 'no-padding-dialog' });
   }
 
-  exportarExcel(): void {
+  exportExcel(): void {
     this.isExporting = true;
     this.service.exportBetsToExcel().subscribe({
       next: (blob: Blob) => {

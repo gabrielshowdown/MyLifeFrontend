@@ -30,35 +30,35 @@
     <!-- Container das Categorias -->
     <div class="row g-4">
         <div class="col-md-4" *ngIf="data.primeiraLeitura?.length > 0">
-            <div class="category-box cat-primeira">
+            <div class="category-box cat-first">
                 <h4><mat-icon class="category-icon">looks_one</mat-icon> 1ª Leitura</h4>
                 <ul><li *ngFor="let item of data.primeiraLeitura">{{ item }}</li></ul>
             </div>
         </div>
 
         <div class="col-md-4" *ngIf="data.segundaLeitura?.length > 0">
-            <div class="category-box cat-segunda">
+            <div class="category-box cat-second">
                 <h4><mat-icon class="category-icon">looks_two</mat-icon> 2ª Leitura</h4>
                 <ul><li *ngFor="let item of data.segundaLeitura">{{ item }}</li></ul>
             </div>
         </div>
 
         <div class="col-md-4" *ngIf="data.terceiraLeitura?.length > 0">
-            <div class="category-box cat-terceira">
+            <div class="category-box cat-third">
                 <h4><mat-icon class="category-icon">looks_3</mat-icon> 3ª Leitura</h4>
                 <ul><li *ngFor="let item of data.terceiraLeitura">{{ item }}</li></ul>
             </div>
         </div>
 
         <div class="col-md-6" *ngIf="data.evangelhos?.length > 0">
-            <div class="category-box cat-evangelho">
+            <div class="category-box cat-gospel">
                 <h4><mat-icon class="category-icon">auto_stories</mat-icon> Evangelho</h4>
                 <ul><li *ngFor="let item of data.evangelhos">{{ item }}</li></ul>
             </div>
         </div>
 
         <div class="col-md-6" *ngIf="data.descartados?.length > 0">
-            <div class="category-box cat-descartados">
+            <div class="category-box cat-discarded">
                 <h4 class="text-danger"><mat-icon class="category-icon text-danger">delete_sweep</mat-icon> Descartados</h4>
                 <ul><li *ngFor="let item of data.descartados">{{ item }}</li></ul>
             </div>
@@ -70,16 +70,16 @@
 <mat-dialog-actions align="end" class="border-top p-3 mt-2 bg-white">
     <button mat-button mat-dialog-close class="me-2 rounded-pill px-4">Fechar</button>
     
-    <button mat-flat-button color="primary" class="me-2 rounded-pill px-4" (click)="exportarTexto()">
+    <button mat-flat-button color="primary" class="me-2 rounded-pill px-4" (click)="exportText()">
         <mat-icon>content_copy</mat-icon> Copiar
     </button>
     
-    <button mat-flat-button color="primary" class="me-2 rounded-pill px-4" (click)="exportarPdf()">
+    <button mat-flat-button color="primary" class="me-2 rounded-pill px-4" (click)="exportPdf()">
         <mat-icon>picture_as_pdf</mat-icon> Exportar PDF
     </button>
     
     <!-- Botão de Salvar com gradiente (se houver a classe no styles.scss global, senão ele usa a cor accent normal) -->
-    <button *ngIf="!data.isSavedTheme && !foiSalvo" mat-flat-button color="accent" class="rounded-pill px-4" (click)="salvarNoBanco()" [disabled]="salvando">
-        <mat-icon>save</mat-icon> {{ salvando ? 'Salvando...' : 'Salvar Tema' }}
+    <button *ngIf="!data.isSavedTheme && !wasSaved" mat-flat-button color="accent" class="rounded-pill px-4" (click)="databaseSave()" [disabled]="saving">
+        <mat-icon>save</mat-icon> {{ saving ? 'Salvando...' : 'Salvar Tema' }}
     </button>
 </mat-dialog-actions>
