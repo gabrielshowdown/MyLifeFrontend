@@ -18,7 +18,7 @@ import { DrawModalComponent } from '../draw-modal/draw-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DrawCardComponent } from '../draw-card/draw-card.component';
 import { listAnimation, shownStateTrigger } from '../../../animations/animations';
-import { LoteriasService } from '../../../services/loterias.service';
+import { LotteriesService } from '../../../services/lotteries.service';
 import { DebugService } from '../../../core/services/debug.service';
 import { AddDrawModalComponent } from '../add-draw-modal/add-draw-modal.component';
 import { BetModalComponent } from '../bet-modal/bet-modal.component';
@@ -126,7 +126,7 @@ export class LotofacilComponent implements OnInit {
   };
 
   constructor(
-    private service: LoteriasService,
+    private service: LotteriesService,
     private debugService: DebugService,
     public dialog: MatDialog
   ) { }

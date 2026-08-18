@@ -13,7 +13,7 @@ export interface Book {
 @Injectable({
   providedIn: 'root'
 })
-export class BooksService {
+export class CommunityService {
   // URL base do seu backend Spring Boot
   private apiUrl = 'http://localhost:8080/books';
 

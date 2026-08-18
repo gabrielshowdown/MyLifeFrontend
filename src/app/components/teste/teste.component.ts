@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DebugService } from '../../core/services/debug.service';
-import { LoteriasService } from '../../services/loterias.service';
+import { LotteriesService } from '../../services/lotteries.service';
 import { Subscription } from 'rxjs';
 import { Concurso, LotteryDrawSummary } from '../../interfaces/loterias';
 import { Router } from '@angular/router';
@@ -101,7 +101,7 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
 
   constructor(
     private debugService: DebugService,
-    private service: LoteriasService,
+    private service: LotteriesService,
     private router: Router,
   ) {
     console.log('construtor iniciado');

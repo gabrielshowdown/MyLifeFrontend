@@ -8,7 +8,7 @@ import { DadosNumero, DadosParidade, DadosRepeticao, DetailedDraw, GenerateDrawR
 @Injectable({
   providedIn: 'root'
 })
-export class LoteriasService {
+export class LotteriesService {
 
   private readonly API_LOTOFACIL = 'https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/';
   private readonly API_TOTALPARIDADES = 'http://localhost:8080/lotofacilTotalsParities';

@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { Book, BooksService } from '../../../services/books.service';
+import { Book, CommunityService } from '../../../services/community.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ImageModalComponent } from '../../../shared/image-modal/image-modal.component';
@@ -55,7 +55,7 @@ export class WordCelebrationComponent implements OnInit {
   };
 
   constructor(
-    private booksService: BooksService,
+    private CommunityService: CommunityService,
     private dialog: MatDialog
   ) {}
 
@@ -65,7 +65,7 @@ export class WordCelebrationComponent implements OnInit {
   }
 
   loadBooks() {
-    this.booksService.getBooks().subscribe({
+    this.CommunityService.getBooks().subscribe({
       next: (data: Book[]) => {
         this.allBooks = data;
         this.distributeBooksToCategories(); // Chama a função para separar
@@ -74,7 +74,7 @@ export class WordCelebrationComponent implements OnInit {
   }
 
   loadSavedThemes() {
-    this.booksService.getSavedThemes().subscribe({
+    this.CommunityService.getSavedThemes().subscribe({
       next: (themes) => {
         this.savedThemes = themes;
       },
@@ -115,7 +115,7 @@ export class WordCelebrationComponent implements OnInit {
       rawText: this.rawText
     };
 
-    this.booksService.processText(payload).subscribe({
+    this.CommunityService.processText(payload).subscribe({
       next: (result) => {
         // Guarda a referência do modal aberto
         const dialogRef = this.dialog.open(ResultModalComponent, {
@@ -161,7 +161,7 @@ export class WordCelebrationComponent implements OnInit {
       const movedBook = event.container.data[event.currentIndex];
       
       // Salva no backend chamando o endpoint PUT
-      this.booksService.updateCategory(movedBook.id, newCategoryName).subscribe({
+      this.CommunityService.updateCategory(movedBook.id, newCategoryName).subscribe({
         next: (updatedBook) => {
           console.log(`Livro ${updatedBook.name} atualizado para ${updatedBook.category}`);
         },

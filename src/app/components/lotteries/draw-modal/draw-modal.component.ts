@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { NumeroSorteadoDetalhe, ModalData, DetailedDraw, SaveBetRequest } from '../../../interfaces/lotofacil';
 import { MatIconModule } from '@angular/material/icon';
-import { LoteriasService } from '../../../services/loterias.service'; // <-- Importe o Service
+import { LotteriesService } from '../../../services/lotteries.service'; // <-- Importe o Service
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 
 interface ConcursoInfoVM {
@@ -31,7 +31,7 @@ export class DrawModalComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ModalData,
-    private loteriasService: LoteriasService, // <-- NOVO: Injeta o service
+    private LotteriesService: LotteriesService, // <-- NOVO: Injeta o service
     private dialog: MatDialog, // <-- NOVO: Injeta o serviço de Dialog para o confirm
     private dialogRef: MatDialogRef<DrawModalComponent>
   ) { }
@@ -59,7 +59,7 @@ export class DrawModalComponent implements OnInit {
 
     this.isLoading = true;
     
-    this.loteriasService.generateDraw(this.data.requestParams).subscribe({
+    this.LotteriesService.generateDraw(this.data.requestParams).subscribe({
       next: (novoConcurso) => {
         // Atualiza a tela instantaneamente sem fechar o modal
         this.atualizarDadosTela(novoConcurso);
@@ -111,7 +111,7 @@ export class DrawModalComponent implements OnInit {
     // Imprime o JSON no console para você validar a simulação
     console.log('JSON disparado para o Backend:', JSON.stringify(payload, null, 2));
 
-    this.loteriasService.saveGeneratedBet(payload).subscribe({
+    this.LotteriesService.saveGeneratedBet(payload).subscribe({
       next: (resposta) => {
         this.isLoading = false;
         // Idealmente, trocar por um MatSnackBar no futuro

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { BooksService } from '../../../services/books.service';
+import { CommunityService } from '../../../services/community.service';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -38,7 +38,7 @@ export class ResultModalComponent {
   constructor(
     public dialogRef: MatDialogRef<ResultModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private booksService: BooksService
+    private CommunityService: CommunityService
   ) {
     // Se for um tema salvo, já bloqueiaa edição e preenchee a data
     if (this.data.isSavedTheme) {
@@ -128,10 +128,10 @@ export class ResultModalComponent {
     
     if (this.data.id) {
       // Já está salvo no banco, usamos o GET pelo ID
-      requestObservable = this.booksService.exportPdf(this.data.id);
+      requestObservable = this.CommunityService.exportPdf(this.data.id);
     } else {
       // NÃO está salvo, usamos o POST enviando o payload inteiro
-      requestObservable = this.booksService.exportPdfPreview(payload);
+      requestObservable = this.CommunityService.exportPdfPreview(payload);
     }
 
     // 4. Executa a requisição e faz o download
@@ -168,7 +168,7 @@ export class ResultModalComponent {
       celebrationDate: `${year}-${month}-${day}`
     };
     
-    this.booksService.saveTheme(payload).subscribe({
+    this.CommunityService.saveTheme(payload).subscribe({
       next: (resultadoSalvo) => {
         // GUARDE O ID RETORNADO PARA O PDF FUNCIONAR!
         this.data.id = resultadoSalvo.id; 

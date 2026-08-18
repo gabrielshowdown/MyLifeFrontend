@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { LoteriasService } from '../../../services/loterias.service';
+import { LotteriesService } from '../../../services/lotteries.service';
 import { BetSummaryResponse, LotofacilBet, BetGraphicsResponse } from '../../../interfaces/lotofacil';
 import { BetModalComponent } from '../bet-modal/bet-modal.component';
 import { forkJoin } from 'rxjs';
@@ -58,7 +58,7 @@ export class BetReportComponent implements OnInit {
   public paritiesChartData: ChartData<'pie', number[], string | string[]> = { labels: [], datasets: [{ data: [] }] };
   public repetitionsChartData: ChartData<'pie', number[], string | string[]> = { labels: [], datasets: [{ data: [] }] };
 
-  constructor(private service: LoteriasService, private dialog: MatDialog) {}
+  constructor(private service: LotteriesService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadDashboardData();
