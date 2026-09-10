@@ -8,11 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { Book, CommunityService } from '../../../services/community.service';
+import { CommunityService } from '../../../services/community.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ImageModalComponent } from '../../../shared/image-modal/image-modal.component';
 import { ResultModalComponent } from '../result-modal/result-modal.component';
+import { BookBible } from '../../../interfaces/book-bible';
 
 @Component({
   selector: 'app-word-celebration',
@@ -41,12 +42,12 @@ export class WordCelebrationComponent implements OnInit {
   processedResult: any = null;
 
   // Armazenamento do resultado do backend
-  allBooks: Book[] = []; // Agora tipado com a interface
+  allBooks: BookBible[] = []; // Agora tipado com a interface
   categories: string[] = ['PRIMEIRA_LEITURA', 'SEGUNDA_LEITURA', 'TERCEIRA_LEITURA', 'EVANGELHO', 'DESCARTADO'];
 
   savedThemes: any[] = [];
   
-  booksByCategory: { [key: string]: Book[] } = {
+  booksByCategory: { [key: string]: BookBible[] } = {
     'PRIMEIRA_LEITURA': [],
     'SEGUNDA_LEITURA': [],
     'TERCEIRA_LEITURA': [],
@@ -66,7 +67,7 @@ export class WordCelebrationComponent implements OnInit {
 
   loadBooks() {
     this.CommunityService.getBooks().subscribe({
-      next: (data: Book[]) => {
+      next: (data: BookBible[]) => {
         this.allBooks = data;
         this.distributeBooksToCategories(); // Chama a função para separar
       }
@@ -144,7 +145,7 @@ export class WordCelebrationComponent implements OnInit {
     });
   }
 
-  drop(event: CdkDragDrop<Book[]>, newCategoryName: string) {
+  drop(event: CdkDragDrop<BookBible[]>, newCategoryName: string) {
     if (event.previousContainer === event.container) {
       // Se apenas mudou a ordem dentro da mesma coluna
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

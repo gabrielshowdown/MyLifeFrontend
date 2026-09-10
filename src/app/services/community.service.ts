@@ -1,38 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-// Definimos uma interface baseada no retorno do seu JSON
-export interface Book {
-  id: number;
-  abbreviation: string;
-  name: string;
-  category: string;
-}
+import { BookBible } from '../interfaces/book-bible';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommunityService {
-  // URL base do seu backend Spring Boot
-  private apiUrl = 'http://localhost:8080/books';
+
+  private readonly API_BOOKS = 'http://localhost:8080/books';
+  private readonly API_THEMES= 'http://localhost:8080/themes';
 
   constructor(private http: HttpClient) {}
 
-  // Faz o GET em http://localhost:8080/books
-  getBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl);
+  getBooks(): Observable<BookBible[]> {
+    return this.http.get<BookBible[]>(this.API_BOOKS);
   }
 
-  // Já aproveitamos para fazer o POST do processamento
   processText(payload: { themeName: string, rawText: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/process-text`, payload);
+    return this.http.post<any>(`${this.API_THEMES}/process-text`, payload);
   }
   
-  updateCategory(id: number, newCategory: string): Observable<Book> {
+  updateCategory(id: number, newCategory: string): Observable<BookBible> {
     // O Spring Boot com @RequestBody Enum espera que a string venha entre aspas duplas no JSON
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.put<Book>(`${this.apiUrl}/${id}/category`, `"${newCategory}"`, { headers });
+    return this.http.put<BookBible>(`${this.API_BOOKS}/${id}/category`, `"${newCategory}"`, { headers });
   }
 
   // Novo método para Salvar o Tema
