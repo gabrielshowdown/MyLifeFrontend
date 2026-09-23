@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { debugMode, desenvMode } from '../../config/parameters';
 
 @Injectable({
-  providedIn: 'root' // Garante que o serviço seja um singleton
+  providedIn: 'root' /* Garante que o serviço seja um singleton */
 })
 
 export class DebugService {
 
   constructor() {}
 
-  // Método para logar mensagens apenas se o debug estiver ativo
+  /* Método para logar mensagens apenas se o debug estiver ativo */
   log(message: string, ...optionalParams: any[]): void {
     if (debugMode) {
       console.log(message, ...optionalParams);

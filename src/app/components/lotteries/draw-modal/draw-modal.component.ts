@@ -2,18 +2,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common'; 
 import { MatButtonModule } from '@angular/material/button';
-import { NumeroSorteadoDetalhe, ModalData, DetailedDraw, SaveBetRequest } from '../../../interfaces/lotofacil';
+import { DetailsNumberDraw, ModalData, DetailedDraw, SaveBetRequest } from '../../../interfaces/lotofacil';
 import { MatIconModule } from '@angular/material/icon';
-import { LotteriesService } from '../../../services/lotteries.service'; // <-- Importe o Service
+import { LotteriesService } from '../../../services/lotteries.service';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
-
-interface ConcursoInfoVM {
-  numero: number;
-  impares: number;
-  pares: number;
-  repetidos: number;
-  dataApuracao?: Date | string;
-}
+import { infoDrawVM } from '../../../interfaces/lotofacil';
+import { DebugService } from '../../../core/services/debug.service';
 
 @Component({
   selector: 'app-draw-modal',
@@ -24,45 +18,47 @@ interface ConcursoInfoVM {
 })
 export class DrawModalComponent implements OnInit {
 
-  public concursoInfo!: ConcursoInfoVM;
-  public resultadoOrdenado!: NumeroSorteadoDetalhe[];
-  public isGerado: boolean = false;
-  public isLoading: boolean = false; // <-- NOVO: Controla estado de loading do botão
+  /* Concurso que será mostraod em tela*/
+  public infoDraw!: infoDrawVM;
+  public orderedResult!: DetailsNumberDraw[];
+  public isGenerate: boolean = false;
+  public isLoading: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ModalData,
-    private LotteriesService: LotteriesService, // <-- NOVO: Injeta o service
-    private dialog: MatDialog, // <-- NOVO: Injeta o serviço de Dialog para o confirm
-    private dialogRef: MatDialogRef<DrawModalComponent>
+    private LotteriesService: LotteriesService,
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<DrawModalComponent>,
+    private debugService: DebugService,
   ) { }
 
   ngOnInit(): void {
-    this.isGerado = this.data.isGerado;
-    this.atualizarDadosTela(this.data.concurso);
+    this.isGenerate = this.data.isGenerated;
+    this.updateScreenData(this.data.draw);
   }
 
-  // Extraímos a lógica para reaproveitar ao gerar um novo
-  private atualizarDadosTela(concurso: DetailedDraw): void {
-    this.concursoInfo = {
-      numero: concurso.id,
-      impares: concurso.oddCount,
-      pares: concurso.evenCount,
-      repetidos: concurso.repeatedCount,
-      dataApuracao: concurso.drawDate
+  /* Extraímos a lógica para reaproveitar ao gerar um novo */
+  private updateScreenData(draw: DetailedDraw): void {
+    this.infoDraw = {
+      idDraw: draw.id,
+      oddCount: draw.oddCount,
+      evenCount: draw.evenCount,
+      repeatedCount: draw.repeatedCount,
+      drawDate: draw.drawDate
     };
-    this.resultadoOrdenado = concurso.drawNumbers.sort((a, b) => a.number - b.number);
+    this.orderedResult = draw.drawNumbers.sort((a, b) => a.number - b.number);
   }
 
-  // NOVO: Função para recriar o concurso diretamente do modal
-  public recriarConcurso(): void {
+  /* Função para recriar o concurso diretamente do modal */
+  public recreateDraw(): void {
     if (!this.data.requestParams || this.isLoading) return;
 
     this.isLoading = true;
     
     this.LotteriesService.generateDraw(this.data.requestParams).subscribe({
-      next: (novoConcurso) => {
-        // Atualiza a tela instantaneamente sem fechar o modal
-        this.atualizarDadosTela(novoConcurso);
+      next: (newDraw) => {
+        /* Atualiza a tela instantaneamente sem fechar o modal */
+        this.updateScreenData(newDraw);
         this.isLoading = false;
       },
       error: (err) => {
@@ -72,54 +68,53 @@ export class DrawModalComponent implements OnInit {
     });
   }
 
-  public apostarConcurso(): void {
+  public betADraw(): void {
     const dialogRefConfirm = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
         title: 'Confirmar Aposta',
-        message: `Deseja registrar que você apostou os números gerados para o concurso ${this.concursoInfo.numero}?`,
+        message: `Deseja registrar que você apostou os números gerados para o concurso ${this.infoDraw.idDraw}?`,
         confirmText: 'Sim, apostei',
         cancelText: 'Cancelar',
-        confirmButtonColor: 'accent' // Mesma cor do botão para manter consistência
+        confirmButtonColor: 'accent' /* Mesma cor do botão para manter consistência */
       }
     });
 
-    dialogRefConfirm.afterClosed().subscribe(confirmado => {
-      if (confirmado) {
-        this.registrarApostaNoBackend();
+    dialogRefConfirm.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.registerBet();
       }
     });
   }
 
-  // NOVO: Monta o JSON e dispara para o Service
-  private registrarApostaNoBackend(): void {
+  /* Monta o JSON e dispara para o Service */
+  private registerBet(): void {
     this.isLoading = true;
 
-    // Pega a data de hoje no formato YYYY-MM-DD
-    const dataHoje = new Date().toISOString().split('T')[0];
+    /* Pega a data de hoje no formato YYYY-MM-DD */
+    const todayDate = new Date().toISOString().split('T')[0];
 
     const payload: SaveBetRequest = {
-      betDate: dataHoje,
-      targetDrawId: this.concursoInfo.numero,
-      oddCount: this.concursoInfo.impares,
-      evenCount: this.concursoInfo.pares,
-      repeatedCount: this.concursoInfo.repetidos,
-      betNumbers: this.resultadoOrdenado.map(dezena => dezena.number), // Extrai apenas os inteiros
+      betDate: todayDate,
+      targetDrawId: this.infoDraw.idDraw,
+      oddCount: this.infoDraw.oddCount,
+      evenCount: this.infoDraw.evenCount,
+      repeatedCount: this.infoDraw.repeatedCount,
+      betNumbers: this.orderedResult.map(dezena => dezena.number), /* Extrai apenas os inteiros */
       autoGenerated: true
     };
 
-    // Imprime o JSON no console para você validar a simulação
-    console.log('JSON disparado para o Backend:', JSON.stringify(payload, null, 2));
+    /* Imprime o JSON no console para você validar a simulação */
+    this.debugService.log('JSON disparado para o Backend:', JSON.stringify(payload, null, 2));
 
     this.LotteriesService.saveGeneratedBet(payload).subscribe({
-      next: (resposta) => {
+      next: (response) => {
         this.isLoading = false;
-        // Idealmente, trocar por um MatSnackBar no futuro
         
-        this.dialogRef.close({ action: 'BET_SAVED' }); // Fecha o modal do concurso
+        this.dialogRef.close({ action: 'BET_SAVED' }); /* Fecha o modal do concurso */
       },
-      error: (erro) => {
-        console.error('Erro ao registrar aposta:', erro);
+      error: (error) => {
+        console.error('Erro ao registrar aposta:', error);
         this.isLoading = false;
         alert('Não foi possível registrar a aposta. Verifique o console.');
       }

@@ -1,4 +1,4 @@
-// Paleta adaptada da sua lógica existente
+/* Paleta adaptada da sua lógica existente */
 $bg-day: #f3f4f8;
 $bg-night: #1f293a;
 $card-day: #ffffff;
@@ -25,41 +25,41 @@ $border-night: #34495e;
   transition: transform 0.3s ease, color 0.3s ease;
   
   &.day { 
-    color: #dc3545; // Vermelho do Bootstrap para o modo claro
+    color: #dc3545; /* Vermelho do Bootstrap para o modo claro */
   }
   
   &.night { 
-    color: #ff6b6b; // Um vermelho mais claro/pastel para destacar no fundo escuro
+    color: #ff6b6b; /* Um vermelho mais claro/pastel para destacar no fundo escuro */
   }
 
   &:hover {
-    transform: scale(1.1); // Dá uma leve crescida ao passar o mouse
+    transform: scale(1.1); /* Dá uma leve crescida ao passar o mouse */
   }
 }
 
-// Estilos do Cabeçalho
+/* Estilos do Cabeçalho */
 .menu-header {
   transition: all 0.5s ease;
   
   &.day {
     background-color: $card-day;
-    border-left: 5px solid #2870f5; // Cor primária do seu login day
+    border-left: 5px solid #2870f5; /* Cor primária do seu login day */
   }
   
   &.night {
     background-color: $card-night;
-    border-left: 5px solid #0ef; // Cor primária do seu login night
+    border-left: 5px solid #0ef; /* Cor primária do seu login night */
     box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
   }
 }
 
-// Textos Universais que trocam baseados no elemento pai com classe .day / .night
+/* Textos Universais que trocam baseados no elemento pai com classe .day / .night */
 .day .title-text { color: $text-day; }
 .night .title-text { color: $text-night; }
 
 .night .text-muted { color: #adb5bd !important; }
 
-// Cards de Funcionalidade
+/* Cards de Funcionalidade */
 .feature-card {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -72,7 +72,7 @@ $border-night: #34495e;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
   }
 
-  // Efeito Hover do Card Inteiro
+  /* Efeito Hover do Card Inteiro */
   &:hover {
     transform: translateY(-5px);
     
@@ -84,7 +84,7 @@ $border-night: #34495e;
 
     .arrow-icon {
       transform: translateX(5px);
-      color: inherit !important; // Pega a cor do texto do card
+      color: inherit !important; /* Pega a cor do texto do card */
     }
 
     .card-icon-wrapper {
@@ -95,7 +95,7 @@ $border-night: #34495e;
   .feature-desc {
     font-size: 0.95rem;
     line-height: 1.5;
-    padding-right: 24px; // Espaço para a setinha não sobrepor o texto
+    padding-right: 24px; /* Espaço para a setinha não sobrepor o texto */
   }
 
   .arrow-icon {
@@ -103,7 +103,7 @@ $border-night: #34495e;
   }
 }
 
-// Badges da Categoria
+/* Badges da Categoria */
 .category-badge {
   font-size: 0.75rem;
   font-weight: 600;
@@ -121,7 +121,7 @@ $border-night: #34495e;
   }
 }
 
-// Gradientes Mapeados para os Ícones (dá um charme excelente de Dashboard)
+/* Gradientes Mapeados para os Ícones (dá um charme excelente de Dashboard) */
 .card-icon-wrapper {
   width: 56px;
   height: 56px;

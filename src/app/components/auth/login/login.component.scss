@@ -1,10 +1,3 @@
-// @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-// * {
-//     margin: 0;
-//     padding: 0;
-//     box-sizing: border-box;
-//     font-family: 'Poppins', sans-serif;
-// }
 .parent{
     display: flex;
     justify-content: center;
@@ -27,7 +20,6 @@
     align-items: center;
 }
 
-//.toogle-container {
 mat-slide-toggle{
   position: absolute;
   top: 10px; /* Distância do topo da tela */
@@ -58,6 +50,7 @@ mat-slide-toggle{
       }
 
   }
+
   @keyframes animateBlinkNight {
       0% {
           background: #0ef;
@@ -81,6 +74,7 @@ mat-slide-toggle{
     position: absolute;
     width: 400px;
 }
+
 .login-box form {
     width: 100%;
     padding: 0 50px;
@@ -103,7 +97,6 @@ h2 {
 
 img {
   max-width: 40%;
-  //height: auto;
   text-align: center;
   display: block;
   margin-left: auto;
@@ -135,7 +128,7 @@ img {
     }
 }
 
-// Efeito quando clicado sobre os inputs dessa classes
+/* Efeito quando clicado sobre os inputs dessa classes */
 .input-box input:focus,
 .input-box input:valid {
   &.night{
@@ -146,7 +139,7 @@ img {
   }
 }
 
-// Coloca o label 'Usuário' e 'Senha' para cima, dentro dos inputs
+/* Coloca o label 'Usuário' e 'Senha' para cima, dentro dos inputs */
 .input-box label {
     position: absolute;
     top: 50%; //50%; //25px;
@@ -154,7 +147,7 @@ img {
     left: 20px;
     font-size: 1em;
     pointer-events: none;
-    transition: .5s ease; // Aplica meio segundo de transicao toda vez que o label muda
+    transition: .5s ease; /* Aplica meio segundo de transicao toda vez que o label muda */
     &.night{
       color: #fff;;
     }
@@ -177,8 +170,8 @@ img {
     }
 }
 
-// Aplica o efeito de subir o label quando o input for
-// clicado e quando ele estiver valido (preenchido devido ao required)
+/* Aplica o efeito de subir o label quando o input for */
+/* clicado e quando ele estiver valido (preenchido devido ao required) */
 .input-box input:focus~label,
 .input-box input:valid~label {
     top: 10%; // 10% ou 5px;

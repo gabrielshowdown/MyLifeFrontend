@@ -13,16 +13,16 @@
   
   mat-card-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 1rem 1rem 0.5rem; // Se remover a data, 
+    padding: 1rem 1rem 0.5rem;
     
-    // 1. Centraliza o conteúdo principal
+    /* Centraliza o conteúdo principal */
     justify-content: center;
     text-align: center;
 
-    // 2. Hack para domar o container invisível do Angular Material
+    /* Hack para domar o container invisível do Angular Material */
     ::ng-deep .mat-mdc-card-header-text {
-      margin: 0 !important; // Remove a margem invisível do "avatar"
-      width: 100%;          // Garante que ocupe o espaço todo para centralizar
+      margin: 0 !important; /* Remove a margem invisível do "avatar" */
+      width: 100%; /* Garante que ocupe o espaço todo para centralizar */
     }
     
     mat-card-title {
@@ -84,14 +84,14 @@
   color: #333;
   transition: all 0.2s ease;
   
-  &.repetido {
+  &.repeated {
     background: linear-gradient(145deg, #e3f2fd, #bbdefb);
     color: #1976d2;
     box-shadow: 2px 2px 4px rgba(25, 118, 210, 0.2);
     border: 2px solid #90caf9;
   }
   
-  &:not(.repetido):hover {
+  &:not(.repeated):hover {
     transform: scale(1.05);
   }
 }

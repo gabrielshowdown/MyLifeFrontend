@@ -1,45 +1,45 @@
 <div class="modal-header-custom">
-  <h2>Concurso {{ concursoInfo.numero }}</h2>
-  <div class="subtitle text-white-50" *ngIf="!isGerado" >
-    {{ concursoInfo.dataApuracao }}
+  <h2>Concurso {{ infoDraw.idDraw }}</h2>
+  <div class="subtitle text-white-50" *ngIf="!isGenerate" >
+    {{ infoDraw.drawDate }}
   </div>
   
 </div>
 
 <mat-dialog-content>
-  <div class="dezenas-grid-dialog">
-    <div *ngFor="let dezenaInfo of resultadoOrdenado" 
-         class="dezena"
-         [class.repetido]="dezenaInfo.isRepeated">
-         {{ dezenaInfo.number | number:'2.0-0' }}
+  <div class="dozens-grid-dialog">
+    <div *ngFor="let n of orderedResult" 
+         class="dozens"
+         [class.repetido]="n.isRepeated">
+         {{ n.number | number:'2.0-0' }}
     </div>
   </div>
 
   <div class="stats-info">
     <strong>Paridade:</strong>
-    <span class="highlight">{{ concursoInfo.impares }} Ímpares</span>
+    <span class="highlight">{{ infoDraw.oddCount }} Ímpares</span>
     <span style="color: #ccc">/</span>
-    <span class="highlight">{{ concursoInfo.pares }} Pares</span>
+    <span class="highlight">{{ infoDraw.evenCount }} Pares</span>
     
     <span style="color: #ccc; margin-left: 8px; margin-right: 8px;">|</span>
     <strong>Repetidos:</strong>
-    <span class="highlight">{{ concursoInfo.repetidos }}</span>
+    <span class="highlight">{{ infoDraw.repeatedCount }}</span>
   </div>
 </mat-dialog-content>
 
 <mat-dialog-actions class="custom-dialog-actions">
   
   <div class="d-flex align-items-center gap-2">
-    <span *ngIf="isGerado" class="obs-text">
+    <span *ngIf="isGenerate" class="obs-text">
       <mat-icon style="font-size: 16px; height: 16px; width: 16px;">warning</mat-icon>
       Simulação
     </span>
 
-    <button *ngIf="isGerado" 
+    <button *ngIf="isGenerate" 
         mat-icon-button 
         color="primary" 
         title="Gerar outro palpite com os mesmos parâmetros" 
-        (click)="recriarConcurso()"
+        (click)="recreateDraw()"
         [disabled]="isLoading"
         class="refresh-btn">
       <mat-icon [class.icon-spin]="isLoading">loop</mat-icon>
@@ -47,7 +47,7 @@
   </div>
 
   <div class="d-flex gap-2">
-    <button *ngIf="isGerado" mat-raised-button color="accent" (click)="apostarConcurso()" [disabled]="isLoading">
+    <button *ngIf="isGenerate" mat-raised-button color="accent" (click)="betADraw()" [disabled]="isLoading">
       <mat-icon class="me-1">check_circle</mat-icon> Apostar
     </button>
     <button mat-stroked-button color="primary" mat-dialog-close>

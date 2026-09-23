@@ -8,8 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { AddDrawRequest, DetailedDraw, DadosNumero, DadosParidade, DadosRepeticao, GenerateDrawRequest, ModalData, SynchronizeResponse, SaveBetRequest, LotofacilBet } from '../../../interfaces/lotofacil';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { AddDrawRequest, DetailedDraw, NumberData, ParityData, RepetitionData, GenerateDrawRequest, ModalData, SaveBetRequest, LotofacilBet, StatusContext } from '../../../interfaces/lotofacil';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { catchError, forkJoin, of, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -23,13 +22,6 @@ import { DebugService } from '../../../core/services/debug.service';
 import { AddDrawModalComponent } from '../add-draw-modal/add-draw-modal.component';
 import { BetModalComponent } from '../bet-modal/bet-modal.component';
 import { RouterModule } from '@angular/router';
-
-
-// Interface auxiliar para passar contexto para a atualização de status
-interface StatusContext {
-  syncResponse?: SynchronizeResponse | null;
-  manualAddId?: number | null;
-}
 
 @Component({
   selector: 'app-lotofacil',
@@ -56,8 +48,7 @@ interface StatusContext {
 })
 export class LotofacilComponent implements OnInit {
 
-  // Atributos
-  private _liveAnnouncer = inject(LiveAnnouncer);
+  /* Atributos */
   subscription!: Subscription;
   isSyncing: boolean = false;
 
@@ -65,26 +56,28 @@ export class LotofacilComponent implements OnInit {
   drawIdConsulted: number = 0;
   showConsultAlert: boolean = false;
 
+  /* Controle dos cuncursos mais recentes que serão exibidos */
   recentDraws: DetailedDraw[] = [];
   currentPage: number = 0;
-  pageSize: number = 4; // Mostra 4 cards, igual ao print Java
+  pageSize: number = 4;
   totalPages: number = 0;
 
-  // Alertas de Status
+  /* Alertas de Status */
   showSyncAlert: boolean = false;
   syncAlertMessage: string = '';
   syncAlertType: 'success' | 'warning' | 'info' | 'danger' = 'info';
   syncAlertIcon: string = 'info_outline';
 
-  // Dados das tabelas
-  paritiesData: DadosParidade[] = [];
-  repetitionsData: DadosRepeticao[] = [];
-  numbersData: DadosNumero[] = [];
+  /* Dados das tabelas */
+  paritiesData: ParityData[] = [];
+  repetitionsData: RepetitionData[] = [];
+  numbersData: NumberData[] = [];
 
   displayedColumnsParity: string[] = ['parity', 'quantity', 'percentage'];
   displayedColumnsRepetition: string[] = ['repeated', 'quantity', 'percentage'];
   displayedColumnsNumber: string[] = ['id', 'quantity', 'percentage'];
 
+  /* Fonte de dados para as tabelas */
   dataSourceParity: any;
   dataSourceRepetition: any;
   dataSourceNumber: any;
@@ -92,37 +85,38 @@ export class LotofacilComponent implements OnInit {
   lastDrawApiCaixa: number = 0;
   dateNextDrawCaixa: any;
 
-  // Alertas de Geração
+  /* Alertas de Geração */
   showGenerateAlert: boolean = false;
   generateAlertMessage: string = '';
 
-  totalInvestido: number = 0;
-  totalRetorno: number = 0;
-  saldoFinanceiro: number = 0;
-  totalApostasRealizadas: number = 0;
+  totalInvested: number = 0;
+  totalReturned: number = 0;
+  financialBalance: number = 0;
+  totalBetsPlaced: number = 0;
   recentBets: LotofacilBet[] = [];
 
+  /* Referencia para o HTML, para fazer a ordenação das tabelas de totais */
   @ViewChild('sortParity') sortParity!: MatSort;
   @ViewChild('sortRepetition') sortRepetition!: MatSort;
   @ViewChild('sortNumber') sortNumber!: MatSort;
 
-  // Filtros
-  repeticaoSelecionada: string = 'N/D';
-  private repeticaoMap: { [key: string]: string | null } = {
+  /* Filtros */
+  selectedRepetition: string = 'N/D';
+  private repetitionMap: { [key: string]: string | null } = {
     'N/D': '0', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10', '11': '11', '12': '12'
   };
 
-  paridadeSelecionada: string = 'N/D';
-  private paridadeMap: { [key: string]: { impares: string, pares: string } | null } = {
-    'N/D': { impares: '0', pares: '0' },
-    '4/11': { impares: '4', pares: '11' },
-    '5/10': { impares: '5', pares: '10' },
-    '6/9': { impares: '6', pares: '9' },
-    '7/8': { impares: '7', pares: '8' },
-    '8/7': { impares: '8', pares: '7' },
-    '9/6': { impares: '9', pares: '6' },
-    '10/5': { impares: '10', pares: '5' },
-    '11/4': { impares: '11', pares: '4' }
+  selectedParity: string = 'N/D';
+  private parityMap: { [key: string]: { odd: string, even: string } | null } = {
+    'N/D': { odd: '0', even: '0' },
+    '4/11': { odd: '4', even: '11' },
+    '5/10': { odd: '5', even: '10' },
+    '6/9': { odd: '6', even: '9' },
+    '7/8': { odd: '7', even: '8' },
+    '8/7': { odd: '8', even: '7' },
+    '9/6': { odd: '9', even: '6' },
+    '10/5': { odd: '10', even: '5' },
+    '11/4': { odd: '11', even: '4' }
   };
 
   constructor(
@@ -146,19 +140,19 @@ export class LotofacilComponent implements OnInit {
   }
 
   loadBetsReport(): void {
-  // 1. Busca os totais gerais (rápido e leve)
+      /* Busca os totais gerais */
       this.service.getBetSummary().subscribe({
         next: (summary) => {
-          this.totalApostasRealizadas = summary.totalBets;
-          this.totalInvestido = summary.totalInvested;
-          this.totalRetorno = summary.totalReturn;
-          this.saldoFinanceiro = summary.balance;
+          this.totalBetsPlaced = summary.totalBets;
+          this.totalInvested = summary.totalInvested;
+          this.totalReturned = summary.totalReturn;
+          this.financialBalance = summary.balance;
         },
         error: (err) => console.error('Erro ao carregar resumo', err)
       })
     ;
 
-    // 2. Busca apenas as 3 últimas apostas paginadas para a tabelinha inicial
+    /* Busca apenas as 3 últimas apostas paginadas para a tabelinha inicial de Desempenho de Apostas */
       this.service.getBetsPaginated(0, 3).subscribe({
         next: (page) => {
           this.recentBets = page.content;
@@ -166,7 +160,7 @@ export class LotofacilComponent implements OnInit {
         error: (err) => console.error('Erro ao carregar apostas recentes', err)      
       })
     ;
-    console.log('this.recentBets' + this.recentBets);
+    this.debugService.log('this.recentBets: ' + this.recentBets);
 }
 
   loadTablesData() {
@@ -175,6 +169,7 @@ export class LotofacilComponent implements OnInit {
     this.loadDataNumbers();
   }
 
+  /* Método que atualiza a quantidade de cards de concurso ao mudar de monitor/dimunir/aumentar a tela */
   /*
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -192,16 +187,13 @@ export class LotofacilComponent implements OnInit {
   }
   */
 
-  /**
-   * Carrega dados gerais e define a mensagem de status baseada no contexto
-   * @param context Objeto opcional contendo dados de sync ou adição manual recente
-   */
+  /* Carrega dados gerais e define a mensagem de status baseada no contexto */
   loadGeneralData(context: StatusContext = {}) {
     let localErrorType: 'NONE' | 'EMPTY' | 'ERROR' = 'NONE';
     let apiError = false;
 
     forkJoin({
-      lastLocal: this.service.getLastContestLotofacilRegistered().pipe(
+      lastDrawLocal: this.service.getLastDrawLotofacilRegistered().pipe(
         catchError(err => {
           if (err.message === 'Nenhum concurso encontrado' || err.status === 404) {
             localErrorType = 'EMPTY';
@@ -211,37 +203,37 @@ export class LotofacilComponent implements OnInit {
           return of(null);
         })
       ),
-      lastCaixa: this.service.getContestLotofacilCaixa().pipe(
+      lastCaixaDraw: this.service.getDrawLotofacilCaixa().pipe(
         catchError(err => {
           apiError = true;
           return of(null);
         })
       )
     }).subscribe({
-      next: ({ lastLocal, lastCaixa }) => {
+      next: ({ lastDrawLocal, lastCaixaDraw }) => {
         // Atualiza variáveis de estado
-        if (lastLocal !== null) this.totalNumberLotofacilDraw = lastLocal;
+        if (lastDrawLocal !== null) this.totalNumberLotofacilDraw = lastDrawLocal;
         else if (localErrorType === 'EMPTY') this.totalNumberLotofacilDraw = 0;
 
-        if (lastCaixa !== null) {
-          this.lastDrawApiCaixa = lastCaixa.numero;
-          this.dateNextDrawCaixa = lastCaixa.dataProximoConcurso;
+        if (lastCaixaDraw !== null) {
+          this.lastDrawApiCaixa = lastCaixaDraw.numero;
+          this.dateNextDrawCaixa = lastCaixaDraw.dataProximoConcurso;
         }
 
-        // Chama o centralizador de mensagens
+        /* Chama o centralizador de mensagens */
         this.updateDashboardStatus(localErrorType, apiError, context);
       }
     });
   }
 
   loadRecentDraws(): void {
-    this.service.getContestsPaginated(this.currentPage, this.pageSize)
+    this.service.getDrawsPaginated(this.currentPage, this.pageSize)
       .subscribe({
         next: (pageData) => {
           this.recentDraws = pageData.content;
           this.totalPages = pageData.totalPages;
 
-          // Ordenar as dezenas dentro de cada concurso para visualização correta
+          /* Ordenar as dezenas dentro de cada concurso para visualização correta */
           this.recentDraws.forEach(c => {
             c.drawNumbers.sort((a, b) => a.number - b.number);
           });
@@ -256,52 +248,37 @@ export class LotofacilComponent implements OnInit {
    * define o tamanho da página para 6 para preencher o grid 3x2.
    */
   adjustPageSizeToScreen(): void {
-    // A largura da tela disponível
+    /* A largura da tela disponível */
     const screenWidth = window.innerWidth;
-
-    // DEFINIÇÃO DO PONTO DE QUEBRA (BREAKPOINT):
-    // Seu container de lista ocupa metade da tela (col-lg-6).
-    // Cada card tem min-width de 260px.
-    // Para caber 3 cards lado a lado, o container precisa de ~820px.
-    // Logo, a tela inteira precisa ter aproximadamente > 1650px.
     
-    // Vamos usar 1600px como margem de segurança para monitores Wide
+    /* Vamos usar 1600px como margem de segurança para monitores Wide */
     if (screenWidth >= 1600) {
       this.pageSize = 6;
     } else {
       this.pageSize = 4;
     }
-    
-    // Opcional: Log para você debugar qual tamanho foi escolhido
-    // console.log(`Largura: ${screenWidth}px | PageSize definido para: ${this.pageSize}`);
   }
 
+  /* Troca de página de concursos */
   changePage(delta: number): void {
     const nextPage = this.currentPage + delta;
 
-    // A validação de limites continua a mesma, 
-    // pois o Backend ainda trata 0 como início e totalPages como fim.
+    /* A validação de limites continua a mesma, pois o Backend ainda trata 0 como início e totalPages como fim. */
     if (nextPage >= 0 && nextPage < this.totalPages) {
       this.currentPage = nextPage;
       this.loadRecentDraws();
     }
   }
 
-  /**
-   * Lógica centralizada para definir a mensagem, cor e ícone do alerta principal
-   */
+  /* Lógica centralizada para definir a mensagem, cor e ícone do alerta principal */
   private updateDashboardStatus(
     localErrorType: 'NONE' | 'EMPTY' | 'ERROR',
     apiError: boolean,
     context: StatusContext
   ) {
     const diff = this.lastDrawApiCaixa - this.totalNumberLotofacilDraw;
-    const nextDateFormatted = this.dateNextDrawCaixa
-      ? new Date(this.dateNextDrawCaixa).toLocaleDateString('pt-BR') // Ajuste conforme formato da API
-      : 'N/D';
-    // Obs: Se a API já retorna string formatada ("dd/mm/yyyy"), remova o "new Date()"
 
-    // 1. Erros de Infraestrutura
+    /* Erros de Infraestrutura */
     if (localErrorType === 'ERROR') {
       this.setAlert('Erro ao buscar dados locais.', 'danger', 'error_outline');
       return;
@@ -311,7 +288,7 @@ export class LotofacilComponent implements OnInit {
       return;
     }
 
-    // 2. Banco Local Vazio
+    /* Banco Local Vazio */
     if (localErrorType === 'EMPTY' || this.totalNumberLotofacilDraw === 0) {
       this.setAlert(
         `Nenhum concurso cadastrado no banco local. (Último na Caixa ${this.lastDrawApiCaixa})`,
@@ -321,7 +298,7 @@ export class LotofacilComponent implements OnInit {
       return;
     }
 
-    // 3. Adição Manual (Prioridade sobre Sync se acabou de acontecer)
+    /* Se veio de uma adição manual (Prioridade sobre Sync se acabou de acontecer) */
     if (context.manualAddId) {
       if (diff > 0) {
         this.setAlert(
@@ -330,7 +307,7 @@ export class LotofacilComponent implements OnInit {
           'warning_amber'
         );
       } else {
-        // Igualou
+        /* Igualou */
         this.setAlert(
           `Concurso ${context.manualAddId} adicionado manualmente, Próximo concurso: ${this.dateNextDrawCaixa}`,
           'success',
@@ -340,12 +317,12 @@ export class LotofacilComponent implements OnInit {
       return;
     }
 
-    // 4. Sincronização (Se veio de uma ação de sync)
+    /* Sincronização (Se veio de uma ação de sync) */
     if (context.syncResponse) {
       const syncedCount = context.syncResponse.synchronizedDrawsCount;
 
       if (syncedCount > 0) {
-        // Caso A: Houve processamento de novos dados
+        /* Caso A: Houve processamento de novos dados */
         if (diff > 0) {
           this.setAlert(
             `Sincronizados ${syncedCount} concursos! Restam ${diff} concurso(s). (Último na Caixa: ${this.lastDrawApiCaixa})`,
@@ -360,16 +337,15 @@ export class LotofacilComponent implements OnInit {
           );
         }
       } else {
-        // Caso B: Não houve novos dados (syncedCount === 0)
+        /* Caso B: Não houve novos dados (syncedCount === 0) */
         if (diff === 0) {
-          // AQUI ESTÁ O AJUSTE: Feedback específico para "já estava atualizado"
           this.setAlert(
             `Concursos Sincronizados. Próximo concurso: ${this.dateNextDrawCaixa}`,
             'info',
             'check_circle_outline'
           );
         } else {
-          // Raro: sync retornou 0 mas ainda existe diferença (ex: erro silencioso no back ou gap de dados)
+          /* Raro: sync retornou 0 mas ainda existe diferença (ex: erro silencioso no back ou gap de dados) */
           this.setAlert(
             `Sincronização finalizada sem novos registros. Faltam ${diff} concursos.`,
             'warning',
@@ -380,16 +356,16 @@ export class LotofacilComponent implements OnInit {
       return;
     }
 
-    // 5. Estados Passivos (Apenas consulta/load da página)
+    /* Estados Passivos (Apenas consulta/load da página) */
     if (diff > 0) {
-      // Existem pendentes
+      /* Existem pendentes */
       this.setAlert(
         `Existem ${diff} concurso(s) para sincronizar. (Último na Caixa: ${this.lastDrawApiCaixa})`,
         'warning',
         'warning_amber'
       );
     } else {
-      // Tudo sincronizado
+      /* Tudo sincronizado */
       this.setAlert(
         `Concursos Sincronizados. Próximo concurso: ${this.dateNextDrawCaixa}`,
         'info',
@@ -398,7 +374,7 @@ export class LotofacilComponent implements OnInit {
     }
   }
 
-  /** Helper para setar as variáveis do alerta */
+  /* Método para setar as variáveis do alerta */
   private setAlert(message: string, type: 'success' | 'warning' | 'info' | 'danger', icon: string) {
     this.syncAlertMessage = message;
     this.syncAlertType = type;
@@ -419,7 +395,7 @@ export class LotofacilComponent implements OnInit {
         this.isSyncing = false;
         this.debugService.log('Sincronização concluída:', response);
 
-        // Passamos o response como contexto para o loadGeneralData
+        /* Passamos o response como contexto para o loadGeneralData */
         this.loadGeneralData({ syncResponse: response });
         this.loadTablesData();
         this.loadRecentDraws()
@@ -442,7 +418,7 @@ export class LotofacilComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Direciona para o método correto dependendo do que o usuário escolheu
+        /* Direciona para o método correto dependendo do que o usuário escolheu */
         if (result.action === 'DRAW') {
           this.saveNewManualDraw(result.payload);
         } else if (result.action === 'BET') {
@@ -454,10 +430,8 @@ export class LotofacilComponent implements OnInit {
 
   private saveNewManualBet(payload: SaveBetRequest): void {
     this.subscription = this.service.saveGeneratedBet(payload).subscribe({
-      next: (resposta) => {
-        // Pode usar seu setAlert ou outro feedback
+      next: (response) => {
         this.setAlert(`Aposta para o concurso ${payload.targetDrawId} cadastrada com sucesso!`, 'success', 'check_circle_outline');
-
         this.loadBetsReport();
       },
       error: (err) => {
@@ -467,7 +441,7 @@ export class LotofacilComponent implements OnInit {
   }
 
   private saveNewManualDraw(data: { drawId: number, dozens: string[], drawDate: string }): void { 
-    console.log('this.drawDate2' , data.drawDate);
+    this.debugService.log('this.drawDate: ' , data.drawDate);
        
     const request: AddDrawRequest = {
       drawId: data.drawId,
@@ -476,14 +450,14 @@ export class LotofacilComponent implements OnInit {
     };
 
     this.subscription = this.service.addDrawManually(request).subscribe({
-      next: (novoConcurso) => {
+      next: (newDraw) => {
         this.loadTablesData();
-        // Passamos o ID adicionado como contexto para o loadGeneralData
-        this.loadGeneralData({ manualAddId: novoConcurso.id });
+        /* Passamos o ID adicionado como contexto para o loadGeneralData */
+        this.loadGeneralData({ manualAddId: newDraw.id });
         this.loadRecentDraws();
       },
       error: (err) => {
-        // Erro específico de adição manual (não recarrega o geral, só mostra erro)
+        /* Erro específico de adição manual (não recarrega o geral, só mostra erro) */
         this.setAlert(
           `Erro ao salvar concurso ${request.drawId}. (Erro: ${err.error?.message || err.message})`,
           'danger',
@@ -493,20 +467,10 @@ export class LotofacilComponent implements OnInit {
     });
   }
 
-  // --- Métodos de Tabelas e Consultas (Mantidos iguais ou levemente ajustados) ---
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
-  }
-
   loadDataParities(): void {
     this.subscription = this.service.getAllParities().subscribe({
-      next: (dadosDaApi) => {
-        this.paritiesData = dadosDaApi.map(item => ({
+      next: (response) => {
+        this.paritiesData = response.map(item => ({
           id: item.id,
           parity: item.parity,
           quantity: item.quantity,
@@ -515,14 +479,14 @@ export class LotofacilComponent implements OnInit {
         this.dataSourceParity = new MatTableDataSource(this.paritiesData);
         this.dataSourceParity.sort = this.sortParity;
       },
-      error: (erro) => console.error('Erro paridade:', erro)
+      error: (error) => console.error('Erro paridade:', error)
     });
   }
 
   loadDataRepetitions(): void {
     this.subscription = this.service.getAllRepetitions().subscribe({
-      next: (dadosDaApi) => {
-        this.repetitionsData = dadosDaApi.map(item => ({
+      next: (response) => {
+        this.repetitionsData = response.map(item => ({
           id: item.id,
           repeated: item.repeated,
           quantity: item.quantity,
@@ -531,14 +495,14 @@ export class LotofacilComponent implements OnInit {
         this.dataSourceRepetition = new MatTableDataSource(this.repetitionsData);
         this.dataSourceRepetition.sort = this.sortRepetition;
       },
-      error: (erro) => console.error('Erro repetição:', erro)
+      error: (error) => console.error('Erro repetição:', error)
     });
   }
 
   loadDataNumbers(): void {
     this.subscription = this.service.getAllNumbers().subscribe({
-      next: (dadosDaApi) => {
-        this.numbersData = dadosDaApi.map(item => ({
+      next: (response) => {
+        this.numbersData = response.map(item => ({
           id: item.id,
           quantity: item.quantity,
           percentage: item.percentage,
@@ -546,20 +510,20 @@ export class LotofacilComponent implements OnInit {
         this.dataSourceNumber = new MatTableDataSource(this.numbersData);
         this.dataSourceNumber.sort = this.sortNumber;
       },
-      error: (erro) => console.error('Erro números:', erro)
+      error: (error) => console.error('Erro números:', error)
     });
   }
 
-  consultContest() {
+  consultDraw() {
     this.showConsultAlert = false;
     if (!this.drawIdConsulted || this.drawIdConsulted <= 0) return;
 
     if (this.drawIdConsulted > this.totalNumberLotofacilDraw) {
       this.showConsultAlert = true;
     } else {
-      this.service.getContestById(this.drawIdConsulted).subscribe({
-        next: (resultadoConcurso: DetailedDraw) => {
-          if (resultadoConcurso) this.openConsultaDialog(resultadoConcurso, false);
+      this.service.getDrawById(this.drawIdConsulted).subscribe({
+        next: (resultDraw: DetailedDraw) => {
+          if (resultDraw) this.openConsultDialog(resultDraw, false);
           else this.showConsultAlert = true;
         },
         error: (err) => {
@@ -570,22 +534,22 @@ export class LotofacilComponent implements OnInit {
     }
   }
 
-openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false, requestParams?: GenerateDrawRequest): void {
+openConsultDialog(response: DetailedDraw, isGenerate: boolean = false, requestParams?: GenerateDrawRequest): void {
     const dialogRef = this.dialog.open(DrawModalComponent, {
       width: '450px',
       panelClass: 'no-padding-dialog', 
-      data: { concurso: resultado, isGerado: isGerado, requestParams: requestParams } as ModalData
+      data: { draw: response, isGenerated: isGenerate, requestParams: requestParams } as ModalData
     });
 
-    // Voltamos com o afterClosed para capturar o evento emitido quando a aposta é salva!
+    /* Voltamos com o afterClosed para capturar o evento emitido quando a aposta é salva! */
     dialogRef.afterClosed().subscribe(result => {
-      // Verifica se o modal retornou a nossa ação de sucesso
+      /* Verifica se o modal retornou a nossa ação de sucesso */
       if (result && result.action === 'BET_SAVED') {
         
-        // 1. Aciona o Alerta Visual (Dashboard) no topo da tela
+        /* Aciona o Alerta Visual (Dashboard) no topo da tela */
         this.setAlert('Aposta gerada registrada com sucesso!', 'success', 'check_circle_outline');
         
-        // 2. Atualiza a tabela "Desempenho das Apostas" no background
+        /* Atualiza a tabela 'Desempenho das Apostas' no background */
         this.loadBetsReport();
       }
     });
@@ -600,19 +564,19 @@ openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false, requestPa
       return;
     }
 
-    const repetidos = this.repeticaoMap[this.repeticaoSelecionada];
-    const paridade = this.paridadeMap[this.paridadeSelecionada];
+    const repeatedCount = this.repetitionMap[this.selectedRepetition];
+    const parityCount = this.parityMap[this.selectedParity];
 
     const requestBody: GenerateDrawRequest = {
       lastDrawId: this.totalNumberLotofacilDraw.toString(),
-      repeatedCount: repetidos,
-      oddCount: paridade ? paridade.impares : null,
-      evenCount: paridade ? paridade.pares : null
+      repeatedCount: repeatedCount,
+      oddCount: parityCount ? parityCount.odd : null,
+      evenCount: parityCount ? parityCount.even : null
     };
 
     this.subscription = this.service.generateDraw(requestBody).subscribe({
-      next: (resultadoConcurso: DetailedDraw) => {
-        if (resultadoConcurso) this.openConsultaDialog(resultadoConcurso, true, requestBody);
+      next: (responseDraw: DetailedDraw) => {
+        if (responseDraw) this.openConsultDialog(responseDraw, true, requestBody);
       },
       error: (err) => {
         if (err.status === 422 && err.error && err.error.message) {
@@ -627,9 +591,9 @@ openConsultaDialog(resultado: DetailedDraw, isGerado: boolean = false, requestPa
 
   openBetDetailModal(bet: LotofacilBet): void {
     this.dialog.open(BetModalComponent, {
-      width: '500px', // Ajuste a largura conforme necessário
-      data: bet, // Passa os dados da aposta selecionada para o modal
-      panelClass: 'no-padding-dialog' // Classe CSS opcional para remover padding do material se preferir
+      width: '500px', /* Ajuste a largura conforme necessário */
+      data: bet, /* Passa os dados da aposta selecionada para o modal */
+      panelClass: 'no-padding-dialog' /* Classe CSS opcional para remover padding do material se preferir */
     });
   }
 }

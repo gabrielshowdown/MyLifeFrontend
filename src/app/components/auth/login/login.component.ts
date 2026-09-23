@@ -28,7 +28,7 @@ import { loginThemeFixed } from '../../../config/parameters';
 })
 export class LoginComponent implements OnInit, OnDestroy{
 
-  // Atribrutos
+  /* Atribrutos */
   form!: FormGroup;
   loginError!: boolean;
   openModal!: boolean;
@@ -64,31 +64,32 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void{
     if (loginThemeFixed){
-      // Fazer tratativa futura de sempre abrir o Login pelo getTimeOfDay
+      /* Fazer tratativa futura de sempre abrir o Login pelo getTimeOfDay */
     }
     this.theme = this.themeService.getTheme();
 
     this.form = this.formBuilder.group({
       username: ['', Validators.compose([
-        Validators.required, // Não permite branco
+        Validators.required, /* Não permite branco */
         Validators.minLength(3),
       ])],
       password: ['', Validators.compose([
-        Validators.required, // Não permite branco
+        Validators.required, /* Não permite branco */
         Validators.minLength(3),
-        //Validators.pattern(/(.|\s)*\S(.|\s)*/), // Não permite espaços em branco no conteúdo
+        /* Não permite espaços em branco no conteúdo */
+        // Validators.pattern(/(.|\s)*\S(.|\s)*/),
       ])],
     })
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe(); // O ? indica que pode ser undefined, caso não seja usado ele no processo
+    this.subscription?.unsubscribe(); /* O '?' indica que pode ser undefined, caso não seja usado ele no processo */
   }
 
   ngAfterViewInit() {
     if (this.element){
-      // this.element.nativeElement.querySelector('.mdc-switch__icon--off').firstChild.setAttribute('d', this.sun);
-      // this.element.nativeElement.querySelector('.mdc-switch__icon--on').firstChild.setAttribute('d', this.moon);
+      /* this.element.nativeElement.querySelector('.mdc-switch__icon--off').firstChild.setAttribute('d', this.sun); */
+      /* this.element.nativeElement.querySelector('.mdc-switch__icon--on').firstChild.setAttribute('d', this.moon); */
       this.themeService.configureDarkModeSwitch(this.element);
     }
   }
@@ -120,10 +121,9 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.debugService.log('usuario valid: ' + this.form.get('username')?.valid);
     this.debugService.log('senha valid: ' + this.form.get('password')?.valid);
 
-    // const credentials = this.form.value;
-    /* Se deixar assim como no trecho acima vai gerar o json dessa forma:
+    /* Se deixar const credentials = this.form.value;  vai gerar o json dessa forma:
     {username: 'super', password: 'super'}
-    e como na interface e no banco é 'senha' no lugar de 'password', da pau. */
+    e como na interface e no banco era 'senha' no lugar de 'password', dava pau, agora já é password, mas vamos manter como lembrança */
 
     const credentials = {
       username: this.form.get('username')?.value,
@@ -142,49 +142,50 @@ export class LoginComponent implements OnInit, OnDestroy{
         console.error('Erro ao validar login:', err);
         this.loginError = true;
          if (err.status === 0) {
-        // Erro de conexão com o backend
+        /* Erro de conexão com o backend */
         this.messageErrorLogin = 'Não foi possível conectar ao servidor';
       } 
       else if (err.status === 401) {
-        // Usuário ou senha inválidos
+        /* Usuário ou senha inválidos */
         this.messageErrorLogin = 'Usuário ou senha incorretos.';
       } 
       else {
-        // Outros erros
+        /* Outros erros */
         this.messageErrorLogin = `Erro inesperado (${err.status}): ${err.message}`;
       }
       },
     });
 
-    // this.service.getUsers().subscribe({
-    //   next: (users) => {
-    //     this.debugService.log(users); // Manipulação de sucesso
-    //   },
-    //   error: (error) => {
-    //     console.error('Erro ao buscar usuários:', error); // Manipulação de erro
-    //   },
-    //   complete: () => {
-    //     this.debugService.log('Busca de usuários concluída.'); // (Opcional) Finalização do Observable
-    //   }
-    // });
-
+    /*
+    this.service.getUsers().subscribe({
+      next: (users) => {
+        this.debugService.log(users); // Manipulação de sucesso
+      },
+      error: (error) => {
+        console.error('Erro ao buscar usuários:', error); // Manipulação de erro
+      },
+      complete: () => {
+        this.debugService.log('Busca de usuários concluída.'); // (Opcional) Finalização do Observable
+      }
+    });
+  */
   }
 
   onToggleChange(event: any): void {
-    // Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo
+    /* Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo */
     this.theme = this.themeService.changeTheme(event.checked);
   }
 
-    clearMessages(): void {
+  clearMessages(): void {
     this.loginError = false;
   }
 
-  abrirModalEsqueciSenha(event: Event): void {
-    event.preventDefault(); // Evita que o link '# ' recarregue a tela
+  openFogotPasswordModal(event: Event): void {
+    event.preventDefault(); /* Evita que o link '#' recarregue a tela */
     
     this.dialog.open(TemplateModalComponent, {
       width: '400px',
-      panelClass: 'no-padding-dialog', // A mesma classe usada no AddConcurso
+      panelClass: 'no-padding-dialog', /* A mesma classe usada no AddDraw */
       data: {
         title: this.forgotPasswordMessage.title,
         content: this.forgotPasswordMessage.content,

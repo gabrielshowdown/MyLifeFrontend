@@ -6,7 +6,7 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: '/login',
-    pathMatch: 'full' // Necessário quando o path é vazio, indica que é para ler toda a URL
+    pathMatch: 'full' /* Necessário quando o path é vazio, indica que é para ler toda a URL */
   },
   { 
     path: 'login', 

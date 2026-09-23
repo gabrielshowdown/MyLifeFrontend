@@ -13,7 +13,7 @@ import { DetailedDraw } from '../../../interfaces/lotofacil';
 export class DrawCardComponent {
   @Input() draw!: DetailedDraw;
 
-  // Helper para formatar números menores que 10 com zero à esquerda
+  /* Helper para formatar números menores que 10 com zero à esquerda */
   formatNumber(num: number): string {
     return num < 10 ? `0${num}` : `${num}`;
   }

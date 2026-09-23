@@ -4,15 +4,15 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-// Interface que define o que o modal pode receber
+/* Interface que define o que o modal pode receber */
 export interface ImageModalData {
   title: string;
-  icon?: string;          // Opcional: ex 'screen_share', 'help'
-  imageSrc: string;       // O caminho do GIF/Imagem
-  imageAlt: string;       // Texto alternativo
-  description?: string;   // Texto descritivo acima do botão/imagem
-  actionUrl?: string;     // Se informado, exibe o botão
-  actionText?: string;    // Texto do botão
+  icon?: string;          /* Opcional: ex 'screen_share', 'help' */
+  imageSrc: string;       /* O caminho do GIF/Imagem */
+  imageAlt: string;       /* Texto alternativo */
+  description?: string;   /* Texto descritivo acima do botão/imagem */
+  actionUrl?: string;     /* Se informado, exibe o botão */
+  actionText?: string;    /* Texto do botão */
 }
 
 @Component({

@@ -5,7 +5,7 @@ $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow: hidden;
 }
 
-// 1. Cabeçalho Padronizado
+/* Cabeçalho Padronizado */
 .modal-header-custom {
   background: $primary-gradient;
   padding: 1.5rem 1rem;
@@ -21,13 +21,13 @@ $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   }
 }
 
-// 2. Ajuste do Conteúdo (Formulário)
+/* Ajuste do Conteúdo (Formulário) */
 mat-dialog-content {
   margin: 0 !important;
-  padding: 24px 32px !important; // Padding lateral um pouco maior para o form
+  padding: 24px 32px !important; /* Padding lateral um pouco maior para o form */
   overflow: visible !important;
 
-  // Texto explicativo
+  /* Texto explicativo */
   p {
     color: #666;
     font-size: 0.95rem;
@@ -37,17 +37,17 @@ mat-dialog-content {
   }
 }
 
-// 3. Rodapé
+/* Rodapé */
 .custom-dialog-actions {
   padding: 16px 24px 24px 24px;
   display: flex;
-  justify-content: flex-end; // Botões alinhados à direita
-  gap: 12px; // Espaço entre os botões
+  justify-content: flex-end; /* Botões alinhados à direita */
+  gap: 12px; /* Espaço entre os botões */
   border-top: none;
   background: white;
 }
 
-// 4. Estilo Especial para o botão Salvar (Gradiente)
+/* Estilo Especial para o botão Salvar (Gradiente) */
 .btn-save-custom {
   background: $primary-gradient !important;
   color: white !important;
@@ -59,7 +59,7 @@ mat-dialog-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: -8px; // aproxima do input (efeito igual ao mat-hint)
+  margin-top: -8px; /* Aproxima do input (efeito igual ao mat-hint) */
   padding: 0 4px;
 }
 

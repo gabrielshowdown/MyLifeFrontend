@@ -1,18 +1,16 @@
-// concurso-modal.component.scss
-
 $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
-// Garante que o componente ocupe tudo sem scrolls
+/* Garante que o componente ocupe tudo sem scrolls */
 :host {
   display: block;
   overflow: hidden; 
 }
 
-// Cabeçalho
+/* Cabeçalho */
 .modal-header-custom {
   background: $primary-gradient;
-  padding: 1.5rem 1rem; // Retornamos ao padding original, que deixa o cabeçalho "gordinho" e bonito
-  text-align: center;   // O bom e velho text-align resolve a centralização perfeitamente
+  padding: 1.5rem 1rem; /* Retornamos ao padding original, que deixa o cabeçalho "gordinho" e bonito */
+  text-align: center;   /* O bom e velho text-align resolve a centralização perfeitamente */
   color: white;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   position: relative;
@@ -25,9 +23,9 @@ $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     line-height: 1.2; 
   }
 
-  // Estilo do subtítulo (só aparece quando tem data)
+  /* Estilo do subtítulo (só aparece quando tem data) */
   .subtitle {
-    margin-top: 6px; // Dá um respiro entre o título e a data
+    margin-top: 6px; /* Dá um respiro entre o título e a data */
     margin-bottom: -12px;
     font-size: 0.9rem;
     font-weight: 500;
@@ -35,24 +33,24 @@ $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   }
 }
 
-// Conteúdo (Corpo)
+/* Conteúdo (Corpo) */
 mat-dialog-content {
   margin: 0 !important;
-  padding: 24px 24px 10px 24px !important; // Controlamos o padding aqui agora
-  max-height: none !important; // Remove limite de altura que causa scroll
-  overflow: visible !important; // Remove scroll interno
+  padding: 24px 24px 10px 24px !important; /* Controlamos o padding aqui agora */
+  max-height: none !important; /* Remove limite de altura que causa scroll */
+  overflow: visible !important; /* Remove scroll interno */
 }
 
-// Grid das Dezenas
-.dezenas-grid-dialog {
+/* Grid das Dezenas */
+.dozens-grid-dialog {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
   justify-items: center;
-  margin-bottom: 1.5rem; // Espaço entre as bolinhas e a paridade
+  margin-bottom: 1.5rem; /* Espaço entre as bolinhas e a paridade */
 }
 
-.dezena {
+.dozens {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -72,7 +70,7 @@ mat-dialog-content {
   }
 }
 
-// Card de Informação (Paridade)
+/* Card de Informação (Paridade) */
 .stats-info {
   background-color: #f8f9fa;
   border-radius: 12px;
@@ -80,7 +78,7 @@ mat-dialog-content {
   text-align: center;
   border: 1px solid #edf2f7;
   
-  // Centraliza o texto e ícones
+  /* Centraliza o texto e ícones */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,14 +98,14 @@ mat-dialog-content {
   }
 }
 
-// Rodapé (Botões)
+/* Rodapé (Botões) */
 .custom-dialog-actions {
-  padding: 16px 24px 24px 24px; // Espaço generoso embaixo
+  padding: 16px 24px 24px 24px; /* Espaço generoso embaixo */
   display: flex;
-  justify-content: space-between; // Mantém aviso na esq e botão na dir
+  justify-content: space-between; /* Mantém aviso na esquerda e botão na direita */
   align-items: center;
-  border-top: none; // Remove borda para visual mais limpo
-  background: white; // Garante fundo branco
+  border-top: none; /* Remove borda para visual mais limpo */
+  background: white; /* Garante fundo branco */
 }
 
 .obs-text {
@@ -122,7 +120,7 @@ mat-dialog-content {
   gap: 6px;
 }
 
-// Estilo para o botão de atualizar palpite
+/* Estilo para o botão de atualizar palpite */
 .refresh-btn {
   width: 32px;
   height: 32px;
@@ -138,7 +136,7 @@ mat-dialog-content {
   }
 }
 
-// Animação de giro enquanto carrega
+/* Animação de giro enquanto carrega */
 .icon-spin {
   animation: spin 1s linear infinite;
 }

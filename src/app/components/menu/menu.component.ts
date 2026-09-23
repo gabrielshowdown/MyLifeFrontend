@@ -26,7 +26,7 @@ interface MenuItem {
     MatIconModule,
     MatSlideToggle,
     MatSlideToggleModule,
-    MatRippleModule, // Adiciona aquele efeito visual de "onda" ao clicar no Material
+    MatRippleModule, /* Adiciona aquele efeito visual de "onda" ao clicar no Material */
     MatButtonModule
   ],
   templateUrl: './menu.component.html',
@@ -38,7 +38,7 @@ export class MenuComponent implements OnInit {
   theme: string = 'day';
   @ViewChild('darkModeSwitch', { read: ElementRef }) element: ElementRef | undefined;
 
-  // Lista dinâmica de funcionalidades separadas por tema visual
+  /* Lista dinâmica de funcionalidades separadas por tema visual */
   menuItems: MenuItem[] = [
     {
       title: 'Lotofácil',
@@ -88,7 +88,6 @@ export class MenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Mantém a mesma lógica de recuperação do tema do Login/Register
     this.theme = this.themeService.getTheme();
   }
 
@@ -99,7 +98,7 @@ export class MenuComponent implements OnInit {
   }
 
   onToggleChange(event: any): void {
-    // Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo
+    /* Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo */
     this.theme = this.themeService.changeTheme(event.checked);
   }
 
@@ -108,9 +107,7 @@ export class MenuComponent implements OnInit {
   }
 
   logout(): void {
-    // Futuramente você pode adicionar aqui a limpeza do LocalStorage/Token, ex:
-    // localStorage.removeItem('userToken');
-    
+    /* Futuramente você pode adicionar aqui a limpeza do LocalStorage/Token, ex: */    
     this.router.navigate(['/login']);
   }
 }

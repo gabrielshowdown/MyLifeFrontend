@@ -17,7 +17,6 @@ export class UsersService {
 
   constructor(private http: HttpClient, private debugService: DebugService,) { }
 
-  // Retorna todos os usuários cadastrados
   getUsers(): Observable<User[]> {
     !desenvMode ? this.API = this.API_USERS : this.API = this.API_USERS_DEV
     return this.http.get<User[]>(this.API);
@@ -25,14 +24,12 @@ export class UsersService {
 
   validateLogin(credentials: { username: string; password: string }): Observable<boolean> {
     this.debugService.log('credentials:' , credentials);
-
     return this.http.post<boolean>(`${this.API_USERS}/validate`, credentials);
   }
 
   registerUser(user: User): Observable<User>{
     this.debugService.log('user: ', user);
-    console.log(desenvMode);
-
+    this.debugService.log('desenvMode: ', desenvMode);
     !desenvMode ? this.API = this.API_USERS : this.API = this.API_USERS_DEV
     return this.http.post<User>(`${this.API}`, user);
   }

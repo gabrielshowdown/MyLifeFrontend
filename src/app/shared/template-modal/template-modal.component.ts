@@ -24,7 +24,7 @@ export interface ModalMessageData {
 })
 export class TemplateModalComponent {
 
-  // Injeta os dados recebidos pelo MatDialog
+  /* Injeta os dados recebidos pelo MatDialog */
   constructor(@Inject(MAT_DIALOG_DATA) public data: ModalMessageData) {}
 
 }

@@ -18,9 +18,9 @@ export class ThemeService {
   private initializeTheme(): void {
     const savedTheme = localStorage.getItem(this.THEME_KEY);
     if (savedTheme) {
-      this.theme = savedTheme; // Pega o que está salvo
+      this.theme = savedTheme; /* Pega o que está salvo */
     } else {
-      this.theme = this.getTimeOfDay(); // Fallback para a hora do dia
+      this.theme = this.getTimeOfDay(); /* Fallback para a hora do dia */
     }
   }
 
@@ -40,7 +40,7 @@ export class ThemeService {
   }
 
   getTimeOfDay(): string {
-    const currentHour = new Date().getHours(); // Obtém a hora atual (0-23)
+    const currentHour = new Date().getHours(); /* Obtém a hora atual (0-23) */
     return currentHour >= 6 && currentHour < 18 ? 'day' : 'night';
   }
 
@@ -52,14 +52,12 @@ export class ThemeService {
     return this.moon;
   }
 
-  // Refatorado: Agora ele altera e JÁ SALVA no localStorage e no serviço
   changeTheme(isChecked: boolean): string {
     const newTheme = isChecked ? 'night' : 'day';
     this.setTheme(newTheme);
     return newTheme;
   }
 
-  // Refatorado: Centraliza a lógica de salvar
   setTheme(value: string) {
     this.theme = value;
     localStorage.setItem(this.THEME_KEY, value);

@@ -22,29 +22,27 @@ export class CommunityService {
   }
   
   updateCategory(id: number, newCategory: string): Observable<BookBible> {
-    // O Spring Boot com @RequestBody Enum espera que a string venha entre aspas duplas no JSON
+    /* O Spring Boot com @RequestBody Enum espera que a string venha entre aspas duplas no JSON */
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.put<BookBible>(`${this.API_BOOKS}/${id}/category`, `"${newCategory}"`, { headers });
   }
 
-  // Novo método para Salvar o Tema
   saveTheme(themeData: any): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/themes', themeData);
+    return this.http.post<any>(this.API_THEMES, themeData);
   }
 
-  // Novo método para buscar o histórico
   getSavedThemes(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8080/themes');
+    return this.http.get<any[]>(this.API_THEMES);
   }
 
+  /* Exportação de PDFs, talvez juntar no futuro, usam responseType: 'blob' para arquivos */
   exportPdf(themeId: number): Observable<Blob> {
-    // Usamos responseType: 'blob' para arquivos
-    return this.http.get(`http://localhost:8080/themes/${themeId}/export-pdf`, { responseType: 'blob' });
+    return this.http.get(`${this.API_THEMES}/${themeId}/export-pdf`, { responseType: 'blob' });
   }
 
   exportPdfPreview(themeData: any): Observable<Blob> {
-    // Usamos POST e enviamos os dados no corpo da requisição
-    return this.http.post(`http://localhost:8080/themes/export-pdf-preview`, themeData, { responseType: 'blob' });
+    /* Como não há registro no banco, usa o POST e envia os dados no corpo da requisição */
+    return this.http.post(`${this.API_THEMES}/export-pdf-preview`, themeData, { responseType: 'blob' });
   }
   
 }

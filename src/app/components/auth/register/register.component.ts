@@ -29,7 +29,7 @@ import { User } from '../../../interfaces/user';
 
 export class RegisterComponent implements OnInit, OnDestroy {
 
-  // Atributos
+  /* Atributos */
   passwordsDifferents!: boolean;
   userAlreadyRegistered!: boolean;
   afterRequestRegister!: boolean;
@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   @ViewChild('darkModeSwitch', { read: ElementRef }) element: ElementRef | undefined;
 
-  //Construtor
+  /* Construtor */
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -71,12 +71,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.theme = this.themeService.getTheme();
 
-    // this.maxDate = today.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
-    // Formulário reativo (as aspas vazias '' é o valor inicial do campo)
+    /* Formulário reativo (as aspas vazias '' é o valor inicial do campo) */
     this.form = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(3),]], // minusculoValidator só aceitaria minusculo
+      username: ['', [Validators.required, Validators.minLength(3),]],
       password: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/(.|\s)*\S(.|\s)*/),]],
-      confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.pattern(/(.|\s)*\S(.|\s)*/)])], // Compose não é obrigatório
+      confirmPassword: ['', Validators.compose([ /* Compose não é obrigatório */
+        Validators.required, Validators.minLength(3), Validators.pattern(/(.|\s)*\S(.|\s)*/)]
+      )], 
       gender: ['', Validators.required],
       location: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+-[A-Z]{2}$/)]],
       birthdate: ['', Validators.compose([Validators.required, birthdayValidator])],
@@ -85,26 +86,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit() {
     if (this.element){
-    //   this.element.nativeElement.querySelector('.mdc-switch__icon--off').firstChild.setAttribute('d', this.sun);
-    //   this.element.nativeElement.querySelector('.mdc-switch__icon--on').firstChild.setAttribute('d', this.moon);
       this.themeService.configureDarkModeSwitch(this.element);
     }
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe(); // // O ? indica que pode ser undefined, caso não seja usado ele no processo
+    this.subscription?.unsubscribe(); /* O '?' indica que pode ser undefined, caso não seja usado ele no processo */
   }
 
   register(): void {
-
     this.clearMessages();
-
-    // Só colocando o this.passwordsDifferents = true resolveria, porém a animação não pegaria, igual pega no userAlreadyRegistered = true no else.
-    /* O Angular vê isso como “só mudou o valor”, mas o elemento nunca chegou a ser removido e recriado → não há :enter → sem animação na segunda tentativa. ou seja, bug*/
+    /* Só colocando o this.passwordsDifferents = true resolveria, porém a animação não pegaria, igual pega no userAlreadyRegistered = true no else. */
+    /* O Angular vê isso como “só mudou o valor”, mas o elemento nunca chegou a ser removido e recriado, portanto se não há 'enter' → sem animação na segunda tentativa. ou seja, bug*/
     if (this.form.get('password')?.value != this.form.get('confirmPassword')?.value){
-      this.passwordsDifferents = false; // garante remoção
+      this.passwordsDifferents = false;
       setTimeout(() => {
-        this.passwordsDifferents = true; // força entrar de novo
+        this.passwordsDifferents = true;
       });
       return
     }
@@ -121,7 +118,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         }
 
         const user: User = {
-          //id: 0, // ou undefined, caso o backend trate isso automaticamente
           ...credentials
         };
 
@@ -148,7 +144,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   showStatusRequestMsg(status : string) {
-    // Se o status for success , faz o
     this.typeMessage = (status === 'success' ? "alert-success" : 'alert-danger');
     this.msgAfterClickRegister = status === 'success' ? "Usuário cadastrado com sucesso!" : 'Não foi possível conectar ao servidor';
     this.afterRequestRegister = true;
@@ -165,7 +160,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onToggleChange(event: any): void {
-    // Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo
+    /* Isso agora atualiza a tela, o serviço e o localStorage ao mesmo tempo */
     this.theme = this.themeService.changeTheme(event.checked);
   }
 
@@ -179,12 +174,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   clearForm(): void {
-    // Fazer campo a campo
-    // this.form.get('username')?.reset();
-
+    /* Fazer campo a campo, ex: this.form.get('username')?.reset(); */
     /* Se fizer apenas o this.form.reset() funciona certinho, porém mostra a mensagem no console log:
-    Cannot read properties of null (reading 'length') at RegisterComponent_Template" */
-
+       Cannot read properties of null (reading 'length') at RegisterComponent_Template" */
     this.form.reset({
       username: '',
       password: '',

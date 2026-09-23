@@ -1,9 +1,9 @@
-import { Concurso } from '../interfaces/loterias';
+import { CaixaDraw } from '../interfaces/loterias';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DebugService } from '../core/services/debug.service';
 import { map, Observable, tap } from 'rxjs';
-import { DadosNumero, DadosParidade, DadosRepeticao, DetailedDraw, GenerateDrawRequest as GenerateDrawRequest, SynchronizeResponse, AddDrawRequest, Page, SaveBetRequest, LotofacilBet, BetSummaryResponse, BetGraphicsResponse } from '../interfaces/lotofacil';
+import { NumberData, ParityData, RepetitionData, DetailedDraw, GenerateDrawRequest as GenerateDrawRequest, SynchronizeResponse, AddDrawRequest, Page, SaveBetRequest, LotofacilBet, BetSummaryResponse, BetGraphicsResponse } from '../interfaces/lotofacil';
 
 @Injectable({
   providedIn: 'root'
@@ -20,75 +20,54 @@ export class LotteriesService {
 
   constructor(private http: HttpClient, private debugService: DebugService,) { }
 
-  // Obtem todo o retorno da API
-  getContestLotofacilCaixa(conc?: number): Observable<Concurso> {
-    //const paramertros = new HttpParams().append('','300')
-    //return this.http.get<any[]>(this.API_LOTOFACIL , {params : paramertros});
-    // geraria uma URL https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil/?=300
-    const url = conc !== undefined ? this.API_LOTOFACIL + conc : this.API_LOTOFACIL;
-    return this.http.get<Concurso>(url)
+  /* Busca na API da caixa, quando não é passado o número na URL, retorna o último */
+  getDrawLotofacilCaixa(draw?: number): Observable<CaixaDraw> {
+    const url = (draw !== undefined) ? this.API_LOTOFACIL + draw : this.API_LOTOFACIL;
+    return this.http.get<CaixaDraw>(url)
       .pipe(
-        tap((retornoAPI) => console.log('Fluxo do tap no service', retornoAPI)), // Usado para debug
-        //map(resultado => resultado.localSorteio), // Usado para transformação
-        tap(resultado => console.log('Fluxo do tap após o map no service', resultado))
+        tap((apiReturn) => this.debugService.log('Fluxo do tap no service', apiReturn)), /* Usado para debug */
+        /* map(result => result.localSorteio), *//* Usado para transformação */
+        tap(result => this.debugService.log('Fluxo do tap após o map no service', result))
       )
   }
 
-  // Transforma toda a resposta da API em um array de string com as dezenas
-  getDezenasLotofacil(conc: number): Observable<string[]> {
-    return this.http.get<Concurso>(this.API_LOTOFACIL + conc)
+  /* Transforma toda a resposta da API em um array de string com as dezenas */
+  getDozensLotofacil(draw: number): Observable<string[]> {
+    return this.http.get<CaixaDraw>(this.API_LOTOFACIL + draw)
       .pipe(
-        tap((retornoAPI) => console.log('Fluxo do tap no service', retornoAPI)), // Usado para debug
-        map(resultado => resultado.listaDezenas), // Usado para transformação
-        tap(resultado => console.log('Fluxo do tap após o map no service', resultado))
+        tap((apiReturn) => this.debugService.log('Fluxo do tap no service', apiReturn)), /* Usado para debug */
+        map(result => result.listaDezenas), /* Usado para transformação */
+        tap(result => this.debugService.log('Fluxo do tap após o map no service', result))
       )
   }
 
-  getAllParities(): Observable<DadosParidade[]> {
-    console.log('getTotalParidade');
-
-    return this.http.get<DadosParidade[]>(this.API_TOTALPARIDADES)
-      .pipe(
-        tap((retornoAPI) => console.log('Fluxo do tap no service', retornoAPI)), // Usado para debug
-        // map(resultado => resultado.listaDezenas), // Usado para transformação
-        tap(resultado => console.log('Fluxo do tap após o map no service', resultado))
-      )
+  getAllParities(): Observable<ParityData[]> {
+    return this.http.get<ParityData[]>(this.API_TOTALPARIDADES);
   }
 
-  getAllRepetitions(): Observable<DadosRepeticao[]> {
-    return this.http.get<DadosRepeticao[]>(this.API_TOTALREPETICOES)
-      .pipe(
-        tap((retornoAPI) => console.log('Fluxo do tap no service', retornoAPI)), // Usado para debug
-        // map(resultado => resultado.listaDezenas), // Usado para transformação
-        tap(resultado => console.log('Fluxo do tap após o map no service', resultado))
-      )
+  getAllRepetitions(): Observable<RepetitionData[]> {
+    return this.http.get<RepetitionData[]>(this.API_TOTALREPETICOES);
   }
 
-  getAllNumbers(): Observable<DadosNumero[]> {
-    return this.http.get<DadosNumero[]>(this.API_TOTALNUMEROS)
-      .pipe(
-        tap((retornoAPI) => console.log('Fluxo do tap no service', retornoAPI)), // Usado para debug
-        // map(resultado => resultado.listaDezenas), // Usado para transformação
-        tap(resultado => console.log('Fluxo do tap após o map no service', resultado))
-      )
+  getAllNumbers(): Observable<NumberData[]> {
+    return this.http.get<NumberData[]>(this.API_TOTALNUMEROS);
   }
 
-  getLastContestLotofacilRegistered(): Observable<number> {
+  getLastDrawLotofacilRegistered(): Observable<number> {
     return this.http.get<DetailedDraw[]>(this.API_TOTALCONCURSOS).pipe(
-      map(contests => {
-        if (contests.length === 0) {
+      map(draws => {
+        if (draws.length === 0) {
           throw new Error('Nenhum concurso encontrado');
         }
-        const lastContests = contests[contests.length - 1];
-        console.log('ultimo iddd: ', lastContests.id);
-
-        return lastContests.id;
+        const lastDraw = draws[draws.length - 1];
+        this.debugService.log('Último id: ', lastDraw.id);
+        return lastDraw.id;
       })
     );
   }
 
-  getContestById(id: number): Observable<DetailedDraw> {
-    // A URL final será: http://localhost:8080/concursoLotofacil/3000
+  getDrawById(id: number): Observable<DetailedDraw> {
+    /* A URL final será: http://localhost:8080/concursoLotofacil/3000 */
     return this.http.get<DetailedDraw>(`${this.API_TOTALCONCURSOS}/${id}`);
   }
 
@@ -97,25 +76,22 @@ export class LotteriesService {
   }
 
   synchronizeDatabase(): Observable<SynchronizeResponse> {
-    // Usamos POST para uma ação que modifica o estado do servidor
-    // O { responseType: 'text' } é crucial porque o backend retorna uma string, não um JSON
+    /* Usa o POST para uma ação que modifica o estado do servidor */
     return this.http.post<SynchronizeResponse>(`${this.API_TOTALCONCURSOS}/synchronize`, {});
   }
 
   addDrawManually(request: AddDrawRequest): Observable<DetailedDraw> {
-    // Assumindo que o backend tenha um endpoint "manual" para isso
     return this.http.post<DetailedDraw>(`${this.API_TOTALCONCURSOS}/insert`, request);
   }
 
-  getContestsPaginated(page: number, size: number): Observable<Page<DetailedDraw>> {
-    // O Spring Pageable usa query params: ?page=0&size=4&sort=id,desc
-    // Como definimos o default no backend, basta mandar page e size
+  getDrawsPaginated(page: number, size: number): Observable<Page<DetailedDraw>> {
+    /* O Spring Pageable usa query params: ?page=0&size=4&sort=id,desc */
+    /* Como foi definido o default no backend, basta mandar page e size */
     return this.http.get<Page<DetailedDraw>>(`${this.API_TOTALCONCURSOS}/paginated?page=${page}&size=${size}`);
   }
 
   saveGeneratedBet(request: SaveBetRequest): Observable<any> {
-    // Usamos POST pois estamos criando um registro de aposta no banco
-    // A URL simulada aqui aponta para um endpoint fictício '/bet'
+    /* Usamos POST pois estamos criando um registro de aposta no banco */
     return this.http.post<any>(`${this.API_APOSTALOTOFACIL}/insert`, request);
   }
 
@@ -128,6 +104,8 @@ export class LotteriesService {
   }
 
   getBetsPaginated(page: number, size: number): Observable<Page<LotofacilBet>> {
+    /* O Spring Pageable usa query params: ?page=0&size=4&sort=id,desc */
+    /* Como foi definido o default no backend, basta mandar page e size */
     return this.http.get<Page<LotofacilBet>>(`${this.API_APOSTALOTOFACIL}/paginated?page=${page}&size=${size}`);
   }
 
@@ -137,7 +115,8 @@ export class LotteriesService {
 
   exportBetsToExcel(): Observable<Blob> {
     return this.http.get(`${this.API_APOSTALOTOFACIL}/export`, {
-      responseType: 'blob' // Fundamental para não corromper o arquivo
+      responseType: 'blob' /* Fundamental para não corromper o arquivo */
     });
   }
+  
 }

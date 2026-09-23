@@ -14,6 +14,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ImageModalComponent } from '../../../shared/image-modal/image-modal.component';
 import { ResultModalComponent } from '../result-modal/result-modal.component';
 import { BookBible } from '../../../interfaces/book-bible';
+import { DebugService } from '../../../core/services/debug.service';
 
 @Component({
   selector: 'app-word-celebration',
@@ -36,17 +37,19 @@ import { BookBible } from '../../../interfaces/book-bible';
 })
 export class WordCelebrationComponent implements OnInit {
 
-  // Modelos para os inputs
+  /* Modelos para os inputs */
   themeName: string = '';
   rawText: string = '';
   processedResult: any = null;
 
-  // Armazenamento do resultado do backend
-  allBooks: BookBible[] = []; // Agora tipado com a interface
+  /* Armazenamento do resultado do backend */
+  allBooks: BookBible[] = [];
+  /* Usado como base na separação das leituras que vem do backend */
   categories: string[] = ['PRIMEIRA_LEITURA', 'SEGUNDA_LEITURA', 'TERCEIRA_LEITURA', 'EVANGELHO', 'DESCARTADO'];
 
   savedThemes: any[] = [];
   
+  /* Guarda em cada chave que vem do tipo Enumerado um array de BookBible */
   booksByCategory: { [key: string]: BookBible[] } = {
     'PRIMEIRA_LEITURA': [],
     'SEGUNDA_LEITURA': [],
@@ -56,8 +59,9 @@ export class WordCelebrationComponent implements OnInit {
   };
 
   constructor(
-    private CommunityService: CommunityService,
-    private dialog: MatDialog
+    private communityService: CommunityService,
+    private dialog: MatDialog,
+    private debugService: DebugService,
   ) {}
 
   ngOnInit(): void {
@@ -66,16 +70,16 @@ export class WordCelebrationComponent implements OnInit {
   }
 
   loadBooks() {
-    this.CommunityService.getBooks().subscribe({
+    this.communityService.getBooks().subscribe({
       next: (data: BookBible[]) => {
         this.allBooks = data;
-        this.distributeBooksToCategories(); // Chama a função para separar
+        this.distributeBooksToCategories(); /* Chama a função para separar */
       }
     });
   }
 
   loadSavedThemes() {
-    this.CommunityService.getSavedThemes().subscribe({
+    this.communityService.getSavedThemes().subscribe({
       next: (themes) => {
         this.savedThemes = themes;
       },
@@ -90,7 +94,6 @@ export class WordCelebrationComponent implements OnInit {
       data: { 
         ...theme, 
         isSavedTheme: true,
-        onThemeSaved: () => this.loadSavedThemes() 
       },
       width: '85vw',
       maxWidth: '1000px',
@@ -98,9 +101,9 @@ export class WordCelebrationComponent implements OnInit {
     });
   }
 
-  // Função para limpar e preencher os arrays de cada categoria
+  /* Função para limpar e preencher os arrays de cada categoria */
   distributeBooksToCategories() {
-    this.categories.forEach(cat => this.booksByCategory[cat] = []); // Limpa arrays
+    this.categories.forEach(cat => this.booksByCategory[cat] = []); /* Limpa arrays */
     this.allBooks.forEach(book => {
       if (this.booksByCategory[book.category]) {
         this.booksByCategory[book.category].push(book);
@@ -116,13 +119,13 @@ export class WordCelebrationComponent implements OnInit {
       rawText: this.rawText
     };
 
-    this.CommunityService.processText(payload).subscribe({
+    this.communityService.processText(payload).subscribe({
       next: (result) => {
-        // Guarda a referência do modal aberto
+        /* Guarda a referência do modal aberto */
         const dialogRef = this.dialog.open(ResultModalComponent, {
           data: {
             ...result,
-            // Passamos a instrução para recarregar a lista lateral
+            /* Passa a instrução para recarregar a lista lateral, sendo uma função anonima para o modal */
             onThemeSaved: () => this.loadSavedThemes() 
           },
           width: '85vw',
@@ -130,12 +133,12 @@ export class WordCelebrationComponent implements OnInit {
           maxHeight: '90vh'
         });
 
-        // Fica "escutando" o momento em que o modal é fechado
+        /* Fica "escutando" o momento em que o modal é fechado */
         dialogRef.afterClosed().subscribe((saved: boolean) => {
           if (saved) {
-            this.loadSavedThemes(); // Recarrega a lista lateral de temas
-            this.themeName = '';    // Limpa o input do nome
-            this.rawText = '';      // Limpa o textarea das leituras
+            /* this.loadSavedThemes(); */ /* Recarrega a lista lateral de temas (já é feito ao abrir o modal) */
+            this.themeName = ''; /* Limpa o input do nome */
+            this.rawText = ''; /* Limpa o textarea das leituras */
           }
         });
       },
@@ -145,12 +148,13 @@ export class WordCelebrationComponent implements OnInit {
     });
   }
 
+  /* Função de mover as leituras */
   drop(event: CdkDragDrop<BookBible[]>, newCategoryName: string) {
     if (event.previousContainer === event.container) {
-      // Se apenas mudou a ordem dentro da mesma coluna
+      /* Se apenas mudou a ordem dentro da mesma coluna */
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      // Se moveu para uma coluna diferente
+      /* Se moveu para uma coluna diferente */
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -158,13 +162,13 @@ export class WordCelebrationComponent implements OnInit {
         event.currentIndex,
       );
 
-      // Pega o livro que acabou de ser movido
+      /* Pega o livro que acabou de ser movido */
       const movedBook = event.container.data[event.currentIndex];
       
-      // Salva no backend chamando o endpoint PUT
-      this.CommunityService.updateCategory(movedBook.id, newCategoryName).subscribe({
+      /* Salva no backend chamando o endpoint PUT */
+      this.communityService.updateCategory(movedBook.id, newCategoryName).subscribe({
         next: (updatedBook) => {
-          console.log(`Livro ${updatedBook.name} atualizado para ${updatedBook.category}`);
+          this.debugService.log(`Livro ${updatedBook.name} atualizado para ${updatedBook.category}`);
         },
         error: (err) => {
           console.error('Erro ao atualizar categoria', err);
@@ -175,7 +179,7 @@ export class WordCelebrationComponent implements OnInit {
 
   formatCategoryName(category: string): string {
     if (!category) return '';
-    // Substitui o underline por espaço
+    /* Substitui o underline que vem por padrão no ENUM por espaço */
     return category.replace('_', ' ');
   }
 
@@ -183,7 +187,6 @@ export class WordCelebrationComponent implements OnInit {
     this.dialog.open(ImageModalComponent, {
       width: '600px',
       maxWidth: '90vw',
-      // Passamos o objeto de configuração aqui!
       data: {
         title: 'Como extrair as leituras',
         icon: 'screen_share',

@@ -1,6 +1,4 @@
-/* =========================================
-   Variáveis Globais do Sistema (Baseadas na Lotofácil/Menu)
-   ========================================= */
+/* Variáveis Globais */
 $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 $card-shadow: 0 4px 20px rgba(0,0,0,0.05);
 $card-radius: 16px;
@@ -12,9 +10,6 @@ $bg-color: #f3f4f8;
   min-height: 100vh;
 }
 
-/* =========================================
-   Hero Section (Dashboard Header)
-   ========================================= */
 .dashboard-header {
   background: white;
   border-radius: $card-radius;
@@ -29,9 +24,7 @@ $bg-color: #f3f4f8;
   &.gradient-purple { background: $primary-gradient; }
 }
 
-/* =========================================
-   Cartões (Cards) Estilizados
-   ========================================= */
+/* Cartões (Cards) Estilizados */
 .content-card {
   background: white !important;
   border-radius: $card-radius !important;
@@ -53,9 +46,7 @@ $bg-color: #f3f4f8;
   }
 }
 
-/* =========================================
-   Botão Ação (Gradiente)
-   ========================================= */
+/* Botão Ação (Gradiente) */
 .btn-gradient-action {
   background: $primary-gradient !important; 
   color: white !important;
@@ -82,9 +73,7 @@ $bg-color: #f3f4f8;
   }
 }
 
-/* =========================================
-   Lista de Temas Salvos e Scroll
-   ========================================= */
+/* Lista de Temas Salvos e Scroll */
 .saved-themes-scroll {
   max-height: 320px; 
   overflow-y: auto;
@@ -135,9 +124,7 @@ $bg-color: #f3f4f8;
   mat-icon { margin: 0 !important; display: flex !important; }
 }
 
-/* =========================================
-   Dicionário (Drag & Drop)
-   ========================================= */
+/* Dicionário (Drag & Drop) */
 .drop-zone {
   min-height: 120px;
   background-color: #f4f6f9;
@@ -179,9 +166,7 @@ $bg-color: #f3f4f8;
 .cdk-drag-placeholder { opacity: 0.3; }
 .cdk-drag-animating { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
 
-/* =========================================
-   Animações
-   ========================================= */
+/* Animações */
 .fade-in { animation: fadeIn 0.5s ease-out forwards; }
 .slide-up {
   opacity: 0;

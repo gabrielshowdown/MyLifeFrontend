@@ -25,12 +25,12 @@ export class ConfirmDialogComponent {
   ) {}
 
   onConfirm(): void {
-    // Retorna true para quem chamou
+    /* Retorna true para quem chamou */
     this.dialogRef.close(true);
   }
 
   onDismiss(): void {
-    // Retorna false para quem chamou
+    /* Retorna false para quem chamou */
     this.dialogRef.close(false);
   }
 }

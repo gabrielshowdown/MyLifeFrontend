@@ -12,7 +12,7 @@
     <div class="dozens-grid">
       <div *ngFor="let n of draw.drawNumbers" 
            class="dozen" 
-           [class.repetido]="n.isRepeated">
+           [class.repeated]="n.isRepeated">
         {{ formatNumber(n.number) }}
       </div>
     </div>

@@ -10,7 +10,7 @@ $day-text: #666;
   font-family: 'Poppins', sans-serif;
 }
 
-// 1. Cabeçalho Padronizado
+/* Cabeçalho Padronizado */
 .modal-header-custom {
   background: $primary-gradient;
   padding: 1.5rem 1rem;
@@ -25,14 +25,14 @@ $day-text: #666;
     letter-spacing: 0.5px;
   }
 
-  // Se quiser um cabeçalho diferente no tema escuro, pode ajustar aqui:
+  /* Se quiser um cabeçalho diferente no tema escuro, pode ajustar aqui: */
   &.night {
     background: #2c4766; 
     color: $night-text;
   }
 }
 
-// 2. Ajuste do Conteúdo
+/* Ajuste do Conteúdo */
 mat-dialog-content.custom-content {
   margin: 0 !important;
   padding: 24px 32px !important;
@@ -56,17 +56,17 @@ mat-dialog-content.custom-content {
   }
 }
 
-// 3. Rodapé
+/* Rodapé */
 .custom-dialog-actions {
   padding: 16px 24px 24px 24px;
   display: flex;
-  justify-content: center; // Centraliza o botão Fechar
+  justify-content: center; /* Centraliza o botão Fechar */
   border-top: none;
 
   &.night {
     background: $night-bg;
     
-    // Garante que o botão fique na cor neon no modo noite
+    /* Garante que o botão fique na cor neon no modo noite */
     button {
       color: $night-text !important;
       border-color: $night-text !important;

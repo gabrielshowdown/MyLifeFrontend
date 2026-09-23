@@ -6,12 +6,12 @@ import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-to
 import { DebugService } from '../../core/services/debug.service';
 import { LotteriesService } from '../../services/lotteries.service';
 import { Subscription } from 'rxjs';
-import { Concurso, LotteryDrawSummary } from '../../interfaces/loterias';
+import { CaixaDraw, LotteryDrawSummary } from '../../interfaces/loterias';
 import { Router } from '@angular/router';
 import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { DadosParidade } from '../../interfaces/lotofacil';
+import { ParityData } from '../../interfaces/lotofacil';
 
 export interface PeriodicElement {
   name: string;
@@ -20,7 +20,7 @@ export interface PeriodicElement {
   symbol: string;
 }
 
-export interface DadosParidade1 {
+export interface ParityData1 {
   id: number;
   paridade1: string;
   qtd: number;
@@ -40,7 +40,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
 ];
 
-const ELEMENT_DATA2: DadosParidade1[] = [
+const ELEMENT_DATA2: ParityData1[] = [
   {id: 1, paridade1: '13I/02P', porcentagem: 0.0, qtd: 0},
   {id: 2, paridade1: '12I/03P', porcentagem: 0.09, qtd: 3},
   {id: 3, paridade1: '11I/04P', porcentagem: 7.1, qtd: 5},
@@ -65,9 +65,9 @@ const ELEMENT_DATA2: DadosParidade1[] = [
 export class TesteComponent implements OnDestroy, AfterViewInit {
 
   private _liveAnnouncer = inject(LiveAnnouncer);
-  totaisParidades: DadosParidade[] = [];
+  totaisParidades: ParityData[] = [];
 
-  estatisticasParidade: DadosParidade[] = [
+  estatisticasParidade: ParityData[] = [
       {id: 1, parity: 'aa', percentage: 0.2, quantity: 2},
       {id: 2, parity: 'ac', percentage: 0.1, quantity: 2},
       {id: 3, parity: 'ab', percentage: 0.6, quantity: 2},
@@ -166,7 +166,7 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
     });
   }
 
-  concursoParaConcursoResumo(concurso: Concurso){
+  concursoParaConcursoResumo(concurso: CaixaDraw){
     this.concursoLotofacil = {
       numero:  concurso.numero,
       numeroConcursoAnterior: concurso.numeroConcursoAnterior,
@@ -180,7 +180,7 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
   }
 
   buscar(): void {
-    this.subscription = this.service.getContestLotofacilCaixa(this.numConcurso)
+    this.subscription = this.service.getDrawLotofacilCaixa(this.numConcurso)
     .subscribe({
       next: concurso => {
         //this.debugService.log(users); // Manipulação de sucesso
@@ -199,7 +199,7 @@ export class TesteComponent implements OnDestroy, AfterViewInit {
   }
 
   buscarDezenas(): void {
-    this.subscription = this.service.getDezenasLotofacil(this.numConcurso)
+    this.subscription = this.service.getDozensLotofacil(this.numConcurso)
     .subscribe({
       next: concurso => {
         //this.debugService.log(users); // Manipulação de sucesso
