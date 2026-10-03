@@ -32,11 +32,11 @@
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
     <mat-label>{{ mode === 'DRAW' ? 'Data de Apuração' : 'Data da Aposta' }}</mat-label>
     <input matInput 
+           appDateMask
            [matDatepicker]="picker" 
            [(ngModel)]="drawDate" 
            placeholder="DD/MM/AAAA"
-           maxlength="10"
-           (input)="onDateInput($event)">
+           maxlength="10">
     <mat-icon matSuffix (click)="picker.open()" style="cursor: pointer;">calendar_today</mat-icon>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>

@@ -17,9 +17,11 @@
             <mat-form-field appearance="outline" class="w-100 bg-white" subscriptSizing="dynamic">
                 <mat-label>Data da Celebração</mat-label>
                 <input matInput 
+                       appDateMask
                        [matDatepicker]="picker" 
                        [(ngModel)]="celebrationDate" 
                        placeholder="DD/MM/AAAA"
+                       maxlength="10"
                        [disabled]="data.isSavedTheme">
                 <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="data.isSavedTheme"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>

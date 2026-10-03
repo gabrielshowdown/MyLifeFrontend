@@ -13,6 +13,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SaveBetRequest } from '../../../interfaces/lotofacil';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DateMaskDirective } from '../../../shared/date/date-mask.directive';
 
 @Component({
   selector: 'app-add-draw-modal',
@@ -27,7 +28,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSnackBarModule,
     MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule,
+    DateMaskDirective,
     MatButtonToggleModule,
     MatCheckboxModule
   ],
@@ -107,54 +108,6 @@ export class AddDrawModalComponent implements OnInit {
     setTimeout(() => {
       input.value = this.formattedDozens;
     }, 0);
-  }
-
-  /* Máscara manual para o campo de Data (DD/MM/AAAA) */
-  onDateInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    /* Remove tudo que não for número (letras, símbolos, etc) */
-    let cleanValue = input.value.replace(/\D/g, ''); 
-
-    /* Limita a 8 dígitos reais (DDMMAAAA) */
-    if (cleanValue.length > 8) {
-      cleanValue = cleanValue.substring(0, 8);
-    }
-
-    /* Aplica a máscara DD/MM/AAAA */
-    let formattedValue = cleanValue;
-    if (cleanValue.length > 4) {
-      /* Se tem mais de 4 dígitos, coloca as duas barras */
-      formattedValue = cleanValue.replace(/^(\d{2})(\d{2})(\d{1,4}).*/, '$1/$2/$3');
-    } else if (cleanValue.length > 2) {
-      /* Se tem mais de 2 dígitos, coloca a primeira barra */
-      formattedValue = cleanValue.replace(/^(\d{2})(\d{1,2}).*/, '$1/$2');
-    }
-
-    /* 4. Atualiza o input usando o truque do setTimeout */
-    /* Igual feito nas dezenas, para não atrapalhar o cursor do Angular */
-    setTimeout(() => {
-      input.value = formattedValue;
-    }, 0);
-
-    if (cleanValue.length === 8) {
-      const day = +cleanValue.substring(0, 2);
-      const month = +cleanValue.substring(2, 4);
-      const year = +cleanValue.substring(4, 8);
-
-      const date = new Date(year, month - 1, day);
-
-      /* Validação real (evita 31/02/2026 virar data inválida) */
-      if ( date.getFullYear() === year &&
-        date.getMonth() === month - 1 &&
-        date.getDate() === day) {
-        this.drawDate = date;
-      } else {
-        this.drawDate = null;
-      }
-    } 
-    else {
-      this.drawDate = null;
-    }
   }
 
   save(): void {

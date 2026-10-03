@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DateMaskDirective } from '../../../shared/date/date-mask.directive';
 
 @Component({
   selector: 'app-result-modal',
@@ -23,7 +24,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    DateMaskDirective
   ],
   templateUrl: './result-modal.component.html',
   styleUrl: './result-modal.component.scss',
