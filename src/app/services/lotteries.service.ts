@@ -54,16 +54,7 @@ export class LotteriesService {
   }
 
   getLastDrawLotofacilRegistered(): Observable<number> {
-    return this.http.get<DetailedDraw[]>(this.API_TOTALCONCURSOS).pipe(
-      map(draws => {
-        if (draws.length === 0) {
-          throw new Error('Nenhum concurso encontrado');
-        }
-        const lastDraw = draws[draws.length - 1];
-        this.debugService.log('Último id: ', lastDraw.id);
-        return lastDraw.id;
-      })
-    );
+    return this.http.get<number>(`${this.API_TOTALCONCURSOS}/lastId`);
   }
 
   getDrawById(id: number): Observable<DetailedDraw> {
