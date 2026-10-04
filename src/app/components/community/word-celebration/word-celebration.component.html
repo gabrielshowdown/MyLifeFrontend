@@ -34,9 +34,13 @@
                   Celebração: {{ theme.celebrationDate | date:'dd/MM/yyyy' }}
                 </div>
                 
-                <button mat-icon-button matListItemMeta color="primary" (click)="viewSavedTheme(theme)" matTooltip="Ver leituras">
-                  <mat-icon>visibility</mat-icon>
-                </button>
+                <button mat-icon-button matListItemMeta color="primary"
+                      (click)="viewSavedTheme(theme)"
+                      [disabled]="loadingThemeId !== null"
+                      matTooltip="Ver leituras">
+                <mat-spinner *ngIf="loadingThemeId === theme.id" diameter="20"></mat-spinner>
+                <mat-icon *ngIf="loadingThemeId !== theme.id">visibility</mat-icon>
+              </button>
               </mat-list-item>
             </mat-list>
           </div>

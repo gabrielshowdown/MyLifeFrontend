@@ -13,8 +13,9 @@ import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from 
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ImageModalComponent } from '../../../shared/image-modal/image-modal.component';
 import { ResultModalComponent } from '../result-modal/result-modal.component';
-import { BookBible } from '../../../interfaces/book-bible';
+import { BookBible, ThemeSummary } from '../../../interfaces/community';
 import { DebugService } from '../../../core/services/debug.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 @Component({
   selector: 'app-word-celebration',
@@ -30,7 +31,8 @@ import { DebugService } from '../../../core/services/debug.service';
     MatDividerModule,
     MatIconModule,
     DragDropModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './word-celebration.component.html',
   styleUrls: ['./word-celebration.component.scss']
@@ -47,7 +49,8 @@ export class WordCelebrationComponent implements OnInit {
   /* Usado como base na separação das leituras que vem do backend */
   categories: string[] = ['PRIMEIRA_LEITURA', 'SEGUNDA_LEITURA', 'TERCEIRA_LEITURA', 'EVANGELHO', 'DESCARTADO'];
 
-  savedThemes: any[] = [];
+  savedThemes: ThemeSummary[] = [];
+  loadingThemeId: number | null = null; /* Controla o loading do olho clicado */
   
   /* Guarda em cada chave que vem do tipo Enumerado um array de BookBible */
   booksByCategory: { [key: string]: BookBible[] } = {
@@ -79,7 +82,7 @@ export class WordCelebrationComponent implements OnInit {
   }
 
   loadSavedThemes() {
-    this.communityService.getSavedThemes().subscribe({
+    this.communityService.getSavedThemesSummary().subscribe({
       next: (themes) => {
         this.savedThemes = themes;
       },
@@ -89,15 +92,24 @@ export class WordCelebrationComponent implements OnInit {
     });
   }
 
-  viewSavedTheme(theme: any) {
-    this.dialog.open(ResultModalComponent, {
-      data: { 
-        ...theme, 
-        isSavedTheme: true,
+  viewSavedTheme(theme: ThemeSummary) {
+    if (this.loadingThemeId !== null) return; /* Evita clique duplo */
+    this.loadingThemeId = theme.id;
+
+    this.communityService.getThemeById(theme.id).subscribe({
+      next: (fullTheme) => {
+        this.loadingThemeId = null;
+        this.dialog.open(ResultModalComponent, {
+          data: { ...fullTheme, isSavedTheme: true },
+          width: '85vw',
+          maxWidth: '1000px',
+          maxHeight: '90vh'
+        });
       },
-      width: '85vw',
-      maxWidth: '1000px',
-      maxHeight: '90vh'
+      error: (err) => {
+        this.loadingThemeId = null;
+        console.error('Erro ao buscar detalhes do tema:', err);
+      }
     });
   }
 

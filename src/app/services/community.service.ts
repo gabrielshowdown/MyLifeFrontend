@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BookBible } from '../interfaces/book-bible';
+import { BookBible, ThemeHistory, ThemeSummary } from '../interfaces/community';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +31,16 @@ export class CommunityService {
     return this.http.post<any>(this.API_THEMES, themeData);
   }
 
-  getSavedThemes(): Observable<any[]> {
-    return this.http.get<any[]>(this.API_THEMES);
+  getSavedThemes(): Observable<ThemeHistory[]> {
+    return this.http.get<ThemeHistory[]>(this.API_THEMES);
+  }
+
+  getSavedThemesSummary(): Observable<ThemeSummary[]> {
+    return this.http.get<ThemeSummary[]>(`${this.API_THEMES}/summary`);
+  }
+
+  getThemeById(id: number): Observable<ThemeHistory> {
+    return this.http.get<ThemeHistory>(`${this.API_THEMES}/${id}`);
   }
 
   /* Exportação de PDFs, talvez juntar no futuro, usam responseType: 'blob' para arquivos */
