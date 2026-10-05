@@ -76,10 +76,10 @@
         </div>
       </div>
 
-      <div class="dezenas-grid-dialog mb-3">
-        <div *ngFor="let n of drawNumbersSorted" class="dezena real-draw-dozen">
+      <div class="dozens-grid-dialog mb-3">
+        <div *ngFor="let n of drawNumbersSorted" class="dozens real-draw-dozen">
              {{ formatNumber(n.number) }}
-             <div *ngIf="n.isRepeated" class="repetido-indicator" title="Repetida do concurso anterior"></div>
+             <div *ngIf="n.isRepeated" class="repeated-indicator" title="Repetida do concurso anterior"></div>
         </div>
       </div>
 
