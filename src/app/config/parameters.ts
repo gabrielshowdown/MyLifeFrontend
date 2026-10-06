@@ -2,6 +2,6 @@
 export const desenvMode = false;
 
 /* Modo de debug, ao ativar, vai aparecer as mensagens de log no console */
-export const debugMode = true;
+export const debugMode = false;
 
 export const loginThemeFixed = true;
