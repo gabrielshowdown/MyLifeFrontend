@@ -62,9 +62,18 @@
   <mat-card class="content-card slide-up mb-5" style="animation-delay: 0.25s;">
     <div class="card-header-custom border-bottom pb-3 pt-3 px-4 d-flex justify-content-between align-items-center">
       <h5><mat-icon class="text-primary me-2">list_alt</mat-icon> Itens Cadastrados</h5>
-      <button mat-button color="warn" *ngIf="hasActiveFilters" (click)="clearFilters()">
-        <mat-icon>filter_alt_off</mat-icon> Limpar filtros
-      </button>
+      <div class="d-flex align-items-center gap-3">
+        <button mat-button color="warn" *ngIf="hasActiveFilters" (click)="clearFilters()">
+          <mat-icon>filter_alt_off</mat-icon> Limpar filtros
+        </button>
+        <mat-form-field appearance="outline" class="alert-field" subscriptSizing="dynamic">
+          <mat-label>Alertar com antecedência de</mat-label>
+          <mat-select [(ngModel)]="alertDays" (ngModelChange)="applyFilters()">
+            <mat-option *ngFor="let d of alertDaysOptions" [value]="d">{{ d }} dias</mat-option>
+          </mat-select>
+          <mat-icon matPrefix class="me-2 text-primary">notifications_active</mat-icon>
+        </mat-form-field>
+      </div>
     </div>
 
     <mat-card-content class="pt-4 px-4">
@@ -106,11 +115,11 @@
         </div>
         <div class="col-6 col-md-6 col-xl-3">
           <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
-            <mat-label>Alertar com antecedência de</mat-label>
-            <mat-select [(ngModel)]="alertDays" (ngModelChange)="applyFilters()">
-              <mat-option *ngFor="let d of alertDaysOptions" [value]="d">{{ d }} dias</mat-option>
+            <mat-label>Características</mat-label>
+            <mat-select [(ngModel)]="traitFilter" (ngModelChange)="applyFilters()" multiple>
+              <mat-option *ngFor="let t of traits" [value]="t.value">{{ t.emoji }} {{ t.label }}</mat-option>
             </mat-select>
-            <mat-icon matPrefix class="me-2 text-primary">notifications_active</mat-icon>
+            <mat-hint>Exibe itens com todas as marcadas</mat-hint>
           </mat-form-field>
         </div>
       </div>
@@ -128,11 +137,21 @@
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Item</th>
             <td mat-cell *matCellDef="let item">
-              <div class="fw-bold text-dark">
-                {{ item.name }}
-                <mat-icon *ngIf="item.opened" class="inline-icon text-muted" matTooltip="Item aberto">lock_open</mat-icon>
+              <div class="d-flex align-items-center gap-3">
+                <span class="food-emoji">{{ emojiOf(item) }}</span>
+                <div>
+                  <div class="fw-bold text-dark">
+                    {{ item.name }}
+                    <mat-icon *ngIf="item.opened" class="inline-icon text-muted" matTooltip="Item aberto">lock_open</mat-icon>
+                  </div>
+                  <div class="trait-list" *ngIf="item.glutenFree || item.lactoseFree || item.homemade">
+                    <span class="trait-chip trait-gluten" *ngIf="item.glutenFree">🌾 Sem glúten</span>
+                    <span class="trait-chip trait-lactose" *ngIf="item.lactoseFree">🥛 Sem lactose</span>
+                    <span class="trait-chip trait-homemade" *ngIf="item.homemade">🏠 Caseiro</span>
+                  </div>
+                  <div class="text-muted-small" *ngIf="item.notes">{{ item.notes }}</div>
+                </div>
               </div>
-              <div class="text-muted-small" *ngIf="item.notes">{{ item.notes }}</div>
             </td>
           </ng-container>
 
@@ -160,7 +179,7 @@
           <ng-container matColumnDef="expirationDate">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimento</th>
             <td mat-cell *matCellDef="let item">
-              <div class="fw-medium">{{ item.expirationDate | date:'dd/MM/yyyy' }}</div>
+              <div class="fw-medium">{{ item.expirationDate ? (item.expirationDate | date:'dd/MM/yyyy') : '—' }}</div>
               <div class="days-text" [ngClass]="'status-text-' + statusOf(item)">{{ daysText(item) }}</div>
             </td>
           </ng-container>

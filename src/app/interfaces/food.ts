@@ -1,7 +1,9 @@
 export type FoodCategory = 'LATICINIOS' | 'CARNES' | 'HORTIFRUTI' | 'CONGELADOS' | 'DESPENSA' | 'BEBIDAS' | 'TEMPEROS' | 'OUTROS';
 export type FoodLocation = 'GELADEIRA' | 'FREEZER' | 'DESPENSA' | 'ARMARIO';
 export type FoodUnit = 'UN' | 'KG' | 'G' | 'L' | 'ML' | 'PACOTE';
-export type FoodStatus = 'EXPIRED' | 'CRITICAL' | 'WARNING' | 'OK';
+export type FoodStatus = 'EXPIRED' | 'CRITICAL' | 'WARNING' | 'OK' | 'NO_DATE';
+/* Características filtráveis: o filtro exige que o item tenha TODAS as selecionadas */
+export type FoodTrait = 'GLUTEN_FREE' | 'LACTOSE_FREE' | 'HOMEMADE';
 
 export interface FoodItem {
   id: number;
@@ -10,23 +12,33 @@ export interface FoodItem {
   location: FoodLocation;
   quantity: number;
   unit: FoodUnit;
-  expirationDate: string; /* yyyy-MM-dd */
-  purchaseDate?: string | null; /* yyyy-MM-dd */
+  expirationDate?: string | null; /* yyyy-MM-dd. Só pode faltar em itens caseiros (sem prazo definido) */
+  purchaseDate?: string | null; /* yyyy-MM-dd. Compra, ou preparo/congelamento quando caseiro */
   opened: boolean;
   openedDate?: string | null; /* yyyy-MM-dd */
   notes?: string;
+  emoji?: string; /* Opcional. Se vazio, usa o emoji da categoria */
+  glutenFree: boolean;
+  lactoseFree: boolean;
+  homemade: boolean; /* Feito em casa (tortas, salgados congelados...) */
 }
 
 /* Rótulos e ícones usados nos selects, na tabela e nos filtros */
-export const FOOD_CATEGORIES: { value: FoodCategory; label: string; icon: string }[] = [
-  { value: 'LATICINIOS', label: 'Laticínios', icon: 'egg_alt' },
-  { value: 'CARNES', label: 'Carnes', icon: 'kebab_dining' },
-  { value: 'HORTIFRUTI', label: 'Hortifruti', icon: 'eco' },
-  { value: 'CONGELADOS', label: 'Congelados', icon: 'ac_unit' },
-  { value: 'DESPENSA', label: 'Despensa', icon: 'inventory_2' },
-  { value: 'BEBIDAS', label: 'Bebidas', icon: 'local_drink' },
-  { value: 'TEMPEROS', label: 'Temperos', icon: 'spa' },
-  { value: 'OUTROS', label: 'Outros', icon: 'category' }
+export const FOOD_CATEGORIES: { value: FoodCategory; label: string; icon: string; emoji: string }[] = [
+  { value: 'LATICINIOS', label: 'Laticínios', icon: 'egg_alt', emoji: '🥛' },
+  { value: 'CARNES', label: 'Carnes', icon: 'kebab_dining', emoji: '🥩' },
+  { value: 'HORTIFRUTI', label: 'Hortifruti', icon: 'eco', emoji: '🥬' },
+  { value: 'CONGELADOS', label: 'Congelados', icon: 'ac_unit', emoji: '🧊' },
+  { value: 'DESPENSA', label: 'Despensa', icon: 'inventory_2', emoji: '🥫' },
+  { value: 'BEBIDAS', label: 'Bebidas', icon: 'local_drink', emoji: '🥤' },
+  { value: 'TEMPEROS', label: 'Temperos', icon: 'spa', emoji: '🧂' },
+  { value: 'OUTROS', label: 'Outros', icon: 'category', emoji: '🍽️' }
+];
+
+export const FOOD_TRAITS: { value: FoodTrait; label: string; emoji: string }[] = [
+  { value: 'GLUTEN_FREE', label: 'Sem glúten', emoji: '🌾' },
+  { value: 'LACTOSE_FREE', label: 'Sem lactose', emoji: '🥛' },
+  { value: 'HOMEMADE', label: 'Caseiro', emoji: '🏠' }
 ];
 
 export const FOOD_LOCATIONS: { value: FoodLocation; label: string; icon: string }[] = [
@@ -49,7 +61,8 @@ export const FOOD_STATUS_LABELS: Record<FoodStatus, string> = {
   EXPIRED: 'Vencido',
   CRITICAL: 'Crítico',
   WARNING: 'Atenção',
-  OK: 'Ok'
+  OK: 'Ok',
+  NO_DATE: 'Sem prazo'
 };
 
 /* Converte 'yyyy-MM-dd' em Date local (new Date('yyyy-MM-dd') interpretaria como UTC e voltaria um dia) */
@@ -75,8 +88,14 @@ export function daysUntil(iso: string): number {
   return Math.round((expiration.getTime() - today.getTime()) / 86400000);
 }
 
+/* Dias desde uma data passada (ex.: há quantos dias o item foi congelado) */
+export function daysSince(iso: string): number {
+  return -daysUntil(iso);
+}
+
 /* O status é calculado e não persistido, para nunca ficar desatualizado */
-export function getFoodStatus(iso: string, alertDays: number): FoodStatus {
+export function getFoodStatus(iso: string | null | undefined, alertDays: number): FoodStatus {
+  if (!iso) return 'NO_DATE';
   const days = daysUntil(iso);
   if (days < 0) return 'EXPIRED';
   if (days <= 1) return 'CRITICAL';

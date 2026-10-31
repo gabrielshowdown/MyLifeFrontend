@@ -19,9 +19,9 @@ import { FoodService } from '../../../services/food.service';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { FoodItemModalComponent } from '../food-item-modal/food-item-modal.component';
 import {
-  FOOD_CATEGORIES, FOOD_LOCATIONS, FOOD_STATUS_LABELS, FOOD_UNITS,
-  FoodCategory, FoodItem, FoodLocation, FoodStatus,
-  daysUntil, getFoodStatus
+  FOOD_CATEGORIES, FOOD_LOCATIONS, FOOD_STATUS_LABELS, FOOD_TRAITS, FOOD_UNITS,
+  FoodCategory, FoodItem, FoodLocation, FoodStatus, FoodTrait,
+  daysSince, daysUntil, getFoodStatus
 } from '../../../interfaces/food';
 
 @Component({
@@ -52,7 +52,8 @@ export class FoodExpirationComponent implements OnInit, AfterViewInit, OnDestroy
   readonly categories = FOOD_CATEGORIES;
   readonly locations = FOOD_LOCATIONS;
   readonly statusLabels = FOOD_STATUS_LABELS;
-  readonly statusOptions: FoodStatus[] = ['EXPIRED', 'CRITICAL', 'WARNING', 'OK'];
+  readonly traits = FOOD_TRAITS;
+  readonly statusOptions: FoodStatus[] = ['EXPIRED', 'CRITICAL', 'WARNING', 'OK', 'NO_DATE'];
   readonly alertDaysOptions: number[] = [3, 7, 15, 30];
   readonly displayedColumns: string[] = ['status', 'name', 'category', 'location', 'quantity', 'expirationDate', 'actions'];
 
@@ -64,6 +65,7 @@ export class FoodExpirationComponent implements OnInit, AfterViewInit, OnDestroy
   categoryFilter: FoodCategory | '' = '';
   locationFilter: FoodLocation | '' = '';
   statusFilter: FoodStatus | '' = '';
+  traitFilter: FoodTrait[] = [];
   onlyOpened: boolean = false;
   alertDays: number = 7;
 
@@ -92,8 +94,9 @@ export class FoodExpirationComponent implements OnInit, AfterViewInit, OnDestroy
     /* Ordenação por colunas calculadas ou com tipo diferente de string */
     this.dataSource.sortingDataAccessor = (item: FoodItem, column: string) => {
       switch (column) {
+        /* Itens sem vencimento vão para o fim da ordenação crescente */
         case 'status':
-        case 'expirationDate': return daysUntil(item.expirationDate);
+        case 'expirationDate': return item.expirationDate ? daysUntil(item.expirationDate) : Number.MAX_SAFE_INTEGER;
         case 'quantity': return item.quantity;
         default: return String((item as any)[column] ?? '').toLowerCase();
       }
@@ -129,12 +132,23 @@ export class FoodExpirationComponent implements OnInit, AfterViewInit, OnDestroy
       .filter(i => !this.locationFilter || i.location === this.locationFilter)
       .filter(i => !this.statusFilter || this.statusOf(i) === this.statusFilter)
       .filter(i => !this.onlyOpened || i.opened)
-      /* Ordenação padrão: vencimento mais próximo primeiro (o clique no cabeçalho sobrepõe) */
-      .sort((a, b) => a.expirationDate.localeCompare(b.expirationDate));
+      .filter(i => this.traitFilter.every(t => this.hasTrait(i, t)))
+      /* Ordenação padrão: vencimento mais próximo primeiro, sem vencimento por último
+         (o clique no cabeçalho sobrepõe) */
+      .sort((a, b) => (a.expirationDate ?? '9999-12-31').localeCompare(b.expirationDate ?? '9999-12-31'));
+  }
+
+  hasTrait(item: FoodItem, trait: FoodTrait): boolean {
+    switch (trait) {
+      case 'GLUTEN_FREE': return item.glutenFree;
+      case 'LACTOSE_FREE': return item.lactoseFree;
+      case 'HOMEMADE': return item.homemade;
+    }
   }
 
   get hasActiveFilters(): boolean {
-    return !!(this.searchText || this.categoryFilter || this.locationFilter || this.statusFilter || this.onlyOpened);
+    return !!(this.searchText || this.categoryFilter || this.locationFilter || this.statusFilter
+      || this.traitFilter.length || this.onlyOpened);
   }
 
   clearFilters(): void {
@@ -142,6 +156,7 @@ export class FoodExpirationComponent implements OnInit, AfterViewInit, OnDestroy
     this.categoryFilter = '';
     this.locationFilter = '';
     this.statusFilter = '';
+    this.traitFilter = [];
     this.onlyOpened = false;
     this.applyFilters();
   }
@@ -163,7 +178,21 @@ export class FoodExpirationComponent implements OnInit, AfterViewInit, OnDestroy
     return getFoodStatus(item.expirationDate, this.alertDays);
   }
 
+  /* Emoji do item, ou o da categoria quando não foi informado */
+  emojiOf(item: FoodItem): string {
+    return item.emoji?.trim() || this.categoryOf(item)?.emoji || '🍽️';
+  }
+
   daysText(item: FoodItem): string {
+    if (!item.expirationDate) {
+      /* Sem vencimento: mostra há quanto tempo foi preparado/congelado, se souber */
+      if (item.purchaseDate) {
+        const days = daysSince(item.purchaseDate);
+        return days <= 0 ? 'Preparado hoje' : `Preparado há ${days} ${days === 1 ? 'dia' : 'dias'}`;
+      }
+      return 'Sem prazo definido';
+    }
+
     const days = daysUntil(item.expirationDate);
     if (days < -1) return `Venceu há ${Math.abs(days)} dias`;
     if (days === -1) return 'Venceu ontem';

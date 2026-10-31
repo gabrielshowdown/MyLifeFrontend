@@ -5,11 +5,18 @@
 <mat-dialog-content class="pt-3">
   <div class="row g-3">
 
-    <div class="col-12">
+    <div class="col-8 col-sm-9">
       <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
         <mat-label>Nome do Item</mat-label>
         <input matInput [(ngModel)]="name" placeholder="Ex: Leite integral" maxlength="80">
-        <mat-icon matSuffix>restaurant</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="col-4 col-sm-3">
+      <mat-form-field appearance="outline" class="w-100 emoji-field" subscriptSizing="dynamic">
+        <mat-label>Emoji</mat-label>
+        <input matInput [(ngModel)]="emoji" [placeholder]="categoryEmoji" maxlength="8"
+               matTooltip="Opcional. Abra o teclado de emojis com Win + . (ponto). Vazio usa o da categoria.">
       </mat-form-field>
     </div>
 
@@ -18,7 +25,7 @@
         <mat-label>Categoria</mat-label>
         <mat-select [(ngModel)]="category">
           <mat-option *ngFor="let cat of categories" [value]="cat.value">
-            <mat-icon class="option-icon">{{ cat.icon }}</mat-icon> {{ cat.label }}
+            <span class="option-emoji">{{ cat.emoji }}</span> {{ cat.label }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -51,9 +58,21 @@
       </mat-form-field>
     </div>
 
+    <!-- Características: sem glúten / sem lactose / caseiro -->
+    <div class="col-12">
+      <div class="traits-box">
+        <mat-checkbox [(ngModel)]="glutenFree">🌾 Sem glúten</mat-checkbox>
+        <mat-checkbox [(ngModel)]="lactoseFree">🥛 Sem lactose</mat-checkbox>
+        <mat-checkbox [(ngModel)]="homemade">🏠 Caseiro</mat-checkbox>
+      </div>
+      <div class="text-muted-small mt-1 px-1" *ngIf="homemade">
+        Itens caseiros (ex.: torta congelada) podem ficar sem vencimento. A data abaixo passa a ser a do preparo.
+      </div>
+    </div>
+
     <div class="col-12 col-sm-6">
       <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
-        <mat-label>Vencimento</mat-label>
+        <mat-label>{{ homemade ? 'Vencimento (opcional)' : 'Vencimento' }}</mat-label>
         <input matInput appDateMask [matDatepicker]="expirationPicker" [(ngModel)]="expirationDate"
                placeholder="DD/MM/AAAA" maxlength="10">
         <mat-icon matSuffix (click)="expirationPicker.open()" style="cursor: pointer;">calendar_today</mat-icon>
@@ -63,7 +82,7 @@
 
     <div class="col-12 col-sm-6">
       <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
-        <mat-label>Data da Compra (opcional)</mat-label>
+        <mat-label>{{ homemade ? 'Data do Preparo / Congelamento' : 'Data da Compra (opcional)' }}</mat-label>
         <input matInput appDateMask [matDatepicker]="purchasePicker" [(ngModel)]="purchaseDate"
                placeholder="DD/MM/AAAA" maxlength="10">
         <mat-icon matSuffix (click)="purchasePicker.open()" style="cursor: pointer;">shopping_cart</mat-icon>

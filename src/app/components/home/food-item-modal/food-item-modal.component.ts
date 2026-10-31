@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DateMaskDirective } from '../../../shared/date/date-mask.directive';
 import {
@@ -31,6 +32,7 @@ import {
     MatIconModule,
     MatDatepickerModule,
     MatCheckboxModule,
+    MatTooltipModule,
     MatSnackBarModule,
     DateMaskDirective
   ],
@@ -53,6 +55,10 @@ export class FoodItemModalComponent implements OnInit {
   opened: boolean = false;
   openedDate: Date | null = null;
   notes: string = '';
+  emoji: string = '';
+  glutenFree: boolean = false;
+  lactoseFree: boolean = false;
+  homemade: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<FoodItemModalComponent>,
@@ -78,6 +84,15 @@ export class FoodItemModalComponent implements OnInit {
     this.opened = item.opened;
     this.openedDate = parseIsoDate(item.openedDate);
     this.notes = item.notes ?? '';
+    this.emoji = item.emoji ?? '';
+    this.glutenFree = item.glutenFree;
+    this.lactoseFree = item.lactoseFree;
+    this.homemade = item.homemade;
+  }
+
+  /* Emoji padrão da categoria escolhida, usado quando o campo de emoji fica vazio */
+  get categoryEmoji(): string {
+    return this.categories.find(c => c.value === this.category)?.emoji ?? '🍽️';
   }
 
   onOpenedChange(): void {
@@ -98,11 +113,12 @@ export class FoodItemModalComponent implements OnInit {
       this.showErros('A quantidade deve ser maior que zero.');
       return;
     }
-    if (!this.expirationDate) {
+    /* Itens caseiros (ex.: torta congelada) podem não ter vencimento definido */
+    if (!this.expirationDate && !this.homemade) {
       this.showErros('A data de vencimento é obrigatória.');
       return;
     }
-    if (this.purchaseDate && this.purchaseDate > this.expirationDate) {
+    if (this.purchaseDate && this.expirationDate && this.purchaseDate > this.expirationDate) {
       this.showErros('A data de compra não pode ser posterior ao vencimento.');
       return;
     }
@@ -114,11 +130,15 @@ export class FoodItemModalComponent implements OnInit {
       location: this.location,
       quantity: this.quantity,
       unit: this.unit,
-      expirationDate: toIsoDate(this.expirationDate)!,
+      expirationDate: toIsoDate(this.expirationDate),
       purchaseDate: toIsoDate(this.purchaseDate),
       opened: this.opened,
       openedDate: this.opened ? toIsoDate(this.openedDate) : null,
-      notes: this.notes.trim()
+      notes: this.notes.trim(),
+      emoji: this.emoji.trim(),
+      glutenFree: this.glutenFree,
+      lactoseFree: this.lactoseFree,
+      homemade: this.homemade
     };
 
     this.dialogRef.close(payload);

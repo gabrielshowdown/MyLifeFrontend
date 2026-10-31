@@ -37,6 +37,30 @@ mat-dialog-content {
   color: #764ba2;
 }
 
+.option-emoji {
+  display: inline-block;
+  width: 24px;
+  margin-right: 4px;
+  text-align: center;
+}
+
+.emoji-field input {
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.traits-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  padding: 4px 12px;
+  background: #f6f4fb;
+  border: 1px dashed #d6cdea;
+  border-radius: 10px;
+}
+
+.text-muted-small { font-size: 0.8rem; color: #888; }
+
 .custom-dialog-actions {
   padding: 16px 24px 24px 24px;
   display: flex;

@@ -144,6 +144,7 @@ $color-ok: #2e7d32;
   &.row-CRITICAL td:first-child { border-left-color: $color-critical; }
   &.row-WARNING td:first-child { border-left-color: $color-warning; }
   &.row-OK td:first-child { border-left-color: $color-ok; }
+  &.row-NO_DATE td:first-child { border-left-color: #78909c; }
 }
 
 .status-chip {
@@ -158,6 +159,7 @@ $color-ok: #2e7d32;
   &.status-CRITICAL { background: $color-critical; }
   &.status-WARNING { background: $color-warning; color: #4a3b00; }
   &.status-OK { background: $color-ok; }
+  &.status-NO_DATE { background: #78909c; }
 }
 
 .days-text {
@@ -168,7 +170,40 @@ $color-ok: #2e7d32;
   &.status-text-CRITICAL { color: $color-critical; }
   &.status-text-WARNING { color: #b58100; }
   &.status-text-OK { color: #777; font-weight: 400; }
+  &.status-text-NO_DATE { color: #607d8b; font-weight: 400; }
 }
+
+/* Emoji grande do item */
+.food-emoji {
+  font-size: 2rem;
+  line-height: 1;
+  width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Etiquetas de características */
+.trait-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.trait-chip {
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.5;
+
+  &.trait-gluten { background: #fff3cd; color: #7a5b00; }
+  &.trait-lactose { background: #e1f0ff; color: #0b4a85; }
+  &.trait-homemade { background: #f3e5f5; color: #6a1b9a; }
+}
+
+.alert-field { width: 240px; }
 
 .text-muted-small { font-size: 0.8rem; color: #888; }
 
