@@ -1,0 +1,54 @@
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+:host {
+  display: block;
+  overflow: hidden;
+}
+
+/* Cabeçalho Padronizado */
+.modal-header-custom {
+  background: $primary-gradient;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+}
+
+mat-dialog-content {
+  margin: 0 !important;
+  padding: 24px 32px !important;
+  /* Os selects e datepickers abrem em overlay, então o conteúdo pode rolar em telas pequenas */
+  max-height: 65vh;
+}
+
+.option-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  vertical-align: middle;
+  color: #764ba2;
+}
+
+.custom-dialog-actions {
+  padding: 16px 24px 24px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: none;
+  background: white;
+}
+
+.btn-save-custom {
+  background: $primary-gradient !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(118, 75, 162, 0.3);
+}

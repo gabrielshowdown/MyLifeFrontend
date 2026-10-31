@@ -1,0 +1,199 @@
+<div class="container-fluid py-4 px-xl-5 fade-in">
+
+  <!-- Cabeçalho Estilo Dashboard -->
+  <div class="dashboard-header d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-4 slide-up">
+    <div class="d-flex align-items-center gap-4">
+      <div class="card-icon-wrapper gradient-green d-flex align-items-center justify-content-center text-white rounded-circle shadow">
+        <mat-icon style="font-size: 28px; width: 28px; height: 28px;">kitchen</mat-icon>
+      </div>
+      <div>
+        <h2 class="m-0 fw-bold title-text" style="font-size: 1.8rem; color: #333;">Vencimentos Casa</h2>
+        <p class="text-muted m-0 feature-desc">Monitore a validade das comidas e evite desperdício.</p>
+      </div>
+    </div>
+
+    <button mat-raised-button class="btn-gradient-action px-4 py-2" (click)="openItemModal()">
+      <mat-icon class="me-2">add</mat-icon>
+      NOVO ITEM
+    </button>
+  </div>
+
+  <!-- Cards de resumo (clicáveis, aplicam filtro) -->
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-lg-3 slide-up" style="animation-delay: 0.05s;">
+      <div class="summary-card" [class.active]="statusFilter === 'EXPIRED'" (click)="toggleStatusFilter('EXPIRED')">
+        <div class="summary-icon bg-expired"><mat-icon>report</mat-icon></div>
+        <div>
+          <div class="summary-value">{{ expiredCount }}</div>
+          <div class="summary-label">Vencidos</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3 slide-up" style="animation-delay: 0.1s;">
+      <div class="summary-card" [class.active]="statusFilter === 'WARNING'" (click)="toggleStatusFilter('WARNING')">
+        <div class="summary-icon bg-warning-soft"><mat-icon>schedule</mat-icon></div>
+        <div>
+          <div class="summary-value">{{ expiringCount }}</div>
+          <div class="summary-label">Vencem em {{ alertDays }} dias</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3 slide-up" style="animation-delay: 0.15s;">
+      <div class="summary-card" [class.active]="!hasActiveFilters" (click)="clearFilters()">
+        <div class="summary-icon bg-total"><mat-icon>inventory_2</mat-icon></div>
+        <div>
+          <div class="summary-value">{{ items.length }}</div>
+          <div class="summary-label">Total de itens</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3 slide-up" style="animation-delay: 0.2s;">
+      <div class="summary-card" [class.active]="onlyOpened" (click)="toggleOpenedFilter()">
+        <div class="summary-icon bg-opened"><mat-icon>lock_open</mat-icon></div>
+        <div>
+          <div class="summary-value">{{ openedCount }}</div>
+          <div class="summary-label">Itens abertos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros + Tabela -->
+  <mat-card class="content-card slide-up mb-5" style="animation-delay: 0.25s;">
+    <div class="card-header-custom border-bottom pb-3 pt-3 px-4 d-flex justify-content-between align-items-center">
+      <h5><mat-icon class="text-primary me-2">list_alt</mat-icon> Itens Cadastrados</h5>
+      <button mat-button color="warn" *ngIf="hasActiveFilters" (click)="clearFilters()">
+        <mat-icon>filter_alt_off</mat-icon> Limpar filtros
+      </button>
+    </div>
+
+    <mat-card-content class="pt-4 px-4">
+
+      <div class="row g-3">
+        <div class="col-12 col-md-6 col-xl-3">
+          <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+            <mat-label>Buscar</mat-label>
+            <input matInput [(ngModel)]="searchText" (ngModelChange)="applyFilters()" placeholder="Nome ou observação">
+            <mat-icon matPrefix class="me-2 text-primary">search</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="col-6 col-md-3 col-xl-2">
+          <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+            <mat-label>Categoria</mat-label>
+            <mat-select [(ngModel)]="categoryFilter" (ngModelChange)="applyFilters()">
+              <mat-option value="">Todas</mat-option>
+              <mat-option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-6 col-md-3 col-xl-2">
+          <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+            <mat-label>Local</mat-label>
+            <mat-select [(ngModel)]="locationFilter" (ngModelChange)="applyFilters()">
+              <mat-option value="">Todos</mat-option>
+              <mat-option *ngFor="let loc of locations" [value]="loc.value">{{ loc.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-6 col-md-6 col-xl-2">
+          <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+              <mat-option value="">Todos</mat-option>
+              <mat-option *ngFor="let st of statusOptions" [value]="st">{{ statusLabels[st] }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-6 col-md-6 col-xl-3">
+          <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+            <mat-label>Alertar com antecedência de</mat-label>
+            <mat-select [(ngModel)]="alertDays" (ngModelChange)="applyFilters()">
+              <mat-option *ngFor="let d of alertDaysOptions" [value]="d">{{ d }} dias</mat-option>
+            </mat-select>
+            <mat-icon matPrefix class="me-2 text-primary">notifications_active</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="table-wrapper mt-3">
+        <table mat-table [dataSource]="dataSource" matSort class="food-table w-100">
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let item">
+              <span class="status-chip" [ngClass]="'status-' + statusOf(item)">{{ statusLabels[statusOf(item)] }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Item</th>
+            <td mat-cell *matCellDef="let item">
+              <div class="fw-bold text-dark">
+                {{ item.name }}
+                <mat-icon *ngIf="item.opened" class="inline-icon text-muted" matTooltip="Item aberto">lock_open</mat-icon>
+              </div>
+              <div class="text-muted-small" *ngIf="item.notes">{{ item.notes }}</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
+            <td mat-cell *matCellDef="let item">
+              <mat-icon class="inline-icon text-primary me-1">{{ categoryOf(item)?.icon }}</mat-icon>
+              {{ categoryOf(item)?.label }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Local</th>
+            <td mat-cell *matCellDef="let item">
+              <mat-icon class="inline-icon text-primary me-1">{{ locationOf(item)?.icon }}</mat-icon>
+              {{ locationOf(item)?.label }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Qtd.</th>
+            <td mat-cell *matCellDef="let item">{{ item.quantity | number:'1.0-2' }} {{ unitLabel(item) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="expirationDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimento</th>
+            <td mat-cell *matCellDef="let item">
+              <div class="fw-medium">{{ item.expirationDate | date:'dd/MM/yyyy' }}</div>
+              <div class="days-text" [ngClass]="'status-text-' + statusOf(item)">{{ daysText(item) }}</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="text-end">Ações</th>
+            <td mat-cell *matCellDef="let item" class="text-end actions-cell">
+              <button mat-icon-button color="primary" matTooltip="Marcar como consumido" (click)="removeItem(item, 'CONSUMED')">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="Descartar" (click)="removeItem(item, 'DISCARDED')">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Editar" (click)="openItemModal(item)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              class="food-row" [ngClass]="'row-' + statusOf(row)"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="empty-state" [attr.colspan]="displayedColumns.length">
+              <mat-icon>search_off</mat-icon>
+              <div>{{ items.length === 0 ? 'Nenhum item cadastrado ainda.' : 'Nenhum item encontrado com os filtros atuais.' }}</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

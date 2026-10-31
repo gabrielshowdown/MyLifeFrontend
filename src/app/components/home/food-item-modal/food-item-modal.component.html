@@ -1,0 +1,104 @@
+<div class="modal-header-custom">
+  <h2>{{ isEdit ? 'Editar Item' : 'Novo Item' }}</h2>
+</div>
+
+<mat-dialog-content class="pt-3">
+  <div class="row g-3">
+
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Nome do Item</mat-label>
+        <input matInput [(ngModel)]="name" placeholder="Ex: Leite integral" maxlength="80">
+        <mat-icon matSuffix>restaurant</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-sm-6">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Categoria</mat-label>
+        <mat-select [(ngModel)]="category">
+          <mat-option *ngFor="let cat of categories" [value]="cat.value">
+            <mat-icon class="option-icon">{{ cat.icon }}</mat-icon> {{ cat.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-sm-6">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Local</mat-label>
+        <mat-select [(ngModel)]="location">
+          <mat-option *ngFor="let loc of locations" [value]="loc.value">
+            <mat-icon class="option-icon">{{ loc.icon }}</mat-icon> {{ loc.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-6">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Quantidade</mat-label>
+        <input matInput type="number" min="0" step="any" [(ngModel)]="quantity">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Unidade</mat-label>
+        <mat-select [(ngModel)]="unit">
+          <mat-option *ngFor="let u of units" [value]="u.value">{{ u.label }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-sm-6">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Vencimento</mat-label>
+        <input matInput appDateMask [matDatepicker]="expirationPicker" [(ngModel)]="expirationDate"
+               placeholder="DD/MM/AAAA" maxlength="10">
+        <mat-icon matSuffix (click)="expirationPicker.open()" style="cursor: pointer;">calendar_today</mat-icon>
+        <mat-datepicker #expirationPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-sm-6">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Data da Compra (opcional)</mat-label>
+        <input matInput appDateMask [matDatepicker]="purchasePicker" [(ngModel)]="purchaseDate"
+               placeholder="DD/MM/AAAA" maxlength="10">
+        <mat-icon matSuffix (click)="purchasePicker.open()" style="cursor: pointer;">shopping_cart</mat-icon>
+        <mat-datepicker #purchasePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-sm-5 d-flex align-items-center">
+      <mat-checkbox [(ngModel)]="opened" (ngModelChange)="onOpenedChange()">Item já aberto</mat-checkbox>
+    </div>
+
+    <div class="col-12 col-sm-7" *ngIf="opened">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Data de Abertura</mat-label>
+        <input matInput appDateMask [matDatepicker]="openedPicker" [(ngModel)]="openedDate"
+               placeholder="DD/MM/AAAA" maxlength="10">
+        <mat-icon matSuffix (click)="openedPicker.open()" style="cursor: pointer;">lock_open</mat-icon>
+        <mat-datepicker #openedPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+        <mat-label>Observações (opcional)</mat-label>
+        <textarea matInput rows="2" [(ngModel)]="notes" placeholder="Ex: Usar primeiro" maxlength="200"></textarea>
+      </mat-form-field>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="custom-dialog-actions">
+  <button mat-stroked-button mat-dialog-close color="warn">Cancelar</button>
+  <button mat-raised-button class="btn-save-custom" (click)="save()">
+    <mat-icon class="me-2">save</mat-icon>
+    {{ isEdit ? 'Salvar Alterações' : 'Salvar Item' }}
+  </button>
+</mat-dialog-actions>
